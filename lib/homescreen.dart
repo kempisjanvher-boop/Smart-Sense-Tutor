@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'levelmap.dart';
+import 'lessondata.dart';
+import 'progress.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,7 +11,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+  final int _currentIndex = 0;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +62,30 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisSpacing: 12,
               childAspectRatio: 1.5,
               children: [
-                _buildStatCard("nth", "Lesson(s)\nin progress", const Color(0xFFFFEAEA), Icons.face_outlined),
-                _buildStatCard("nth", "Lessons\ncompleted", const Color(0xFFE8F9EE), Icons.pets_outlined),
-                _buildStatCard("nth", "Categories\ncompleted", const Color(0xFFEAEAFF), Icons.apps_outlined),
-                _buildStatCard("nth", "Achievements", const Color(0xFFFFF7E0),
-                  Icons.emoji_events_outlined),
+                _buildStatCard(
+                  ProgressService.getTotalInProgress().toString(),
+                  "Lesson(s)\nin progress",
+                  const Color(0xFFFFEAEA),
+                  Icons.face_outlined,
+                ),
+                _buildStatCard(
+                  ProgressService.getTotalCompletedAll().toString(),
+                  "Lessons\ncompleted",
+                  const Color(0xFFE8F9EE),
+                  Icons.pets_outlined,
+                ),
+                _buildStatCard(
+                  ProgressService.getCategoriesCompleted().toString(),
+                  "Categories\ncompleted",
+                  const Color(0xFFEAEAFF),
+                  Icons.apps_outlined,
+                ),
+                _buildStatCard(
+                  ProgressService.getTotalStars().toString(),
+                  "Achievements",
+                  const Color(0xFFFFF7E0),
+                  Icons.emoji_events_outlined,
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -84,25 +111,25 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 30),
             Row(
               children: [
-                Expanded(child: _buildCategoryCard("Finance &\nPhysics")),
+                Expanded(child: _buildCategoryCard("Finance & Physics")),
                 const SizedBox(width: 12),
-                Expanded(child: _buildCategoryCard("Objects &\nIdeas")),
+                Expanded(child: _buildCategoryCard("Objects & Ideas")),
               ],
             ),
             const SizedBox(height: 30),
             Row(
               children: [
-                Expanded(child: _buildCategoryCard("All About\nMe...")),
+                Expanded(child: _buildCategoryCard("Law & Structures")),
                 const SizedBox(width: 12),
-                Expanded(child: _buildCategoryCard("Feelings")),
+                Expanded(child: _buildCategoryCard("Attributes & Evaluation")),
               ],
             ),
             const SizedBox(height: 30),
             Row(
               children: [
-                Expanded(child: _buildCategoryCard("Greetings")),
+                Expanded(child: _buildCategoryCard("Actions & Movement")),
                 const SizedBox(width: 12),
-                Expanded(child: _buildCategoryCard("Settings")),
+                Expanded(child: _buildCategoryCard("Directions & Space")),
               ],
             ),
           ],
@@ -111,19 +138,51 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          if (index == _currentIndex) return;
+
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ),
+              );
+              break;
+
+            case 1:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LessonData(),
+                ),
+              );
+              break;
+
+            //
+          }
         },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF2C3E6B),
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Lessons"),
-          BottomNavigationBarItem(icon: Icon(Icons.send), label: "Smart Lookup"),
-          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: "More"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: "Lessons",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.send),
+            label: "Smart Lookup",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "More",
+          ),
         ],
       ),
     );
@@ -170,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LevelMap()),
+          MaterialPageRoute(builder: (context) => LevelMap(category: title)),
         );
       },
     child: Container(

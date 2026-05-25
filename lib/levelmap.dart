@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'gameplayscreen.dart';
+import 'lessondata.dart';
+import 'progress.dart';
 
 class LevelMap extends StatefulWidget {
-  const LevelMap({super.key});
+  final String category;
+
+  const LevelMap({super.key, required this.category});
 
   @override
   State<LevelMap> createState() => LevelMapState();
@@ -11,14 +15,8 @@ class LevelMap extends StatefulWidget {
 class LevelMapState extends State<LevelMap> {
   bool _hasPlayedGame = false;
   int _streakCount = 0;
-  int _unlockedLevel = 1;
-
-  // New: Tracks aggregate star scores per level (0 = unplayed/no stars)
-  final Map<int, int> _levelStarsMap = {
-    1: 0,
-    2: 0,
-    3: 0,
-  };
+  int get _unlockedLevel =>
+      ProgressService.getUnlockedLevel(widget.category);
 
   @override
   Widget build(BuildContext context) {
@@ -34,62 +32,70 @@ class LevelMapState extends State<LevelMap> {
             ),
           ),
 
+          // CATEGORY HEADER
           Positioned(
             top: 60,
             left: 24,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Hello,",
-                  style: TextStyle(fontSize: 18, color: Colors.white70, fontWeight: FontWeight.w500),
+              children: [
+                const Text(
+                  "Category:",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 Text(
-                  "USER!",
-                  style: TextStyle(
-                    fontSize: 32,
+                  widget.category,
+                  style: const TextStyle(
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    letterSpacing: 1.2,
                   ),
                 ),
               ],
             ),
           ),
 
+          // LEVEL 3
           Positioned(
             right: 110,
             top: screenHeight * 0.20,
             child: _buildLevelNode(
-                3,
-                "Level 3",
-                const Color(0xFF5CC2E6),
-                'asset/level3.png'
+              3,
+              "Level 3",
+              const Color(0xFF5CC2E6),
+              'asset/level3.png',
             ),
           ),
 
+          // LEVEL 2
           Positioned(
             right: 25,
             top: screenHeight * 0.40,
             child: _buildLevelNode(
-                2,
-                "Level 2",
-                const Color(0xFFF2A3B3),
-                'asset/level2.png'
+              2,
+              "Level 2",
+              const Color(0xFFF2A3B3),
+              'asset/level2.png',
             ),
           ),
 
+          // LEVEL 1
           Positioned(
             right: 150,
             bottom: screenHeight * 0.26,
             child: _buildLevelNode(
-                1,
-                "Level 1",
-                const Color(0xFF4A5568),
-                'asset/level1.png'
+              1,
+              "Level 1",
+              const Color(0xFF4A5568),
+              'asset/level1.png',
             ),
           ),
 
+          // STREAK BUTTON
           Positioned(
             bottom: 30,
             right: 40,
@@ -101,14 +107,15 @@ class LevelMapState extends State<LevelMap> {
                     setState(() {
                       _hasPlayedGame = true;
                       _streakCount = 1;
-                      if (_unlockedLevel == 1) _unlockedLevel = 2;
                     });
                   },
                   child: Container(
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: _hasPlayedGame ? const Color(0xFFFF7A45) : Colors.grey[400],
+                      color: _hasPlayedGame
+                          ? const Color(0xFFFF7A45)
+                          : Colors.grey[400],
                       shape: BoxShape.circle,
                       boxShadow: const [
                         BoxShadow(
@@ -145,6 +152,7 @@ class LevelMapState extends State<LevelMap> {
             ),
           ),
 
+          // BOTTOM NAV
           Positioned(
             bottom: 30,
             left: 24,
@@ -166,8 +174,16 @@ class LevelMapState extends State<LevelMap> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.menu_book, color: Colors.grey, size: 28),
-                    onPressed: () {},
+                    icon: const Icon(Icons.menu_book,
+                        color: Colors.grey, size: 28),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LessonData(),
+                        ),
+                      );
+                    },
                   ),
                   CircleAvatar(
                     radius: 26,
@@ -184,7 +200,8 @@ class LevelMapState extends State<LevelMap> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.send, color: Colors.grey, size: 28),
+                    icon: const Icon(Icons.send,
+                        color: Colors.grey, size: 28),
                     onPressed: () {},
                   ),
                 ],
@@ -196,14 +213,19 @@ class LevelMapState extends State<LevelMap> {
     );
   }
 
-  Widget _buildLevelNode(int levelNumber, String label, Color characterBaseColor, String imagePath) {
+  Widget _buildLevelNode(
+      int levelNumber,
+      String label,
+      Color characterBaseColor,
+      String imagePath,
+      ) {
     bool isLevelLocked = levelNumber > _unlockedLevel;
-    int starsEarned = _levelStarsMap[levelNumber] ?? 0;
+    int starsEarned =
+    ProgressService.getStars(widget.category, levelNumber);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Displays earned stars directly above the active character badge
         if (!isLevelLocked && starsEarned > 0)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
@@ -212,7 +234,9 @@ class LevelMapState extends State<LevelMap> {
               children: List.generate(3, (index) {
                 return Icon(
                   Icons.star_rounded,
-                  color: index < starsEarned ? const Color(0xFFFFD026) : Colors.grey[300],
+                  color: index < starsEarned
+                      ? const Color(0xFFFFD026)
+                      : Colors.grey[300],
                   size: 22,
                 );
               }),
@@ -223,60 +247,72 @@ class LevelMapState extends State<LevelMap> {
           onTap: () async {
             if (isLevelLocked) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Complete previous levels to unlock $label!")),
+                SnackBar(
+                  content: Text(
+                    "Complete previous levels to unlock $label!",
+                  ),
+                ),
               );
             } else {
-              // Await the average score pop payload from the game sequence
-              final int? averageStarsResult = await Navigator.push<int>(
+              final int? averageStarsResult =
+              await Navigator.push<int>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GameplayScreen(levelName: label),
+                  builder: (context) =>
+                      GameplayScreen(levelName: label),
                 ),
               );
 
               if (averageStarsResult != null && mounted) {
                 setState(() {
-                  _levelStarsMap[levelNumber] = averageStarsResult;
+                  ProgressService.setStars(
+                    widget.category,
+                    levelNumber,
+                    averageStarsResult,
+                  );
+
+                  ProgressService.addCompletion(widget.category);
+                  ProgressService.unlockNext(widget.category, levelNumber);
+
                   _hasPlayedGame = true;
                   _streakCount = 1;
-                  if (_unlockedLevel == levelNumber && _unlockedLevel < 3) {
-                    _unlockedLevel++;
-                  }
                 });
               }
             }
           },
           child: Stack(
             alignment: Alignment.center,
-            clipBehavior: Clip.none,
             children: [
               Container(
                 width: 76,
                 height: 76,
                 decoration: BoxDecoration(
-                    color: isLevelLocked ? Colors.grey[300] : characterBaseColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3.5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      )
-                    ]),
+                  color: isLevelLocked
+                      ? Colors.grey[300]
+                      : characterBaseColor,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3.5),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
                 child: isLevelLocked
-                    ? Icon(
-                  Icons.lock,
-                  color: Colors.grey[600],
-                  size: 32,
-                )
+                    ? Icon(Icons.lock,
+                    color: Colors.grey[600], size: 32)
                     : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
                     imagePath,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.broken_image, color: Colors.black26);
+                      return const Icon(
+                        Icons.broken_image,
+                        color: Colors.black26,
+                      );
                     },
                   ),
                 ),
@@ -284,9 +320,12 @@ class LevelMapState extends State<LevelMap> {
             ],
           ),
         ),
+
         const SizedBox(height: 6),
+
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+          padding:
+          const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
           decoration: BoxDecoration(
             color: const Color(0xFF2C3E6B),
             borderRadius: BorderRadius.circular(10),
@@ -304,4 +343,3 @@ class LevelMapState extends State<LevelMap> {
     );
   }
 }
-
