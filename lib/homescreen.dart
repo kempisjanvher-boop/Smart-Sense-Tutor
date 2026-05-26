@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'levelmap.dart';
 import 'lessondata.dart';
 import 'progress.dart';
+import 'smartlookup.dart';
+import 'achievement.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -63,28 +65,43 @@ class _HomeScreenState extends State<HomeScreen> {
               childAspectRatio: 1.5,
               children: [
                 _buildStatCard(
-                  ProgressService.getTotalInProgress().toString(),
+                  ProgressService.getCategoriesCompleted().toString(),
                   "Lesson(s)\nin progress",
-                  const Color(0xFFFFEAEA),
-                  Icons.face_outlined,
+                  const Color(0xFFFFDDD7),
+                  Image.asset("asset/lessonicon.png", width: 40, height: 40),
                 ),
                 _buildStatCard(
-                  ProgressService.getTotalCompletedAll().toString(),
+                  ProgressService.getCategoriesCompleted().toString(),
                   "Lessons\ncompleted",
-                  const Color(0xFFE8F9EE),
-                  Icons.pets_outlined,
+                  const Color(0xFFE8FFE8),
+                  Image.asset("asset/completedicon.png", width: 40, height: 40),
                 ),
                 _buildStatCard(
                   ProgressService.getCategoriesCompleted().toString(),
                   "Categories\ncompleted",
-                  const Color(0xFFEAEAFF),
-                  Icons.apps_outlined,
+                  const Color(0xFFEAEDFF),
+                  Image.asset("asset/categoriesicon.png", width: 40, height: 40),
                 ),
-                _buildStatCard(
-                  ProgressService.getTotalStars().toString(),
-                  "Achievements",
-                  const Color(0xFFFFF7E0),
-                  Icons.emoji_events_outlined,
+
+                // Wrap this 4th Achievement card to navigate on click!
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const AchievementsScreen()),
+                    );
+                  },
+                  child: _buildStatCard(
+                    ProgressService.getAchievementsUnlockedCount().toString(), // Dynamic unlocked number
+                    "Achievement",
+                    const Color(0xFFFFFADD),
+                    Image.asset(
+                      "asset/achievementicon.png",
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -159,7 +176,14 @@ class _HomeScreenState extends State<HomeScreen> {
               );
               break;
 
-            //
+            case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SmartLookup(),
+                ),
+              );
+              break;
           }
         },
         type: BottomNavigationBarType.fixed,
@@ -188,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildStatCard(String count, String label, Color iconBgColor, IconData fallback) {
+  Widget _buildStatCard(String count, String label, Color iconBgColor, Widget icon) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -216,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(color: iconBgColor, borderRadius: BorderRadius.circular(8)),
-              child: Icon(fallback, size: 20, color: Colors.black45),
+              child: icon,
             ),
           ),
         ],
