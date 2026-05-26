@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
+import 'core/app_categories.dart';
+import 'models/quiz_question.dart';
+import 'services/level_manager.dart';
+import 'services/quiz_engine.dart';
+
 class GameplayScreen extends StatefulWidget {
+  final String category;
+  final int levelNumber;
   final String levelName;
-  const GameplayScreen({super.key, required this.levelName});
+
+  const GameplayScreen({
+    super.key,
+    required this.category,
+    required this.levelNumber,
+    required this.levelName,
+  });
 
   @override
   State<GameplayScreen> createState() => _GameplayScreenState();
@@ -23,57 +36,49 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
   // Tracks stars captured in each distinct question round
   final List<int> _scoreHistoryList = [];
 
-  late AnimationController _timerController;
+  AnimationController? _timerController;
 
-  final List<Map<String, dynamic>> _questionBank = [
-    {
-      "word": "keys",
-      "sentenceBefore": "When Sam arrived home, he could not find his ",
-      "sentenceAfter": " anywhere.",
-      "category": "Objects & Ideas",
-      "correctIndex": 2,
-      "options": [
-        {"text": "A scale of musical notes.", "icon": Icons.music_note_rounded},
-        {"text": "A crucial element needed for success.", "icon": Icons.gavel_rounded},
-        {"text": "A physical metal tool used for opening locks.", "icon": Icons.vpn_key_rounded},
-      ]
-    },
-    {
-      "word": "key",
-      "sentenceBefore": "Sam walked past the grassy bank to the park, carrying a baseball bat while his dog began to bark at a passing squirrel.\n\nLooking at the massive new buildings downtown, Sam realized that hard work was the absolute ",
-      "sentenceAfter": " to achieving great success.",
-      "category": "Objects & Ideas",
-      "correctIndex": 1,
-      "options": [
-        {"text": "A physical metal tool used for opening locks.", "icon": Icons.vpn_key_rounded},
-        {"text": "A vital element, factor, or solution necessary to achieve a goal.", "icon": Icons.check},
-        {"text": "A specific set of musical notes that form a scale.", "icon": Icons.music_note_rounded},
-      ]
-    },
-    {
-      "word": "key",
-      "sentenceBefore": "Sam walked past the grassy bank to the park, carrying a baseball bat while his dog began to bark at a passing squirrel.\n\nLooking at the massive new buildings downtown, Sam realized that hard work was the absolute ",
-      "sentenceAfter": " to achieving great success.",
-      "category": "Objects & Ideas",
-      "correctIndex": 1,
-      "options": [
-        {"text": "A physical metal tool used for opening locks.", "icon": Icons.vpn_key_rounded},
-        {"text": "A vital element, factor, or solution necessary to achieve a goal.", "icon": Icons.check},
-        {"text": "A specific set of musical notes that form a scale.", "icon": Icons.music_note_rounded},
-      ]
-    },
-  ];
+  List<QuizQuestion> _questions = [];
+  bool _isLoading = true;
+  String? _loadError;
+
+  List<Map<String, dynamic>> get _questionBank =>
+      _questions.map((q) => q.toLegacyMap()).toList();
 
   @override
   void initState() {
     super.initState();
-    _initTimer();
+    _loadQuestions();
+  }
+
+  Future<void> _loadQuestions() async {
+    try {
+      final generated = await QuizEngine.instance.questionsForLevel(
+        category: AppCategories.normalize(widget.category),
+        level: widget.levelNumber,
+      );
+      if (!mounted) return;
+      setState(() {
+        _questions = generated;
+        _isLoading = false;
+      });
+      _initTimer();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loadError = e.toString();
+        _isLoading = false;
+      });
+    }
   }
 
   void _initTimer() {
+    _timerController?.dispose();
     _timerController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 15),
+      duration: Duration(
+        seconds: LevelManager.timerSecondsForLevel(widget.levelNumber),
+      ),
     )..addListener(() {
       setState(() {});
     });
@@ -82,8 +87,10 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
   }
 
   void _startTimer() {
-    _timerController.reset();
-    _timerController.forward().then((value) {
+    final controller = _timerController;
+    if (controller == null) return;
+    controller.reset();
+    controller.forward().then((value) {
       if (mounted && _currentStep < 2 && _selectedOptionIndex == null) {
         setState(() {
           _starsEarnedThisQuestion = 0;
@@ -97,7 +104,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
 
   @override
   void dispose() {
-    _timerController.dispose();
+    _timerController?.dispose();
     super.dispose();
   }
 
@@ -109,7 +116,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
         _selectedOptionIndex = index;
         _isSelectionCorrect = true;
       });
-      _timerController.stop();
+      _timerController?.stop();
       _scoreHistoryList.add(_starsEarnedThisQuestion);
 
       Future.delayed(const Duration(milliseconds: 1200), () {
@@ -139,7 +146,8 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
   }
 
   void _handleNextAction() {
-    if (_currentQuestionIndex < _questionBank.length - 1) {
+    if (_questions.isEmpty) return;
+    if (_currentQuestionIndex < _questions.length - 1) {
       setState(() {
         _currentQuestionIndex++;
         _currentStep = 0;
@@ -164,6 +172,39 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(color: Color(0xFFFF9F43)),
+              SizedBox(height: 16),
+              Text(
+                'Generating your quiz...',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_loadError != null || _questions.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(title: Text(widget.levelName)),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              _loadError ?? 'No questions available for this level.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }
+
     final currentQuestion = _questionBank[_currentQuestionIndex];
 
     if (_currentStep == 2) {
@@ -235,7 +276,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6)),
                       ),
                       FractionallySizedBox(
-                        widthFactor: 1.0 - _timerController.value,
+                        widthFactor: 1.0 - (_timerController?.value ?? 0),
                         child: Container(
                           height: 12,
                           decoration: BoxDecoration(
@@ -459,8 +500,6 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
     final String imageAsset = showNiceTry
         ? 'asset/nicetrylogo.png'
         : 'asset/greatjoblogo.png';
-
-    const Color bannerColor = Color(0xFFFFA24A);
 
     return Scaffold(
       backgroundColor: const Color(0xFF70D3F4),

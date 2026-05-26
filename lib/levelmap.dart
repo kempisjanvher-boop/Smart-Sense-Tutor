@@ -258,8 +258,11 @@ class LevelMapState extends State<LevelMap> {
               await Navigator.push<int>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      GameplayScreen(levelName: label),
+                  builder: (context) => GameplayScreen(
+                        category: widget.category,
+                        levelNumber: levelNumber,
+                        levelName: label,
+                      ),
                 ),
               );
 

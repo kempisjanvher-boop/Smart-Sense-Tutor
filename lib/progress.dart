@@ -1,24 +1,22 @@
+import 'core/app_categories.dart';
+
 class ProgressService {
   static final Map<String, int> completedLessons = {};
 
   static final Map<String, int> totalLessons = {
-    "Objects & Ideas": 3,
-    "Tech & Tradition": 3,
-    "Finance & Physics": 3,
-    "All About Me...": 3,
-    "Feelings": 3,
-    "Greetings": 3,
-    "Settings": 3,
+    for (final c in AppCategories.all) c: 3,
   };
 
   static final Map<String, Map<int, int>> levelStars = {};
+
+  static String _key(String category) => AppCategories.normalize(category);
 
   // =========================
   // COMPLETION LOGIC
   // =========================
 
   static int getCompleted(String category) {
-    return completedLessons[category] ?? 0;
+    return completedLessons[_key(category)] ?? 0;
   }
 
   static int getTotalInProgress() {
@@ -26,63 +24,55 @@ class ProgressService {
   }
 
   static void addCompletion(String category) {
-    completedLessons[category] =
-        (completedLessons[category] ?? 0) + 1;
+    final key = _key(category);
+    final cap = totalLessons[key] ?? 3;
+    final current = completedLessons[key] ?? 0;
+    if (current < cap) {
+      completedLessons[key] = current + 1;
+    }
   }
 
   static bool isCategoryCompleted(String category) {
-    final done = completedLessons[category] ?? 0;
-    final total = totalLessons[category] ?? 1;
+    final done = getCompleted(category);
+    final total = totalLessons[_key(category)] ?? 3;
     return done >= total;
   }
 
   static int getTotalCompletedAll() {
     int total = 0;
-
     for (final category in totalLessons.keys) {
-      if (isCategoryCompleted(category)) {
-        total++;
-      }
+      total += getCompleted(category);
     }
-
     return total;
   }
 
   static int getCategoriesCompleted() {
     int count = 0;
-
     for (final category in totalLessons.keys) {
       if (isCategoryCompleted(category)) {
         count++;
       }
     }
-
     return count;
   }
 
   // =========================
-  // LEVEL SYSTEM
+  // LEVEL SYSTEM — 3 levels per category
   // =========================
 
   static final Map<String, int> unlockedLevel = {
-    "Objects & Ideas": 1,
-    "Tech & Tradition": 1,
-    "Finance & Physics": 1,
-    "All About Me...": 1,
-    "Feelings": 1,
-    "Greetings": 1,
-    "Settings": 1,
+    for (final c in AppCategories.all) c: 1,
   };
 
   static int getUnlockedLevel(String category) {
-    return unlockedLevel[category] ?? 1;
+    return unlockedLevel[_key(category)] ?? 1;
   }
 
   static void unlockNext(String category, int level) {
-    final current = unlockedLevel[category] ?? 1;
-
+    final key = _key(category);
+    final current = unlockedLevel[key] ?? 1;
     if (level >= current && current < 3) {
-      unlockedLevel[category] = current + 1;
+      unlockedLevel[key] = current + 1;
     }
   }
 
@@ -91,21 +81,20 @@ class ProgressService {
   // =========================
 
   static int getStars(String category, int level) {
-    return levelStars[category]?[level] ?? 0;
+    return levelStars[_key(category)]?[level] ?? 0;
   }
 
   static void setStars(String category, int level, int stars) {
-    levelStars.putIfAbsent(category, () => {});
-    levelStars[category]![level] = stars;
+    final key = _key(category);
+    levelStars.putIfAbsent(key, () => {});
+    levelStars[key]![level] = stars;
   }
 
   static int getTotalStars() {
     int total = 0;
-
     for (final cat in levelStars.values) {
       total += cat.values.fold(0, (a, b) => a + b);
     }
-
     return total;
   }
 }

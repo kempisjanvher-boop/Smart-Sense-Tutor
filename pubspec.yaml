@@ -66,6 +66,7 @@ flutter:
     - asset/greatjoblogo.png
     - asset/nicetrylogo.png
     - asset/WSD-dataset.xlsx
+    - asset/English_WSD_Dataset.csv
     - asset/ribbon.png
 
   # To add assets to your application, add an assets section, like this:

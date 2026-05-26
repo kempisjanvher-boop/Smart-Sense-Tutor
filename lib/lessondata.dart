@@ -28,7 +28,7 @@ class LessonCategory {
 }
 
 class _LessonDataState extends State<LessonData> {
-  int _currentIndex = 1;
+  final int _currentIndex = 1;
 
   final List<LessonCategory> _categories = [
     LessonCategory(
@@ -47,9 +47,9 @@ class _LessonDataState extends State<LessonData> {
       completedLessons: ProgressService.getCompleted("Objects & Ideas"),
     ),
     LessonCategory(
-      title: "Law & Structure",
+      title: "Law & Structures",
       totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Law & Structure"),
+      completedLessons: ProgressService.getCompleted("Law & Structures"),
     ),
     LessonCategory(
       title: "Attributes & Evaluation",

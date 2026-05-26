@@ -1,8 +1,11 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'homescreen.dart';
+import 'services/quiz_engine.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await QuizEngine.instance.initialize();
   runApp(const WSDGameApp());
 }
 
