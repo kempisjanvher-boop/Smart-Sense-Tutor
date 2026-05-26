@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_sense_tutor/smartlookup.dart';
 import 'levelmap.dart';
 import 'homescreen.dart';
 import 'progress.dart';
@@ -146,6 +147,15 @@ class _LessonDataState extends State<LessonData> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const LessonData(),
+                ),
+              );
+              break;
+
+            case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SmartLookup(),
                 ),
               );
               break;

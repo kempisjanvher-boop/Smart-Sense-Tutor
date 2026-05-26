@@ -67,6 +67,18 @@ flutter:
     - asset/nicetrylogo.png
     - asset/WSD-dataset.xlsx
     - asset/ribbon.png
+    - asset/smartlookup.png
+    - asset/achievementicon.png
+    - asset/completedicon.png
+    - asset/lessonicon.png
+    - asset/categoriesicon.png
+    - asset/perfectscore.png
+    - asset/conqueror.png
+    - asset/legend.png
+    - asset/silver.png
+    - asset/bronze.png
+    - asset/gold.png
+    - asset/achievement.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

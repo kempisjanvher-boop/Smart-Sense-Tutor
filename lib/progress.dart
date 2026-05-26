@@ -14,6 +14,49 @@ class ProgressService {
   static final Map<String, Map<int, int>> levelStars = {};
 
   // =========================
+  // ACHIEVEMENT TRACKING SYSTEM
+  // =========================
+  // Variables live directly in app RAM as requested
+  static bool _weekStreakActive = false;
+
+  static bool hasWeekStreak() => _weekStreakActive;
+
+  // Set this to true in your testing/debug menus to test the streak badge
+  static void setWeekStreak(bool active) {
+    _weekStreakActive = active;
+  }
+
+  /// Calculates how many perfect scores (3 Stars) the user has earned across all categories
+  static int getPerfectScores() {
+    int perfectCount = 0;
+    for (final categoryMap in levelStars.values) {
+      for (final stars in categoryMap.values) {
+        if (stars == 3) {
+          perfectCount++;
+        }
+      }
+    }
+    return perfectCount;
+  }
+
+  /// Checks if the user has completed at least one lesson total
+  static bool hasCompletedAtLeastOneLesson() {
+    for (final count in completedLessons.values) {
+      if (count > 0) return true;
+    }
+    return false;
+  }
+
+  /// Calculates total achievement badges completely unlocked (at 100%)
+  static int getAchievementsUnlockedCount() {
+    int count = 0;
+    if (hasWeekStreak()) count++;
+    if (getPerfectScores() >= 10) count++;
+    if (hasCompletedAtLeastOneLesson()) count++;
+    return count;
+  }
+
+  // =========================
   // COMPLETION LOGIC
   // =========================
 
@@ -26,8 +69,7 @@ class ProgressService {
   }
 
   static void addCompletion(String category) {
-    completedLessons[category] =
-        (completedLessons[category] ?? 0) + 1;
+    completedLessons[category] = (completedLessons[category] ?? 0) + 1;
   }
 
   static bool isCategoryCompleted(String category) {
@@ -38,25 +80,21 @@ class ProgressService {
 
   static int getTotalCompletedAll() {
     int total = 0;
-
     for (final category in totalLessons.keys) {
       if (isCategoryCompleted(category)) {
         total++;
       }
     }
-
     return total;
   }
 
   static int getCategoriesCompleted() {
     int count = 0;
-
     for (final category in totalLessons.keys) {
       if (isCategoryCompleted(category)) {
         count++;
       }
     }
-
     return count;
   }
 
@@ -80,7 +118,6 @@ class ProgressService {
 
   static void unlockNext(String category, int level) {
     final current = unlockedLevel[category] ?? 1;
-
     if (level >= current && current < 3) {
       unlockedLevel[category] = current + 1;
     }
@@ -94,6 +131,7 @@ class ProgressService {
     return levelStars[category]?[level] ?? 0;
   }
 
+  /// Saves level stars and naturally updates achievements
   static void setStars(String category, int level, int stars) {
     levelStars.putIfAbsent(category, () => {});
     levelStars[category]![level] = stars;
@@ -101,11 +139,9 @@ class ProgressService {
 
   static int getTotalStars() {
     int total = 0;
-
     for (final cat in levelStars.values) {
       total += cat.values.fold(0, (a, b) => a + b);
     }
-
     return total;
   }
 }
