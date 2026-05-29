@@ -1,0 +1,4 @@
+Open THIS folder in Android Studio (not the OneDrive Desktop copy).
+
+OneDrive locks Flutter's ios/Flutter/ephemeral folder and breaks Run.
+This copy at C:\dev\Smart-Sense-Tutor-repo is verified to build and run.
