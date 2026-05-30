@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'homescreen.dart';
 import 'lessondata.dart';
+import 'smartlookupresult.dart';
+import 'analyzer/polysemy_analyzer.dart';
 
 class SmartLookup extends StatefulWidget {
   const SmartLookup({super.key});
@@ -13,6 +15,25 @@ class SmartLookup extends StatefulWidget {
 class _SmartLookupState extends State<SmartLookup> {
   final TextEditingController _searchController = TextEditingController();
   final int _currentIndex = 2; // Matches 'Smart Lookup' highlighted tab
+  bool _isDatasetLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAnalyzer();
+  }
+
+  /// Ensures data is fully resident in memory before allowing input matches
+  Future<void> _initializeAnalyzer() async {
+    if (PolysemyAnalyzer.excelDataset.isEmpty) {
+      await PolysemyAnalyzer.loadDataset();
+    }
+    if (mounted) {
+      setState(() {
+        _isDatasetLoading = false;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -38,7 +59,21 @@ class _SmartLookupState extends State<SmartLookup> {
           ),
         ),
       ),
-      body: Container(
+      body: _isDatasetLoading
+          ? const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(color: Color(0xFF70D3F4)),
+            SizedBox(height: 16),
+            Text(
+              "Loading vocabulary engine...",
+              style: TextStyle(color: Colors.black54, fontSize: 16),
+            )
+          ],
+        ),
+      )
+          : Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -103,7 +138,6 @@ class _SmartLookupState extends State<SmartLookup> {
                       ),
                     ),
 
-
                     Positioned(
                       bottom: 0,
                       left: 100,
@@ -111,9 +145,9 @@ class _SmartLookupState extends State<SmartLookup> {
                       child: Transform.rotate(
                         angle: 0.02,
                         child: _buildExampleBubble(
-                        textBefore: "The ",
-                        keyword: "bark",
-                        textAfter: " was very loud at night.",
+                          textBefore: "The ",
+                          keyword: "bank",
+                          textAfter: " approved his loan request.",
                         ),
                       ),
                     ),
@@ -142,14 +176,14 @@ class _SmartLookupState extends State<SmartLookup> {
               ),
               const SizedBox(height: 35),
 
-              // Search Bar with fixed subtle shadow treatment
+              // Search Bar Container
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black, // Fixed from pure harsh black
+                      color: Colors.black.withOpacity(0.12),
                       blurRadius: 15,
                       offset: const Offset(0, 6),
                     ),
@@ -159,7 +193,7 @@ class _SmartLookupState extends State<SmartLookup> {
                   controller: _searchController,
                   style: const TextStyle(fontSize: 18),
                   decoration: InputDecoration(
-                    hintText: "Enter a word to learn...",
+                    hintText: "Enter a word or sentence to learn...",
                     hintStyle: const TextStyle(color: Colors.black38, fontSize: 18),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                     border: InputBorder.none,
@@ -168,7 +202,7 @@ class _SmartLookupState extends State<SmartLookup> {
                       child: InkWell(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('AI Feature Ring Clicked!')),
+                            const SnackBar(content: Text('AI Context Mode Active!')),
                           );
                         },
                         customBorder: const CircleBorder(),
@@ -199,7 +233,51 @@ class _SmartLookupState extends State<SmartLookup> {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Logic to analyze user text input
+                    String textInput = _searchController.text.trim();
+
+                    if (textInput.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please enter a word or sentence to analyze!')),
+                      );
+                      return;
+                    }
+
+                    List<String> inputTokens = textInput
+                        .toLowerCase()
+                        .replaceAll(RegExp(r'[^a-zA-Z0-9 ]'), '')
+                        .split(RegExp(r'\s+'))
+                        .map((t) => t.trim())
+                        .toList();
+
+                    String detectedKeyword = "";
+
+                    Set<String> validKeywordsInExcel = PolysemyAnalyzer.excelDataset
+                        .map((row) => (row["word"] ?? "").toLowerCase().trim())
+                        .where((word) => word.isNotEmpty)
+                        .toSet();
+
+                    for (var token in inputTokens) {
+                      if (validKeywordsInExcel.contains(token)) {
+                        detectedKeyword = token;
+                        break;
+                      }
+                    }
+
+                    if (detectedKeyword.isEmpty && inputTokens.isNotEmpty) {
+                      detectedKeyword = inputTokens.first;
+                    }
+
+                    List<WordMeaning> computedMeanings = PolysemyAnalyzer.analyzeContext(detectedKeyword, textInput);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SmartLookupResult(
+                          searchedWord: detectedKeyword,
+                          dynamicMeanings: computedMeanings,
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF70D3F4),
@@ -273,7 +351,7 @@ class _SmartLookupState extends State<SmartLookup> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -289,14 +367,15 @@ class _SmartLookupState extends State<SmartLookup> {
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   setState(() {
-                    _searchController.text = keyword;
+                    // FIX: This now strictly assigns the clean text keyword to the input box controller
+                    _searchController.text = keyword.trim();
                   });
                 },
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color(0xFFFF8A5B),
                 decoration: TextDecoration.underline,
-                decorationColor: Color(0xFFFF8A5B), // Custom match decoration tint
+                decorationColor: Color(0xFFFF8A5B),
                 decorationThickness: 2,
               ),
             ),

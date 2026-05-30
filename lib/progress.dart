@@ -1,4 +1,8 @@
 class ProgressService {
+  // =========================
+  // COMPLETION DATA
+  // =========================
+
   static final Map<String, int> completedLessons = {};
 
   static final Map<String, int> totalLessons = {
@@ -9,9 +13,35 @@ class ProgressService {
     "Feelings": 3,
     "Greetings": 3,
     "Settings": 3,
+    "Law & Structures": 3,
+    "Attributes & Evaluation": 3,
+    "Actions & Movement": 3,
+    "Directions & Space": 3,
   };
 
+  // =========================
+  // STARS DATA
+  // =========================
+
   static final Map<String, Map<int, int>> levelStars = {};
+
+  // =========================
+  // LEVEL UNLOCK SYSTEM
+  // =========================
+
+  static final Map<String, int> unlockedLevel = {
+    "Objects & Ideas": 1,
+    "Tech & Tradition": 1,
+    "Finance & Physics": 1,
+    "All About Me...": 1,
+    "Feelings": 1,
+    "Greetings": 1,
+    "Settings": 1,
+    "Law & Structures": 1,
+    "Attributes & Evaluation": 1,
+    "Actions & Movement": 1,
+    "Directions & Space": 1,
+  };
 
   // =========================
   // COMPLETION LOGIC
@@ -21,31 +51,36 @@ class ProgressService {
     return completedLessons[category] ?? 0;
   }
 
-  static int getTotalInProgress() {
-    return completedLessons.values.fold(0, (a, b) => a + b);
-  }
-
   static void addCompletion(String category) {
     completedLessons[category] =
         (completedLessons[category] ?? 0) + 1;
   }
 
+  static int getTotalCompletedAll() {
+    return completedLessons.values.fold(0, (a, b) => a + b);
+  }
+
   static bool isCategoryCompleted(String category) {
     final done = completedLessons[category] ?? 0;
     final total = totalLessons[category] ?? 1;
+
     return done >= total;
   }
 
-  static int getTotalCompletedAll() {
-    int total = 0;
+  static int getTotalInProgress() {
+    int count = 0;
 
     for (final category in totalLessons.keys) {
-      if (isCategoryCompleted(category)) {
-        total++;
+      final completed = completedLessons[category] ?? 0;
+      final total = totalLessons[category] ?? 0;
+
+      // Started but not finished
+      if (completed > 0 && completed < total) {
+        count++;
       }
     }
 
-    return total;
+    return count;
   }
 
   static int getCategoriesCompleted() {
@@ -60,19 +95,13 @@ class ProgressService {
     return count;
   }
 
+  static bool hasCompletedAtLeastOneLesson() {
+    return completedLessons.values.any((value) => value > 0);
+  }
+
   // =========================
   // LEVEL SYSTEM
   // =========================
-
-  static final Map<String, int> unlockedLevel = {
-    "Objects & Ideas": 1,
-    "Tech & Tradition": 1,
-    "Finance & Physics": 1,
-    "All About Me...": 1,
-    "Feelings": 1,
-    "Greetings": 1,
-    "Settings": 1,
-  };
 
   static int getUnlockedLevel(String category) {
     return unlockedLevel[category] ?? 1;
@@ -102,10 +131,68 @@ class ProgressService {
   static int getTotalStars() {
     int total = 0;
 
-    for (final cat in levelStars.values) {
-      total += cat.values.fold(0, (a, b) => a + b);
+    for (final category in levelStars.values) {
+      total += category.values.fold(0, (a, b) => a + b);
     }
 
     return total;
+  }
+
+  static int getPerfectScores() {
+    int count = 0;
+
+    for (final category in levelStars.values) {
+      for (final stars in category.values) {
+        if (stars == 3) {
+          count++;
+        }
+      }
+    }
+
+    return count;
+  }
+
+  // =========================
+  // STREAK SYSTEM
+  // =========================
+
+  static bool hasWeekStreak() {
+    // Placeholder logic
+    // Replace with real streak tracking later
+    return getTotalInProgress() >= 7;
+  }
+
+  // =========================
+  // ACHIEVEMENTS
+  // =========================
+
+  static int getAchievementsUnlockedCount() {
+    int count = 0;
+
+    // Achievement 1:
+    // Complete at least one lesson
+    if (hasCompletedAtLeastOneLesson()) {
+      count++;
+    }
+
+    // Achievement 2:
+    // Get one perfect score
+    if (getPerfectScores() >= 1) {
+      count++;
+    }
+
+    // Achievement 3:
+    // Maintain a week streak
+    if (hasWeekStreak()) {
+      count++;
+    }
+
+    // Achievement 4:
+    // Complete 3 categories
+    if (getCategoriesCompleted() >= 3) {
+      count++;
+    }
+
+    return count;
   }
 }

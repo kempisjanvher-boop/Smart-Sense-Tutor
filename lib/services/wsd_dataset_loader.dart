@@ -43,7 +43,6 @@ class WsdDatasetLoader {
     return _cache!;
   }
 
-  /// Minimal CSV parser (handles quoted fields with commas).
   List<String> _parseCsvLine(String line) {
     final result = <String>[];
     final buffer = StringBuffer();

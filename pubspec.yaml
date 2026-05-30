@@ -32,6 +32,8 @@ dependencies:
     sdk: flutter
   excel: ^4.0.6
   cupertino_icons: ^1.0.8
+  http: ^1.2.1
+  csv: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +82,7 @@ flutter:
     - asset/bronze.png
     - asset/gold.png
     - asset/achievement.png
+    - asset/WSD-dataset.csv
 
   # To add assets to your application, add an assets section, like this:
   # assets:

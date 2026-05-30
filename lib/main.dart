@@ -2,10 +2,17 @@
 import 'package:flutter/material.dart';
 import 'homescreen.dart';
 import 'services/quiz_engine.dart';
+import 'analyzer//polysemy_analyzer.dart'; // ADD THIS
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Existing initialization
   await QuizEngine.instance.initialize();
+
+  // Load TF-IDF CSV dataset
+  await PolysemyAnalyzer.loadDataset();
+
   runApp(const WSDGameApp());
 }
 
@@ -20,7 +27,7 @@ class WSDGameApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const IntroScreen(),
+      home: const IntroScreen(), // YOUR intro stays here
     );
   }
 }
@@ -48,21 +55,29 @@ class IntroScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
+
               Image.asset(
                 'asset/logo.png',
                 width: 320,
-                fit: BoxFit.contain
+                fit: BoxFit.contain,
               ),
+
               const SizedBox(height: 40),
+
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
                   "Grow your vocabulary, expand your world.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: Colors.black87),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
+
               const SizedBox(height: 40),
+
               TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -74,7 +89,10 @@ class IntroScreen extends StatelessWidget {
                 },
                 child: Text(
                   "Tap anywhere to start",
-                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],

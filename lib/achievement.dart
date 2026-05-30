@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'homescreen.dart';
 import 'lessondata.dart';
 import 'smartlookup.dart';
-import 'progress.dart'; // Imports your game logic engine
+import 'progress.dart';
 
 class AchievementsScreen extends StatelessWidget {
   const AchievementsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 1. Fetch live gameplay data variables from your game tracking service
-    int perfectScoresCount = ProgressService.getPerfectScores(); // logic tracking 10 perfect scores
+    int perfectScoresCount = ProgressService.getPerfectScores();
     bool hasCompletedALesson = ProgressService.hasCompletedAtLeastOneLesson();
     bool perfectWeekStreak = ProgressService.hasWeekStreak();
 

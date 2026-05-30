@@ -65,17 +65,19 @@ class _HomeScreenState extends State<HomeScreen> {
               childAspectRatio: 1.5,
               children: [
                 _buildStatCard(
-                  ProgressService.getCategoriesCompleted().toString(),
+                  ProgressService.getTotalInProgress().toString(),
                   "Lesson(s)\nin progress",
                   const Color(0xFFFFDDD7),
                   Image.asset("asset/lessonicon.png", width: 40, height: 40),
                 ),
+
                 _buildStatCard(
-                  ProgressService.getCategoriesCompleted().toString(),
+                  ProgressService.getTotalCompletedAll().toString(),
                   "Lessons\ncompleted",
                   const Color(0xFFE8FFE8),
                   Image.asset("asset/completedicon.png", width: 40, height: 40),
                 ),
+
                 _buildStatCard(
                   ProgressService.getCategoriesCompleted().toString(),
                   "Categories\ncompleted",
@@ -92,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                   child: _buildStatCard(
-                    ProgressService.getAchievementsUnlockedCount().toString(), // Dynamic unlocked number
+                    ProgressService.getAchievementsUnlockedCount().toString(),
                     "Achievement",
                     const Color(0xFFFFFADD),
                     Image.asset(
