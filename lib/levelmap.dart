@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'gameplayscreen.dart';
+import 'level_difficulty_screen.dart';
+import 'services/level_manager.dart';
 import 'lessondata.dart';
+import 'models/category_visual_theme.dart';
 import 'progress.dart';
 
 class LevelMap extends StatefulWidget {
@@ -21,6 +23,7 @@ class LevelMapState extends State<LevelMap> {
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
+    final theme = CategoryVisualTheme.forCategory(widget.category);
 
     return Scaffold(
       body: Stack(
@@ -31,28 +34,43 @@ class LevelMapState extends State<LevelMap> {
               fit: BoxFit.fill,
             ),
           ),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    theme.secondary.withValues(alpha: 0.55),
+                    theme.primary.withValues(alpha: 0.45),
+                  ],
+                ),
+              ),
+            ),
+          ),
 
           // CATEGORY HEADER
           Positioned(
             top: 60,
             left: 24,
+            right: 24,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Category:",
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white70,
+                    color: theme.onPrimary.withValues(alpha: 0.85),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
                   widget.category,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: theme.onPrimary,
                   ),
                 ),
               ],
@@ -64,10 +82,10 @@ class LevelMapState extends State<LevelMap> {
             right: 110,
             top: screenHeight * 0.20,
             child: _buildLevelNode(
-              3,
-              "Level 3",
-              const Color(0xFF5CC2E6),
-              'asset/level3.png',
+              theme: theme,
+              levelNumber: 3,
+              label: "Level 3",
+              imagePath: 'asset/level3.png',
             ),
           ),
 
@@ -76,10 +94,10 @@ class LevelMapState extends State<LevelMap> {
             right: 25,
             top: screenHeight * 0.40,
             child: _buildLevelNode(
-              2,
-              "Level 2",
-              const Color(0xFFF2A3B3),
-              'asset/level2.png',
+              theme: theme,
+              levelNumber: 2,
+              label: "Level 2",
+              imagePath: 'asset/level2.png',
             ),
           ),
 
@@ -88,10 +106,10 @@ class LevelMapState extends State<LevelMap> {
             right: 150,
             bottom: screenHeight * 0.26,
             child: _buildLevelNode(
-              1,
-              "Level 1",
-              const Color(0xFF4A5568),
-              'asset/level1.png',
+              theme: theme,
+              levelNumber: 1,
+              label: "Level 1",
+              imagePath: 'asset/level1.png',
             ),
           ),
 
@@ -113,9 +131,7 @@ class LevelMapState extends State<LevelMap> {
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: _hasPlayedGame
-                          ? const Color(0xFFFF7A45)
-                          : Colors.grey[400],
+                      color: _hasPlayedGame ? theme.accent : Colors.grey[400],
                       shape: BoxShape.circle,
                       boxShadow: const [
                         BoxShadow(
@@ -135,8 +151,8 @@ class LevelMapState extends State<LevelMap> {
                 if (_hasPlayedGame)
                   Container(
                     padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFA0E050),
+                    decoration: BoxDecoration(
+                      color: theme.primary,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
@@ -187,7 +203,7 @@ class LevelMapState extends State<LevelMap> {
                   ),
                   CircleAvatar(
                     radius: 26,
-                    backgroundColor: const Color(0xFF70D3F4),
+                    backgroundColor: theme.primary,
                     child: IconButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -213,20 +229,24 @@ class LevelMapState extends State<LevelMap> {
     );
   }
 
-  Widget _buildLevelNode(
-      int levelNumber,
-      String label,
-      Color characterBaseColor,
-      String imagePath,
-      ) {
+  Widget _buildLevelNode({
+    required CategoryVisualTheme theme,
+    required int levelNumber,
+    required String label,
+    required String imagePath,
+  }) {
+    final characterBaseColor = theme.levelNodeColor(levelNumber);
     bool isLevelLocked = levelNumber > _unlockedLevel;
-    int starsEarned =
-    ProgressService.getStars(widget.category, levelNumber);
+    final starsEarned = List.generate(3, (i) {
+      final diff = LevelManager.difficultiesPerLevel[i];
+      return ProgressService.getStars(widget.category, levelNumber, diff) >= 1;
+    });
+    final starCount = starsEarned.where((done) => done).length;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (!isLevelLocked && starsEarned > 0)
+        if (!isLevelLocked && starCount > 0)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: Row(
@@ -234,8 +254,8 @@ class LevelMapState extends State<LevelMap> {
               children: List.generate(3, (index) {
                 return Icon(
                   Icons.star_rounded,
-                  color: index < starsEarned
-                      ? const Color(0xFFFFD026)
+                  color: starsEarned[index]
+                      ? theme.starColor
                       : Colors.grey[300],
                   size: 22,
                 );
@@ -254,29 +274,19 @@ class LevelMapState extends State<LevelMap> {
                 ),
               );
             } else {
-              final int? averageStarsResult =
-              await Navigator.push<int>(
+              final bool? refreshed = await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GameplayScreen(
-                        category: widget.category,
-                        levelNumber: levelNumber,
-                        levelName: label,
-                      ),
+                  builder: (context) => LevelDifficultyScreen(
+                    category: widget.category,
+                    levelNumber: levelNumber,
+                    levelName: label,
+                  ),
                 ),
               );
 
-              if (averageStarsResult != null && mounted) {
+              if (refreshed == true && mounted) {
                 setState(() {
-                  ProgressService.setStars(
-                    widget.category,
-                    levelNumber,
-                    averageStarsResult,
-                  );
-
-                  ProgressService.addCompletion(widget.category);
-                  ProgressService.unlockNext(widget.category, levelNumber);
-
                   _hasPlayedGame = true;
                   _streakCount = 1;
                 });
@@ -330,7 +340,7 @@ class LevelMapState extends State<LevelMap> {
           padding:
           const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
           decoration: BoxDecoration(
-            color: const Color(0xFF2C3E6B),
+            color: theme.secondary,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(

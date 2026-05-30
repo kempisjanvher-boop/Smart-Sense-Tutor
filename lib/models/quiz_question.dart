@@ -1,4 +1,5 @@
 import 'quiz_option.dart';
+import 'difficulty.dart';
 
 /// Runtime question presented in [GameplayScreen].
 class QuizQuestion {
@@ -7,6 +8,7 @@ class QuizQuestion {
   final String sentenceAfter;
   final String category;
   final int level;
+  final Difficulty difficulty;
   final int correctIndex;
   final List<QuizOption> options;
   final int sourceRecordId;
@@ -17,6 +19,7 @@ class QuizQuestion {
     required this.sentenceAfter,
     required this.category,
     required this.level,
+    required this.difficulty,
     required this.correctIndex,
     required this.options,
     required this.sourceRecordId,
@@ -27,6 +30,7 @@ class QuizQuestion {
         'sentenceBefore': sentenceBefore,
         'sentenceAfter': sentenceAfter,
         'category': category,
+        'difficulty': difficulty.label,
         'correctIndex': correctIndex,
         'options': options.map((o) => o.toMap()).toList(),
         'sourceRecordId': sourceRecordId,

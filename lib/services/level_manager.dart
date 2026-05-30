@@ -1,3 +1,5 @@
+import '../models/difficulty.dart';
+
 /// Unified level rules for every category.
 class LevelManager {
   LevelManager._();
@@ -11,17 +13,21 @@ class LevelManager {
 
   static String levelLabel(int level) => 'Level $level';
 
+  static const List<Difficulty> difficultiesPerLevel = [
+    Difficulty.easy,
+    Difficulty.moderate,
+    Difficulty.hard,
+  ];
+
   /// Timer duration scales with difficulty (seconds).
-  static int timerSecondsForLevel(int level) {
-    switch (level) {
-      case 1:
+  static int timerSecondsForDifficulty(Difficulty difficulty) {
+    switch (difficulty) {
+      case Difficulty.easy:
         return 20;
-      case 2:
+      case Difficulty.moderate:
         return 15;
-      case 3:
+      case Difficulty.hard:
         return 12;
-      default:
-        return 15;
     }
   }
 }

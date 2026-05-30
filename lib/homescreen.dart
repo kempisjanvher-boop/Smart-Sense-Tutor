@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'levelmap.dart';
 import 'lessondata.dart';
+import 'models/category_visual_theme.dart';
 import 'progress.dart';
 import 'smartlookup.dart';
 import 'achievement.dart';
@@ -251,6 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildCategoryCard(String title, {bool isFullWidth = false}) {
+    final theme = CategoryVisualTheme.forCategory(title);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -258,31 +261,44 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialPageRoute(builder: (context) => LevelMap(category: title)),
         );
       },
-    child: Container(
-      height: isFullWidth ? 100 : 110,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFE2E8F0),
-          width: 1.5,
+      child: Container(
+        height: isFullWidth ? 100 : 110,
+        decoration: BoxDecoration(
+          color: theme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: theme.primary, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: theme.primary.withValues(alpha: 0.25),
+              blurRadius: 8,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color:  const Color(0xFFE2E8F0),
-            offset: const Offset(0, 15),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(20),
-      alignment: Alignment.centerLeft,
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Color(0xFF2C3E6B),
-          )
+        padding: const EdgeInsets.all(20),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Container(
+              width: 6,
+              height: 48,
+              decoration: BoxDecoration(
+                color: theme.accent,
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: theme.titleText,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

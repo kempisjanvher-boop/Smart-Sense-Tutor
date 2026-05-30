@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../core/app_categories.dart';
+import '../models/difficulty.dart';
 import '../models/quiz_option.dart';
 import '../models/quiz_question.dart';
 import '../models/wsd_record.dart';
@@ -21,6 +22,9 @@ class QuestionGenerator {
   Future<List<QuizQuestion>> generate({
     required String category,
     required int level,
+    required Difficulty difficulty,
+    Set<int>? excludeRecordIds,
+    String? avoidWord,
     int? seed,
   }) async {
     if (!LevelManager.isValidLevel(level)) {
@@ -49,12 +53,19 @@ class QuestionGenerator {
       }
     }
 
-    candidates = _filterByDifficulty(candidates, level);
+    // Filter into a difficulty-appropriate slice, but don't over-prune small pools.
+    final baseCandidates = List<WsdRecord>.from(candidates);
+    candidates = _filterByDifficulty(candidates, difficulty);
+    if (candidates.length < LevelManager.questionsPerLevel * 4) {
+      candidates = baseCandidates;
+    }
     if (candidates.length < LevelManager.questionsPerLevel) {
-      candidates = _filterByDifficulty(
-        allRecords.where((r) => poolWords.contains(r.word)).toList(),
-        level,
-      );
+      final fallbackBase =
+          allRecords.where((r) => poolWords.contains(r.word)).toList();
+      candidates = _filterByDifficulty(fallbackBase, difficulty);
+      if (candidates.length < LevelManager.questionsPerLevel * 4) {
+        candidates = fallbackBase;
+      }
     }
     if (candidates.isEmpty) {
       candidates = List<WsdRecord>.from(allRecords);
@@ -69,13 +80,16 @@ class QuestionGenerator {
 
     candidates.shuffle(random);
 
-    final usedRecordIds = <int>{};
+    final excluded = excludeRecordIds ?? const <int>{};
+    final usedRecordIds = <int>{...excluded};
     final usedWords = <String>{};
     final questions = <QuizQuestion>[];
+    String? lastWord = avoidWord;
 
     for (final record in candidates) {
       if (questions.length >= LevelManager.questionsPerLevel) break;
       if (usedRecordIds.contains(record.id)) continue;
+      if (lastWord != null && record.word == lastWord) continue;
 
       // Prefer unique words per session when possible.
       if (usedWords.contains(record.word) && usedWords.length < poolWords.length) {
@@ -94,6 +108,7 @@ class QuestionGenerator {
         senses: senses,
         category: normalizedCategory,
         level: level,
+        difficulty: difficulty,
         random: random,
       );
       if (question == null) continue;
@@ -101,6 +116,7 @@ class QuestionGenerator {
       usedRecordIds.add(record.id);
       usedWords.add(record.word);
       questions.add(question);
+      lastWord = record.word;
     }
 
     // Fallback: relax unique-word rule.
@@ -109,6 +125,7 @@ class QuestionGenerator {
       for (final record in fallback) {
         if (questions.length >= LevelManager.questionsPerLevel) break;
         if (usedRecordIds.contains(record.id)) continue;
+        if (lastWord != null && record.word == lastWord) continue;
 
         final wordRecords = byWord[record.word] ?? [record];
         final senses = <String, String>{};
@@ -122,12 +139,47 @@ class QuestionGenerator {
           senses: senses,
           category: normalizedCategory,
           level: level,
+          difficulty: difficulty,
           random: random,
         );
         if (question == null) continue;
 
         usedRecordIds.add(record.id);
         questions.add(question);
+        lastWord = record.word;
+      }
+    }
+
+    // Last resort: ignore category theming and difficulty slicing.
+    // This prevents hard failures when a themed pool is too small or too sparse
+    // (e.g., many words in the pool only have one sense in the dataset).
+    if (questions.length < LevelManager.questionsPerLevel) {
+      final fallbackAll = List<WsdRecord>.from(allRecords)..shuffle(random);
+      for (final record in fallbackAll) {
+        if (questions.length >= LevelManager.questionsPerLevel) break;
+        if (usedRecordIds.contains(record.id)) continue;
+        if (lastWord != null && record.word == lastWord) continue;
+
+        final wordRecords = byWord[record.word] ?? [record];
+        final senses = <String, String>{};
+        for (final wr in wordRecords) {
+          senses[wr.correctSense] = wr.definition;
+        }
+        if (senses.length < 2) continue;
+
+        final question = _buildQuestion(
+          record: record,
+          senses: senses,
+          category: normalizedCategory,
+          level: level,
+          difficulty: difficulty,
+          random: random,
+        );
+        if (question == null) continue;
+
+        usedRecordIds.add(record.id);
+        questions.add(question);
+        lastWord = record.word;
       }
     }
 
@@ -142,26 +194,28 @@ class QuestionGenerator {
     return questions;
   }
 
-  List<WsdRecord> _filterByDifficulty(List<WsdRecord> records, int level) {
+  List<WsdRecord> _filterByDifficulty(List<WsdRecord> records, Difficulty difficulty) {
     final sorted = List<WsdRecord>.from(records)
-      ..sort((a, b) => a.sentence.length.compareTo(b.sentence.length));
+      ..sort((a, b) {
+        final cmp = a.sentence.length.compareTo(b.sentence.length);
+        if (cmp != 0) return cmp;
+        return a.definition.length.compareTo(b.definition.length);
+      });
 
     if (sorted.isEmpty) return sorted;
 
     final third = (sorted.length / 3).ceil().clamp(1, sorted.length);
 
-    switch (level) {
-      case 1:
+    switch (difficulty) {
+      case Difficulty.easy:
         return sorted.take(third).toList();
-      case 2:
+      case Difficulty.moderate:
         final start = third.clamp(0, sorted.length - 1);
         final end = (third * 2).clamp(start + 1, sorted.length);
         return sorted.sublist(start, end);
-      case 3:
+      case Difficulty.hard:
         final hardStart = (third * 2).clamp(0, sorted.length - 1);
         return sorted.sublist(hardStart);
-      default:
-        return sorted;
     }
   }
 
@@ -170,6 +224,7 @@ class QuestionGenerator {
     required Map<String, String> senses,
     required String category,
     required int level,
+    required Difficulty difficulty,
     required Random random,
   }) {
     final split = _splitSentence(record.sentence, record.word);
@@ -183,26 +238,38 @@ class QuestionGenerator {
         .map((e) => e.value)
         .toSet()
         .toList();
-    distractors.shuffle(random);
+    distractors.sort((a, b) => _definitionSimilarityScore(record.definition, b)
+        .compareTo(_definitionSimilarityScore(record.definition, a)));
+    // For easy, pick least similar distractors. For hard, pick most similar.
+    final ordered = List<String>.from(distractors);
+    if (difficulty == Difficulty.easy) {
+      ordered.sort((a, b) => _definitionSimilarityScore(record.definition, a)
+          .compareTo(_definitionSimilarityScore(record.definition, b)));
+    } else if (difficulty == Difficulty.hard) {
+      ordered.sort((a, b) => _definitionSimilarityScore(record.definition, b)
+          .compareTo(_definitionSimilarityScore(record.definition, a)));
+    } else {
+      ordered.shuffle(random);
+    }
 
-    if (distractors.isEmpty) return null;
+    if (ordered.isEmpty) return null;
 
-    final correctText = _formatDefinition(correctDefinition, level);
+    final correctText = _formatDefinition(correctDefinition, difficulty);
     final optionEntries = <({String text, IconData icon, bool isCorrect})>[
       (text: correctText, icon: _iconForSense(record.correctSense), isCorrect: true),
       (
-        text: _formatDefinition(distractors[0], level),
-        icon: _iconForSense(distractors[0]),
+        text: _formatDefinition(ordered[0], difficulty),
+        icon: _iconForSense(ordered[0]),
         isCorrect: false,
       ),
       (
         text: _formatDefinition(
-          distractors.length > 1 ? distractors[1] : distractors[0],
-          level,
-          variant: distractors.length <= 1,
+          ordered.length > 1 ? ordered[1] : ordered[0],
+          difficulty,
+          variant: ordered.length <= 1,
         ),
         icon: _iconForSense(
-          distractors.length > 1 ? distractors[1] : distractors[0],
+          ordered.length > 1 ? ordered[1] : ordered[0],
         ),
         isCorrect: false,
       ),
@@ -220,23 +287,26 @@ class QuestionGenerator {
       sentenceAfter: split.after,
       category: category,
       level: level,
+      difficulty: difficulty,
       correctIndex: idx,
       options: options,
       sourceRecordId: record.id,
     );
   }
 
-  String _formatDefinition(String definition, int level, {bool variant = false}) {
+  String _formatDefinition(
+    String definition,
+    Difficulty difficulty, {
+    bool variant = false,
+  }) {
     final base = definition.trim();
     if (variant) return base;
-    switch (level) {
-      case 1:
+    switch (difficulty) {
+      case Difficulty.easy:
         return base;
-      case 2:
-        return 'In this context: $base';
-      case 3:
-        return 'Critical reading — $base';
-      default:
+      case Difficulty.moderate:
+        return base;
+      case Difficulty.hard:
         return base;
     }
   }
@@ -276,6 +346,27 @@ class QuestionGenerator {
     }
     if (s.contains('plant') || s.contains('organism')) return Icons.eco;
     return Icons.lightbulb_outline;
+  }
+
+  int _definitionSimilarityScore(String a, String b) {
+    final aTokens = _tokens(a);
+    final bTokens = _tokens(b);
+    if (aTokens.isEmpty || bTokens.isEmpty) return 0;
+    var overlap = 0;
+    for (final t in aTokens) {
+      if (bTokens.contains(t)) overlap++;
+    }
+    return overlap;
+  }
+
+  Set<String> _tokens(String s) {
+    final cleaned = s
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z\\s]'), ' ')
+        .trim();
+    if (cleaned.isEmpty) return const {};
+    final parts = cleaned.split(RegExp(r'\\s+'));
+    return parts.where((p) => p.length >= 4).toSet();
   }
 }
 

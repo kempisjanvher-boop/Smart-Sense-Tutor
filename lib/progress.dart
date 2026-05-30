@@ -1,3 +1,5 @@
+import 'models/difficulty.dart';
+
 class ProgressService {
   // =========================
   // COMPLETION DATA
@@ -23,7 +25,8 @@ class ProgressService {
   // STARS DATA
   // =========================
 
-  static final Map<String, Map<int, int>> levelStars = {};
+  /// category -> level -> difficulty -> stars
+  static final Map<String, Map<int, Map<Difficulty, int>>> levelStars = {};
 
   // =========================
   // LEVEL UNLOCK SYSTEM
@@ -56,6 +59,7 @@ class ProgressService {
         (completedLessons[category] ?? 0) + 1;
   }
 
+  /// Total lessons completed across all categories
   static int getTotalCompletedAll() {
     return completedLessons.values.fold(0, (a, b) => a + b);
   }
@@ -67,6 +71,7 @@ class ProgressService {
     return done >= total;
   }
 
+  /// Categories that have been started but not completed
   static int getTotalInProgress() {
     int count = 0;
 
@@ -74,7 +79,6 @@ class ProgressService {
       final completed = completedLessons[category] ?? 0;
       final total = totalLessons[category] ?? 0;
 
-      // Started but not finished
       if (completed > 0 && completed < total) {
         count++;
       }
@@ -107,10 +111,14 @@ class ProgressService {
     return unlockedLevel[category] ?? 1;
   }
 
+  /// Unlock next level only when all 3 difficulties
+  /// in the current level have at least 1 star.
   static void unlockNext(String category, int level) {
     final current = unlockedLevel[category] ?? 1;
 
-    if (level >= current && current < 3) {
+    if (level < current || current >= 3) return;
+
+    if (completedDifficultiesCount(category, level) >= 3) {
       unlockedLevel[category] = current + 1;
     }
   }
@@ -119,32 +127,102 @@ class ProgressService {
   // STARS SYSTEM
   // =========================
 
-  static int getStars(String category, int level) {
-    return levelStars[category]?[level] ?? 0;
+  static int getStars(
+      String category,
+      int level,
+      Difficulty difficulty,
+      ) {
+    return levelStars[category]?[level]?[difficulty] ?? 0;
   }
 
-  static void setStars(String category, int level, int stars) {
+  static void setStars(
+      String category,
+      int level,
+      Difficulty difficulty,
+      int stars,
+      ) {
     levelStars.putIfAbsent(category, () => {});
-    levelStars[category]![level] = stars;
+    levelStars[category]!.putIfAbsent(level, () => {});
+
+    final current =
+        levelStars[category]![level]![difficulty] ?? 0;
+
+    // Keep highest score only
+    if (stars > current) {
+      levelStars[category]![level]![difficulty] = stars;
+    }
+  }
+
+  /// Number of completed difficulties in a level
+  static int completedDifficultiesCount(
+      String category,
+      int level,
+      ) {
+    final byDifficulty = levelStars[category]?[level];
+
+    if (byDifficulty == null) return 0;
+
+    return byDifficulty.values
+        .where((stars) => stars >= 1)
+        .length;
+  }
+
+  static bool isDifficultyUnlocked(
+      String category,
+      int level,
+      Difficulty difficulty,
+      ) {
+    if (level > getUnlockedLevel(category)) {
+      return false;
+    }
+
+    switch (difficulty) {
+      case Difficulty.easy:
+        return true;
+
+      case Difficulty.moderate:
+        return getStars(
+          category,
+          level,
+          Difficulty.easy,
+        ) >=
+            1;
+
+      case Difficulty.hard:
+        return getStars(
+          category,
+          level,
+          Difficulty.moderate,
+        ) >=
+            1;
+    }
   }
 
   static int getTotalStars() {
     int total = 0;
 
-    for (final category in levelStars.values) {
-      total += category.values.fold(0, (a, b) => a + b);
+    for (final levels in levelStars.values) {
+      for (final difficulties in levels.values) {
+        total += difficulties.values.fold(
+          0,
+              (a, b) => a + b,
+        );
+      }
     }
 
     return total;
   }
 
+  /// Count every difficulty that earned 3 stars
   static int getPerfectScores() {
     int count = 0;
 
-    for (final category in levelStars.values) {
-      for (final stars in category.values) {
-        if (stars == 3) {
-          count++;
+    for (final levels in levelStars.values) {
+      for (final difficulties in levels.values) {
+        for (final stars in difficulties.values) {
+          if (stars == 3) {
+            count++;
+          }
         }
       }
     }
@@ -158,7 +236,7 @@ class ProgressService {
 
   static bool hasWeekStreak() {
     // Placeholder logic
-    // Replace with real streak tracking later
+    // Replace with actual streak tracking later
     return getTotalInProgress() >= 7;
   }
 
@@ -169,26 +247,18 @@ class ProgressService {
   static int getAchievementsUnlockedCount() {
     int count = 0;
 
-    // Achievement 1:
-    // Complete at least one lesson
     if (hasCompletedAtLeastOneLesson()) {
       count++;
     }
 
-    // Achievement 2:
-    // Get one perfect score
     if (getPerfectScores() >= 1) {
       count++;
     }
 
-    // Achievement 3:
-    // Maintain a week streak
     if (hasWeekStreak()) {
       count++;
     }
 
-    // Achievement 4:
-    // Complete 3 categories
     if (getCategoriesCompleted() >= 3) {
       count++;
     }

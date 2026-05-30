@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 import 'core/app_categories.dart';
+import 'difficulty_theme.dart';
+import 'models/category_visual_theme.dart';
+import 'models/difficulty.dart';
 import 'models/quiz_question.dart';
 import 'services/level_manager.dart';
 import 'services/quiz_engine.dart';
@@ -10,12 +13,14 @@ class GameplayScreen extends StatefulWidget {
   final String category;
   final int levelNumber;
   final String levelName;
+  final Difficulty difficulty;
 
   const GameplayScreen({
     super.key,
     required this.category,
     required this.levelNumber,
     required this.levelName,
+    required this.difficulty,
   });
 
   @override
@@ -45,6 +50,11 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
   List<Map<String, dynamic>> get _questionBank =>
       _questions.map((q) => q.toLegacyMap()).toList();
 
+  CategoryVisualTheme get _theme =>
+      CategoryVisualTheme.forCategory(widget.category);
+
+  Difficulty get _difficulty => widget.difficulty;
+
   @override
   void initState() {
     super.initState();
@@ -56,6 +66,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
       final generated = await QuizEngine.instance.questionsForLevel(
         category: AppCategories.normalize(widget.category),
         level: widget.levelNumber,
+        difficulty: widget.difficulty,
       );
       if (!mounted) return;
       setState(() {
@@ -77,7 +88,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
     _timerController = AnimationController(
       vsync: this,
       duration: Duration(
-        seconds: LevelManager.timerSecondsForLevel(widget.levelNumber),
+        seconds: LevelManager.timerSecondsForDifficulty(widget.difficulty),
       ),
     )..addListener(() {
       setState(() {});
@@ -136,10 +147,12 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
 
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Not quite! One star deducted. Try another definition! 🌟"),
-          duration: Duration(milliseconds: 1000),
-          backgroundColor: Color(0xFF742A2A),
+        SnackBar(
+          content: const Text(
+            "Not quite! One star deducted. Try another definition! 🌟",
+          ),
+          duration: const Duration(milliseconds: 1000),
+          backgroundColor: _theme.secondary,
         ),
       );
     }
@@ -173,16 +186,20 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
+      return Scaffold(
+        backgroundColor: _theme.surface,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(color: Color(0xFFFF9F43)),
-              SizedBox(height: 16),
+              CircularProgressIndicator(color: _theme.primary),
+              const SizedBox(height: 16),
               Text(
                 'Generating your quiz...',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: _theme.titleText,
+                ),
               ),
             ],
           ),
@@ -218,7 +235,16 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('asset/gameplayscreen.png', fit: BoxFit.cover,
+            child: Image.asset(
+              'asset/gameplayscreen.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: _theme.primary.withValues(alpha: 0.12),
+              ),
             ),
           ),
           SafeArea(
@@ -227,37 +253,59 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.cancel_rounded, color: Color(0xFF742A2A), size: 36),
+                        icon: Icon(
+                          Icons.cancel_rounded,
+                          color: _theme.secondary,
+                          size: 36,
+                        ),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFF9F43),
-                              borderRadius: BorderRadius.circular(16),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 28,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: DifficultyTheme.badgeColor(_difficulty),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.white, width: 2.5),
+                                boxShadow: DifficultyTheme.badgeShadow(_difficulty),
+                              ),
+                              child: Text(
+                                _difficulty.headerLabel,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18,
+                                  letterSpacing: 1.1,
+                                ),
+                              ),
                             ),
-                            child: Text(
-                              "QUESTION ${_currentQuestionIndex + 1}/${_questionBank.length}",
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Category: ${currentQuestion['category']}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: _theme.titleText.withValues(alpha: 0.85),
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            "Category: ${currentQuestion['category']}",
-                            style: const TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w600),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Row(
                         children: List.generate(3, (index) {
                           return Icon(
                             Icons.star_rounded,
-                            color: index < _starsEarnedThisQuestion ? const Color(0xFFFFD026) : Colors.grey[400],
+                            color: index < _starsEarnedThisQuestion
+                                ? _theme.starColor
+                                : Colors.grey[400],
                             size: 22,
                           );
                         }),
@@ -280,7 +328,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                         child: Container(
                           height: 12,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFC000),
+                            color: _theme.accent,
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
@@ -307,8 +355,15 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                     child: Container(
                       width: 60,
                       height: 60,
-                      decoration: const BoxDecoration(color: Color(0xFFFF7A45), shape: BoxShape.circle),
-                      child: const Icon(Icons.local_fire_department, color: Colors.yellow, size: 36),
+                      decoration: BoxDecoration(
+                        color: _theme.primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.local_fire_department,
+                        color: _theme.starColor,
+                        size: 36,
+                      ),
                     ),
                   ),
                 ),
@@ -327,7 +382,11 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
         const SizedBox(height: 16), // Breathability gap right below the bar layout
         Text(
           widget.levelName,
-          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: _theme.titleText,
+          ),
         ),
         const SizedBox(height: 4),
         const Text(
@@ -345,6 +404,13 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                 child: Container(),
               ),
 
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.55),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(28),
                 child: RichText(
@@ -366,20 +432,20 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                               horizontal: 4,
                               vertical: 2,
                             ),
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                  color: Color(0xFFFF7A45),
+                                  color: _theme.accent,
                                   width: 3,
                                 ),
                               ),
                             ),
                             child: Text(
                               question["word"],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFFFF7A45),
+                                color: _theme.primary,
                               ),
                             ),
                           ),
@@ -405,14 +471,19 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF2C3E6B), size: 24),
+          icon: Icon(Icons.arrow_back_ios_new, color: _theme.titleText, size: 24),
           onPressed: () => setState(() => _currentStep = 0),
         ),
         Align(
           alignment: Alignment.center,
           child: Text(
             question["word"].toString().toUpperCase(),
-            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color(0xFF2C3E6B), letterSpacing: 1.5),
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: _theme.titleText,
+              letterSpacing: 1.5,
+            ),
           ),
         ),
         const Align(
@@ -449,11 +520,14 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                 child: GestureDetector(
                   onTap: () => _handleOptionSelection(index, correctIndex),
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(_difficulty == Difficulty.hard ? 14 : 16),
                     decoration: BoxDecoration(
                       color: cardBgColor,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: borderColor, width: 2),
+                      border: Border.all(
+                        color: borderColor,
+                        width: _difficulty == Difficulty.hard ? 1.6 : 2,
+                      ),
                       boxShadow: const [
                         BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))
                       ],
@@ -463,10 +537,10 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF2C3E6B),
+                            color: _theme.secondary,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Icon(option["icon"], color: Colors.white, size: 24),
+                          child: Icon(option["icon"], color: _theme.onPrimary, size: 24),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -502,14 +576,14 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
         : 'asset/greatjoblogo.png';
 
     return Scaffold(
-      backgroundColor: const Color(0xFF70D3F4),
+      backgroundColor: _theme.primary,
       body: Stack(
         alignment: Alignment.center,
         children: [
           Positioned.fill(
             child: Opacity(
-              opacity: 0.3,
-              child: Container(color: const Color(0xFF2C3E6B)),
+              opacity: 0.35,
+              child: Container(color: _theme.secondary),
             ),
           ),
 
@@ -566,14 +640,17 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(24),
-                                    boxShadow: const [
-                                      BoxShadow(color: Color(0xFFD49E00), offset: Offset(0, 5)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: _theme.accent.withValues(alpha: 0.6),
+                                        offset: const Offset(0, 5),
+                                      ),
                                     ],
                                   ),
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFFFD026),
-                                      foregroundColor: Colors.white,
+                                      backgroundColor: _theme.accent,
+                                      foregroundColor: _theme.onPrimary,
                                       elevation: 0,
                                       padding: const EdgeInsets.symmetric(vertical: 14),
                                       shape: RoundedRectangleBorder(
@@ -593,14 +670,17 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(24),
-                                    boxShadow: const [
-                                      BoxShadow(color: Color(0xFF7CB830), offset: Offset(0, 5)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: _theme.primary.withValues(alpha: 0.5),
+                                        offset: const Offset(0, 5),
+                                      ),
                                     ],
                                   ),
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFA0E050),
-                                      foregroundColor: Colors.white,
+                                      backgroundColor: _theme.primary,
+                                      foregroundColor: _theme.onPrimary,
                                       elevation: 0,
                                       padding: const EdgeInsets.symmetric(vertical: 14),
                                       shape: RoundedRectangleBorder(
@@ -676,7 +756,9 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                             angle: -0.25,
                             child: Icon(
                               Icons.star_rounded,
-                              color: _starsEarnedThisQuestion >= 2 ? const Color(0xFFFFD026) : Colors.grey[300],
+                              color: _starsEarnedThisQuestion >= 2
+                                  ? _theme.starColor
+                                  : Colors.grey[300],
                               size: 64,
                               shadows: [
                                 BoxShadow(color: Colors.black, offset: Offset(3, 4)),
@@ -691,7 +773,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                           child: Icon(
                             Icons.star_rounded,
                             color: _starsEarnedThisQuestion >= 1
-                                ? const Color(0xFFFFD026)
+                                ? _theme.starColor
                                 : Colors.grey[300],
                             size: 96,
                             shadows: const [
@@ -709,7 +791,9 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                             angle: 0.25,
                             child: Icon(
                               Icons.star_rounded,
-                              color: _starsEarnedThisQuestion == 3 ? const Color(0xFFFFD026) : Colors.grey[300],
+                              color: _starsEarnedThisQuestion == 3
+                                  ? _theme.starColor
+                                  : Colors.grey[300],
                               size: 64,
                               shadows: [
                                 BoxShadow(color: Colors.black, offset: Offset(2, 4)),
@@ -734,14 +818,14 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
     final int averageStars = _calculateAverageStars();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF70D3F4),
+      backgroundColor: _theme.primary,
       body: Stack(
         alignment: Alignment.center,
         children: [
           Positioned.fill(
             child: Opacity(
-              opacity: 0.3,
-              child: Container(color: const Color(0xFF2C3E6B)),
+              opacity: 0.35,
+              child: Container(color: _theme.secondary),
             ),
           ),
           Center(
@@ -758,12 +842,12 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                  Text(
                     "LEVEL COMPLETE!",
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFFFF9F43),
+                      color: _theme.accent,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -780,7 +864,9 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                     children: List.generate(3, (index) {
                       return Icon(
                         Icons.star_rounded,
-                        color: index < averageStars ? const Color(0xFFFFD026) : Colors.grey[300],
+                        color: index < averageStars
+                            ? _theme.starColor
+                            : Colors.grey[300],
                         size: 54,
                       );
                     }),
@@ -788,7 +874,11 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                   const SizedBox(height: 16),
                   Text(
                     "Your Average Score: $averageStars / 3 Stars",
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2C3E6B)),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: _theme.titleText,
+                    ),
                   ),
                   const SizedBox(height: 32),
 
@@ -796,14 +886,17 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(color: Color(0xFF7CB830), offset: Offset(0, 4)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: _theme.primary.withValues(alpha: 0.45),
+                          offset: const Offset(0, 4),
+                        ),
                       ],
                     ),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFA0E050),
-                        foregroundColor: Colors.white,
+                        backgroundColor: _theme.primary,
+                        foregroundColor: _theme.onPrimary,
                         elevation: 0,
                         minimumSize: const Size(double.infinity, 52),
                         shape: RoundedRectangleBorder(

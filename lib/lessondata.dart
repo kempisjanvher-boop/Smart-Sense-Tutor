@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_sense_tutor/smartlookup.dart';
 import 'levelmap.dart';
 import 'homescreen.dart';
+import 'models/category_visual_theme.dart';
 import 'progress.dart';
 
 class LessonData extends StatefulWidget {
@@ -188,26 +189,29 @@ class _LessonDataState extends State<LessonData> {
   }
 
   Widget _buildLessonCard(LessonCategory category) {
+    final theme = CategoryVisualTheme.forCategory(category.title);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => LevelMap(
-              category: category.title, // ✅ FIXED HERE
+              category: category.title,
             ),
           ),
         );
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.surface,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
+          border: Border.all(color: theme.primary.withValues(alpha: 0.35)),
+          boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: theme.primary.withValues(alpha: 0.15),
               blurRadius: 10,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -220,10 +224,10 @@ class _LessonDataState extends State<LessonData> {
                 children: [
                   Text(
                     category.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: theme.titleText,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -231,20 +235,17 @@ class _LessonDataState extends State<LessonData> {
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
                       value: category.progressPercentage,
-                      backgroundColor: const Color(0xFFE5E5E5),
-                      valueColor:
-                      const AlwaysStoppedAnimation<Color>(
-                        Color(0xFFFF8A5B),
-                      ),
+                      backgroundColor: Colors.white,
+                      valueColor: AlwaysStoppedAnimation<Color>(theme.accent),
                       minHeight: 12,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     "${category.completedLessons}/${category.totalLessons} Lessons Completed",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black54,
+                      color: theme.titleText.withValues(alpha: 0.65),
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -255,13 +256,13 @@ class _LessonDataState extends State<LessonData> {
             Container(
               width: 48,
               height: 48,
-              decoration: const BoxDecoration(
-                color: Color(0xFF62D275),
+              decoration: BoxDecoration(
+                color: theme.primary,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.play_arrow_rounded,
-                color: Colors.white,
+                color: theme.onPrimary,
                 size: 32,
               ),
             ),
