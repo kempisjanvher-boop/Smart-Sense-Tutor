@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'gameplayscreen.dart';
+import 'level_difficulty_screen.dart';
+import 'services/level_manager.dart';
 import 'lessondata.dart';
 import 'models/category_visual_theme.dart';
 import 'progress.dart';
@@ -236,13 +237,16 @@ class LevelMapState extends State<LevelMap> {
   }) {
     final characterBaseColor = theme.levelNodeColor(levelNumber);
     bool isLevelLocked = levelNumber > _unlockedLevel;
-    int starsEarned =
-    ProgressService.getStars(widget.category, levelNumber);
+    final starsEarned = List.generate(3, (i) {
+      final diff = LevelManager.difficultiesPerLevel[i];
+      return ProgressService.getStars(widget.category, levelNumber, diff) >= 1;
+    });
+    final starCount = starsEarned.where((done) => done).length;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (!isLevelLocked && starsEarned > 0)
+        if (!isLevelLocked && starCount > 0)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: Row(
@@ -250,7 +254,7 @@ class LevelMapState extends State<LevelMap> {
               children: List.generate(3, (index) {
                 return Icon(
                   Icons.star_rounded,
-                  color: index < starsEarned
+                  color: starsEarned[index]
                       ? theme.starColor
                       : Colors.grey[300],
                   size: 22,
@@ -270,33 +274,19 @@ class LevelMapState extends State<LevelMap> {
                 ),
               );
             } else {
-              final int? averageStarsResult =
-              await Navigator.push<int>(
+              final bool? refreshed = await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GameplayScreen(
-                        category: widget.category,
-                        levelNumber: levelNumber,
-                        levelName: label,
-                      ),
+                  builder: (context) => LevelDifficultyScreen(
+                    category: widget.category,
+                    levelNumber: levelNumber,
+                    levelName: label,
+                  ),
                 ),
               );
 
-              if (averageStarsResult != null && mounted) {
+              if (refreshed == true && mounted) {
                 setState(() {
-                  ProgressService.setStars(
-                    widget.category,
-                    levelNumber,
-                    averageStarsResult,
-                  );
-
-                  if (averageStarsResult == 3) {
-                    ProgressService.recordPerfectScore();
-                  }
-
-                  ProgressService.addCompletion(widget.category);
-                  ProgressService.unlockNext(widget.category, levelNumber);
-
                   _hasPlayedGame = true;
                   _streakCount = 1;
                 });

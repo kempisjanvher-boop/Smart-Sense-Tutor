@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_sense_tutor/smartlookup.dart';
-import 'core/app_categories.dart';
 import 'levelmap.dart';
 import 'homescreen.dart';
-import 'achievement.dart';
 import 'models/category_visual_theme.dart';
 import 'progress.dart';
 
@@ -12,6 +10,8 @@ class LessonData extends StatefulWidget {
 
   @override
   State<LessonData> createState() => _LessonDataState();
+
+
 }
 
 class LessonCategory {
@@ -32,34 +32,60 @@ class LessonCategory {
 class _LessonDataState extends State<LessonData> {
   final int _currentIndex = 1;
 
-  List<LessonCategory> get _categories {
-    return AppCategories.all
-        .map(
-          (title) => LessonCategory(
-            title: title,
-            totalLessons: ProgressService.totalLessons[title] ?? 3,
-            completedLessons: ProgressService.getCompleted(title),
-          ),
-        )
-        .toList();
-  }
+  final List<LessonCategory> _categories = [
+    LessonCategory(
+      title: "Tech & Tradition",
+      totalLessons: 3,
+      completedLessons: ProgressService.getCompleted("Tech & Tradition"),
+    ),
+    LessonCategory(
+      title: "Finance & Physics",
+      totalLessons: 3,
+      completedLessons: ProgressService.getCompleted("Finance & Physics"),
+    ),
+    LessonCategory(
+      title: "Objects & Ideas",
+      totalLessons: 3,
+      completedLessons: ProgressService.getCompleted("Objects & Ideas"),
+    ),
+    LessonCategory(
+      title: "Law & Structures",
+      totalLessons: 3,
+      completedLessons: ProgressService.getCompleted("Law & Structures"),
+    ),
+    LessonCategory(
+      title: "Attributes & Evaluation",
+      totalLessons: 3,
+      completedLessons: ProgressService.getCompleted("Attributes & Evaluation"),
+    ),
+    LessonCategory(
+      title: "Actions & Movement",
+      totalLessons: 3,
+      completedLessons: ProgressService.getCompleted("Actions & Movement"),
+    ),
+    LessonCategory(
+      title: "Directions & Space",
+      totalLessons: 3,
+      completedLessons: ProgressService.getCompleted("Directions & Space"),
+    ),
+  ];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setState(() {});
+    setState(() {}); // refresh progress when coming back
   }
 
   @override
   Widget build(BuildContext context) {
-    final categories = _categories;
-
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF70D3F4),
         elevation: 0,
+
         title: const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: Text(
@@ -71,6 +97,7 @@ class _LessonDataState extends State<LessonData> {
             ),
           ),
         ),
+
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -87,17 +114,20 @@ class _LessonDataState extends State<LessonData> {
           )
         ],
       ),
+
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(
           horizontal: 16.0,
           vertical: 24.0,
         ),
-        itemCount: categories.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 20),
+        itemCount: _categories.length,
+        separatorBuilder: (context, index) =>
+        const SizedBox(height: 20),
         itemBuilder: (context, index) {
-          return _buildLessonCard(categories[index]);
+          return _buildLessonCard(_categories[index]);
         },
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -127,15 +157,6 @@ class _LessonDataState extends State<LessonData> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const SmartLookup(),
-                ),
-              );
-              break;
-
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AchievementsScreen(),
                 ),
               );
               break;

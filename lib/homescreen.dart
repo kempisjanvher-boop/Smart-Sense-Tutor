@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'core/app_categories.dart';
 import 'levelmap.dart';
 import 'lessondata.dart';
 import 'models/category_visual_theme.dart';
@@ -67,13 +66,13 @@ class _HomeScreenState extends State<HomeScreen> {
               childAspectRatio: 1.5,
               children: [
                 _buildStatCard(
-                  ProgressService.getLessonsInProgressCount().toString(),
+                  ProgressService.getCategoriesCompleted().toString(),
                   "Lesson(s)\nin progress",
                   const Color(0xFFFFDDD7),
                   Image.asset("asset/lessonicon.png", width: 40, height: 40),
                 ),
                 _buildStatCard(
-                  ProgressService.getTotalCompletedAll().toString(),
+                  ProgressService.getCategoriesCompleted().toString(),
                   "Lessons\ncompleted",
                   const Color(0xFFE8FFE8),
                   Image.asset("asset/completedicon.png", width: 40, height: 40),
@@ -126,7 +125,31 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 16),
-            ..._buildCategorySections(),
+            _buildCategoryCard("Tech & Tradition", isFullWidth: true),
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Expanded(child: _buildCategoryCard("Finance & Physics")),
+                const SizedBox(width: 12),
+                Expanded(child: _buildCategoryCard("Objects & Ideas")),
+              ],
+            ),
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Expanded(child: _buildCategoryCard("Law & Structures")),
+                const SizedBox(width: 12),
+                Expanded(child: _buildCategoryCard("Attributes & Evaluation")),
+              ],
+            ),
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Expanded(child: _buildCategoryCard("Actions & Movement")),
+                const SizedBox(width: 12),
+                Expanded(child: _buildCategoryCard("Directions & Space")),
+              ],
+            ),
           ],
         ),
       ),
@@ -162,15 +185,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
               break;
-
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AchievementsScreen(),
-                ),
-              );
-              break;
           }
         },
         type: BottomNavigationBarType.fixed,
@@ -197,38 +211,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-  }
-
-  List<Widget> _buildCategorySections() {
-    final categories = AppCategories.all;
-    if (categories.isEmpty) return const [];
-
-    final sections = <Widget>[
-      _buildCategoryCard(categories.first, isFullWidth: true),
-      const SizedBox(height: 30),
-    ];
-
-    for (var i = 1; i < categories.length; i += 2) {
-      final left = categories[i];
-      final right = i + 1 < categories.length ? categories[i + 1] : null;
-
-      sections.add(
-        Row(
-          children: [
-            Expanded(child: _buildCategoryCard(left)),
-            if (right != null) ...[
-              const SizedBox(width: 12),
-              Expanded(child: _buildCategoryCard(right)),
-            ],
-          ],
-        ),
-      );
-      if (i + 2 < categories.length) {
-        sections.add(const SizedBox(height: 30));
-      }
-    }
-
-    return sections;
   }
 
   Widget _buildStatCard(String count, String label, Color iconBgColor, Widget icon) {

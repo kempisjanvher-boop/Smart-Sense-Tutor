@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'achievement.dart';
 import 'homescreen.dart';
 import 'lessondata.dart';
 
@@ -243,15 +242,6 @@ class _SmartLookupState extends State<SmartLookup> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const LessonData(),
-                ),
-              );
-              break;
-
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AchievementsScreen(),
                 ),
               );
               break;

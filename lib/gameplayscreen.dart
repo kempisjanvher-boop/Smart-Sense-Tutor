@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 import 'core/app_categories.dart';
+import 'difficulty_theme.dart';
 import 'models/category_visual_theme.dart';
 import 'models/difficulty.dart';
 import 'models/quiz_question.dart';
@@ -12,12 +13,14 @@ class GameplayScreen extends StatefulWidget {
   final String category;
   final int levelNumber;
   final String levelName;
+  final Difficulty difficulty;
 
   const GameplayScreen({
     super.key,
     required this.category,
     required this.levelNumber,
     required this.levelName,
+    required this.difficulty,
   });
 
   @override
@@ -50,8 +53,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
   CategoryVisualTheme get _theme =>
       CategoryVisualTheme.forCategory(widget.category);
 
-  Difficulty get _difficulty =>
-      LevelManager.difficultyForLevel(widget.levelNumber);
+  Difficulty get _difficulty => widget.difficulty;
 
   @override
   void initState() {
@@ -64,6 +66,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
       final generated = await QuizEngine.instance.questionsForLevel(
         category: AppCategories.normalize(widget.category),
         level: widget.levelNumber,
+        difficulty: widget.difficulty,
       );
       if (!mounted) return;
       setState(() {
@@ -85,7 +88,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
     _timerController = AnimationController(
       vsync: this,
       duration: Duration(
-        seconds: LevelManager.timerSecondsForLevel(widget.levelNumber),
+        seconds: LevelManager.timerSecondsForDifficulty(widget.difficulty),
       ),
     )..addListener(() {
       setState(() {});
@@ -250,7 +253,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IconButton(
                         icon: Icon(
@@ -260,59 +263,41 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                         ),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: _theme.primary,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Text(
-                              "QUESTION ${_currentQuestionIndex + 1}/${_questionBank.length}",
-                              style: TextStyle(
-                                color: _theme.onPrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 28,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: DifficultyTheme.badgeColor(_difficulty),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.white, width: 2.5),
+                                boxShadow: DifficultyTheme.badgeShadow(_difficulty),
+                              ),
+                              child: Text(
+                                _difficulty.headerLabel,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18,
+                                  letterSpacing: 1.1,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            "Category: ${currentQuestion['category']}",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: _theme.titleText.withValues(alpha: 0.7),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: _difficulty == Difficulty.hard
-                                  ? _theme.secondary
-                                  : _theme.surface,
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(
-                                color: _difficulty == Difficulty.hard
-                                    ? _theme.accent.withValues(alpha: 0.8)
-                                    : _theme.primary.withValues(alpha: 0.45),
-                              ),
-                            ),
-                            child: Text(
-                              _difficulty.label,
+                            const SizedBox(height: 6),
+                            Text(
+                              'Category: ${currentQuestion['category']}',
                               style: TextStyle(
                                 fontSize: 12,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 0.4,
-                                color: _difficulty == Difficulty.hard
-                                    ? _theme.onPrimary
-                                    : _theme.titleText,
+                                color: _theme.titleText.withValues(alpha: 0.85),
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Row(
                         children: List.generate(3, (index) {
@@ -419,6 +404,13 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                 child: Container(),
               ),
 
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.55),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(28),
                 child: RichText(

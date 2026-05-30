@@ -26,10 +26,10 @@ class QuizEngine {
   Future<List<QuizQuestion>> questionsForLevel({
     required String category,
     required int level,
+    required Difficulty difficulty,
   }) async {
     await initialize();
     final normalized = AppCategories.normalize(category);
-    final difficulty = LevelManager.difficultyForLevel(level);
     final session = _categorySessions.putIfAbsent(
       normalized,
       () => _CategorySessionState(),

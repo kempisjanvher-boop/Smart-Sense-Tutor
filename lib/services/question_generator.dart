@@ -41,17 +41,14 @@ class QuestionGenerator {
     final poolWords = CategoryThemeRegistry.wordsForCategory(normalizedCategory);
     final senseHints = CategoryThemeRegistry.senseHintsForCategory(normalizedCategory);
 
-    final categoryRecords =
-        allRecords.where((r) => poolWords.contains(r.word)).toList();
-
-    var candidates = List<WsdRecord>.from(categoryRecords);
+    var candidates = allRecords.where((r) => poolWords.contains(r.word)).toList();
 
     if (senseHints.isNotEmpty) {
       final themed = candidates.where((r) {
         final sense = r.correctSense.toLowerCase();
         return senseHints.any((hint) => sense.contains(hint.toLowerCase()));
       }).toList();
-      if (themed.length >= LevelManager.questionsPerLevel) {
+      if (themed.length >= LevelManager.questionsPerLevel * 2) {
         candidates = themed;
       }
     }
@@ -59,14 +56,19 @@ class QuestionGenerator {
     // Filter into a difficulty-appropriate slice, but don't over-prune small pools.
     final baseCandidates = List<WsdRecord>.from(candidates);
     candidates = _filterByDifficulty(candidates, difficulty);
-    if (candidates.length < LevelManager.questionsPerLevel * 2) {
+    if (candidates.length < LevelManager.questionsPerLevel * 4) {
       candidates = baseCandidates;
     }
     if (candidates.length < LevelManager.questionsPerLevel) {
-      candidates = _filterByDifficulty(categoryRecords, difficulty);
-      if (candidates.length < LevelManager.questionsPerLevel) {
-        candidates = List<WsdRecord>.from(categoryRecords);
+      final fallbackBase =
+          allRecords.where((r) => poolWords.contains(r.word)).toList();
+      candidates = _filterByDifficulty(fallbackBase, difficulty);
+      if (candidates.length < LevelManager.questionsPerLevel * 4) {
+        candidates = fallbackBase;
       }
+    }
+    if (candidates.isEmpty) {
+      candidates = List<WsdRecord>.from(allRecords);
     }
 
     final random = Random(
@@ -148,12 +150,15 @@ class QuestionGenerator {
       }
     }
 
-    // Last resort: stay within the category word pool, allow word reuse.
+    // Last resort: ignore category theming and difficulty slicing.
+    // This prevents hard failures when a themed pool is too small or too sparse
+    // (e.g., many words in the pool only have one sense in the dataset).
     if (questions.length < LevelManager.questionsPerLevel) {
-      final fallbackPool = List<WsdRecord>.from(categoryRecords)..shuffle(random);
-      for (final record in fallbackPool) {
+      final fallbackAll = List<WsdRecord>.from(allRecords)..shuffle(random);
+      for (final record in fallbackAll) {
         if (questions.length >= LevelManager.questionsPerLevel) break;
         if (usedRecordIds.contains(record.id)) continue;
+        if (lastWord != null && record.word == lastWord) continue;
 
         final wordRecords = byWord[record.word] ?? [record];
         final senses = <String, String>{};
@@ -249,18 +254,18 @@ class QuestionGenerator {
 
     if (ordered.isEmpty) return null;
 
-    final correctText = _formatDefinition(correctDefinition, level);
+    final correctText = _formatDefinition(correctDefinition, difficulty);
     final optionEntries = <({String text, IconData icon, bool isCorrect})>[
       (text: correctText, icon: _iconForSense(record.correctSense), isCorrect: true),
       (
-        text: _formatDefinition(ordered[0], level),
+        text: _formatDefinition(ordered[0], difficulty),
         icon: _iconForSense(ordered[0]),
         isCorrect: false,
       ),
       (
         text: _formatDefinition(
           ordered.length > 1 ? ordered[1] : ordered[0],
-          level,
+          difficulty,
           variant: ordered.length <= 1,
         ),
         icon: _iconForSense(
@@ -289,17 +294,19 @@ class QuestionGenerator {
     );
   }
 
-  String _formatDefinition(String definition, int level, {bool variant = false}) {
+  String _formatDefinition(
+    String definition,
+    Difficulty difficulty, {
+    bool variant = false,
+  }) {
     final base = definition.trim();
     if (variant) return base;
-    switch (level) {
-      case 1:
+    switch (difficulty) {
+      case Difficulty.easy:
         return base;
-      case 2:
-        return 'In this context: $base';
-      case 3:
-        return 'Critical reading — $base';
-      default:
+      case Difficulty.moderate:
+        return base;
+      case Difficulty.hard:
         return base;
     }
   }
@@ -355,10 +362,10 @@ class QuestionGenerator {
   Set<String> _tokens(String s) {
     final cleaned = s
         .toLowerCase()
-        .replaceAll(RegExp(r'[^a-z\s]'), ' ')
+        .replaceAll(RegExp(r'[^a-z\\s]'), ' ')
         .trim();
     if (cleaned.isEmpty) return const {};
-    final parts = cleaned.split(RegExp(r'\s+'));
+    final parts = cleaned.split(RegExp(r'\\s+'));
     return parts.where((p) => p.length >= 4).toSet();
   }
 }

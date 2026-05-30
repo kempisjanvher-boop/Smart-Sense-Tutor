@@ -104,8 +104,6 @@ class AchievementsScreen extends StatelessWidget {
             case 2:
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SmartLookup()));
               break;
-            case 3:
-              break;
           }
         },
         items: const [
