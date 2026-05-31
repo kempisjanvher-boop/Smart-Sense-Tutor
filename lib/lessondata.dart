@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_sense_tutor/smartlookup.dart';
+import 'core/app_palette.dart';
 import 'levelmap.dart';
 import 'homescreen.dart';
 import 'models/category_visual_theme.dart';
@@ -16,14 +17,15 @@ class LessonData extends StatefulWidget {
 
 class LessonCategory {
   final String title;
-  final int totalLessons;
-  final int completedLessons;
 
-  LessonCategory({
-    required this.title,
-    required this.totalLessons,
-    required this.completedLessons,
-  });
+  LessonCategory({required this.title});
+
+  int get totalLessons => ProgressService.totalLessons[title] ?? 3;
+
+  int get completedLessons {
+    final done = ProgressService.getCompleted(title);
+    return done.clamp(0, totalLessons);
+  }
 
   double get progressPercentage =>
       totalLessons > 0 ? completedLessons / totalLessons : 0.0;
@@ -32,42 +34,14 @@ class LessonCategory {
 class _LessonDataState extends State<LessonData> {
   final int _currentIndex = 1;
 
-  final List<LessonCategory> _categories = [
-    LessonCategory(
-      title: "Tech & Tradition",
-      totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Tech & Tradition"),
-    ),
-    LessonCategory(
-      title: "Finance & Physics",
-      totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Finance & Physics"),
-    ),
-    LessonCategory(
-      title: "Objects & Ideas",
-      totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Objects & Ideas"),
-    ),
-    LessonCategory(
-      title: "Law & Structures",
-      totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Law & Structures"),
-    ),
-    LessonCategory(
-      title: "Attributes & Evaluation",
-      totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Attributes & Evaluation"),
-    ),
-    LessonCategory(
-      title: "Actions & Movement",
-      totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Actions & Movement"),
-    ),
-    LessonCategory(
-      title: "Directions & Space",
-      totalLessons: 3,
-      completedLessons: ProgressService.getCompleted("Directions & Space"),
-    ),
+  static const List<String> _categoryTitles = [
+    "Tech & Tradition",
+    "Finance & Physics",
+    "Objects & Ideas",
+    "Law & Structures",
+    "Attributes & Evaluation",
+    "Actions & Movement",
+    "Directions & Space",
   ];
 
   @override
@@ -79,11 +53,11 @@ class _LessonDataState extends State<LessonData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppPalette.scaffoldBg,
 
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xFF70D3F4),
+        backgroundColor: AppPalette.header,
         elevation: 0,
 
         title: const Padding(
@@ -93,7 +67,7 @@ class _LessonDataState extends State<LessonData> {
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2C4379),
+              color: AppPalette.navyDark,
             ),
           ),
         ),
@@ -103,7 +77,7 @@ class _LessonDataState extends State<LessonData> {
             padding: const EdgeInsets.only(right: 16.0),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF2C4379),
+                color: AppPalette.navyDark,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: IconButton(
@@ -120,11 +94,11 @@ class _LessonDataState extends State<LessonData> {
           horizontal: 16.0,
           vertical: 24.0,
         ),
-        itemCount: _categories.length,
+        itemCount: _categoryTitles.length,
         separatorBuilder: (context, index) =>
         const SizedBox(height: 20),
         itemBuilder: (context, index) {
-          return _buildLessonCard(_categories[index]);
+          return _buildLessonCard(LessonCategory(title: _categoryTitles[index]));
         },
       ),
 
@@ -164,7 +138,7 @@ class _LessonDataState extends State<LessonData> {
         },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF2C3E6B),
+        selectedItemColor: AppPalette.navy,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
@@ -204,19 +178,20 @@ class _LessonDataState extends State<LessonData> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: theme.surface,
+          color: AppPalette.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: theme.primary.withValues(alpha: 0.35)),
-          boxShadow: [
+          border: Border.all(color: AppPalette.border),
+          boxShadow: const [
             BoxShadow(
-              color: theme.primary.withValues(alpha: 0.15),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Color(0x14000000),
+              blurRadius: 8,
+              offset: Offset(0, 4),
             ),
           ],
         ),
         padding: const EdgeInsets.all(20),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Column(
@@ -235,18 +210,20 @@ class _LessonDataState extends State<LessonData> {
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
                       value: category.progressPercentage,
-                      backgroundColor: Colors.white,
-                      valueColor: AlwaysStoppedAnimation<Color>(theme.accent),
+                      backgroundColor: AppPalette.border,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppPalette.accent),
                       minHeight: 12,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Text(
                     "${category.completedLessons}/${category.totalLessons} Lessons Completed",
                     style: TextStyle(
                       fontSize: 14,
                       color: theme.titleText.withValues(alpha: 0.65),
                       fontStyle: FontStyle.italic,
+                      height: 1.2,
                     ),
                   ),
                 ],

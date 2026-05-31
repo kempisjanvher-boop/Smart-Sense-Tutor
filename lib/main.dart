@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'homescreen.dart';
 import 'services/quiz_engine.dart';
-import 'analyzer//polysemy_analyzer.dart'; // ADD THIS
+import 'analyzer/polysemy_analyzer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

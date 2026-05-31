@@ -55,8 +55,11 @@ class ProgressService {
   }
 
   static void addCompletion(String category) {
-    completedLessons[category] =
-        (completedLessons[category] ?? 0) + 1;
+    final total = totalLessons[category] ?? 3;
+    final current = completedLessons[category] ?? 0;
+    if (current < total) {
+      completedLessons[category] = current + 1;
+    }
   }
 
   /// Total lessons completed across all categories

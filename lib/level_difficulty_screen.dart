@@ -36,7 +36,7 @@ class _LevelDifficultyScreenState extends State<LevelDifficultyScreen> {
           Image.asset('asset/gameplayscreen.png', fit: BoxFit.cover),
           DecoratedBox(
             decoration: BoxDecoration(
-              color: theme.primary.withValues(alpha: 0.08),
+              color: Colors.white.withValues(alpha: 0.12),
             ),
           ),
           SafeArea(
@@ -183,7 +183,10 @@ class _DifficultyTile extends StatelessWidget {
                 result,
               );
 
-              ProgressService.addCompletion(category);
+              // Only increment progress when all 3 difficulties in the level are completed
+              if (ProgressService.completedDifficultiesCount(category, levelNumber) >= 3) {
+                ProgressService.addCompletion(category);
+              }
               ProgressService.unlockNext(category, levelNumber);
               onCompleted();
             }

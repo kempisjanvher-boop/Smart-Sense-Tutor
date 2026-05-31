@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/app_palette.dart';
 import 'levelmap.dart';
 import 'lessondata.dart';
 import 'models/category_visual_theme.dart';
@@ -25,10 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppPalette.scaffoldBg,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xFF70D3F4),
+        backgroundColor: AppPalette.header,
         elevation: 0,
 
         leading: IconButton(
@@ -68,21 +69,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buildStatCard(
                   ProgressService.getTotalInProgress().toString(),
                   "Lesson(s)\nin progress",
-                  const Color(0xFFFFDDD7),
+                  AppPalette.statPink,
                   Image.asset("asset/lessonicon.png", width: 40, height: 40),
                 ),
 
                 _buildStatCard(
                   ProgressService.getTotalCompletedAll().toString(),
                   "Lessons\ncompleted",
-                  const Color(0xFFE8FFE8),
+                  AppPalette.statGreen,
                   Image.asset("asset/completedicon.png", width: 40, height: 40),
                 ),
 
                 _buildStatCard(
                   ProgressService.getCategoriesCompleted().toString(),
                   "Categories\ncompleted",
-                  const Color(0xFFEAEDFF),
+                  AppPalette.statBlue,
                   Image.asset("asset/categoriesicon.png", width: 40, height: 40),
                 ),
 
@@ -97,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: _buildStatCard(
                     ProgressService.getAchievementsUnlockedCount().toString(),
                     "Achievement",
-                    const Color(0xFFFFFADD),
+                    AppPalette.statYellow,
                     Image.asset(
                       "asset/achievementicon.png",
                       width: 40,
@@ -117,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xFF2C3E6B)),
+                  icon: const Icon(Icons.menu, color: AppPalette.navy),
                   onPressed: () {},
                 ),
               ],
@@ -191,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF2C3E6B),
+        selectedItemColor: AppPalette.navy,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
@@ -220,10 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-            color: const Color(0xFFE2E8F0),
-          width: 1
-        ),
+        border: Border.all(color: AppPalette.border, width: 1),
       ),
       padding: const EdgeInsets.all(12),
       child: Stack(
@@ -269,9 +267,9 @@ class _HomeScreenState extends State<HomeScreen> {
           border: Border.all(color: theme.primary, width: 2),
           boxShadow: [
             BoxShadow(
-              color: theme.primary.withValues(alpha: 0.25),
+              color: theme.primary.withValues(alpha: 0.15),
               blurRadius: 8,
-              offset: const Offset(0, 6),
+              offset: const Offset(0, 4),
             ),
           ],
         ),

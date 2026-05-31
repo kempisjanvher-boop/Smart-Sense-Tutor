@@ -23,8 +23,7 @@ class QuestionGenerator {
     required String category,
     required int level,
     required Difficulty difficulty,
-    Set<int>? excludeRecordIds,
-    String? avoidWord,
+    Set<String>? globalUsedWords,
     int? seed,
   }) async {
     if (!LevelManager.isValidLevel(level)) {
@@ -53,19 +52,20 @@ class QuestionGenerator {
       }
     }
 
-    // Filter into a difficulty-appropriate slice, but don't over-prune small pools.
-    final baseCandidates = List<WsdRecord>.from(candidates);
-    candidates = _filterByDifficulty(candidates, difficulty);
+    // Filter into a difficulty-appropriate slice based on level and difficulty
+    // Level 1 = Easy words, Level 2 = Medium words, Level 3 = Hard words
+    // Within each level, difficulty further refines the selection
+    candidates = _filterByLevelAndDifficulty(candidates, level, difficulty);
+    
+    // If pool is too small after filtering, relax the filter
     if (candidates.length < LevelManager.questionsPerLevel * 4) {
-      candidates = baseCandidates;
+      candidates = _filterByDifficulty(
+        allRecords.where((r) => poolWords.contains(r.word)).toList(),
+        difficulty,
+      );
     }
     if (candidates.length < LevelManager.questionsPerLevel) {
-      final fallbackBase =
-          allRecords.where((r) => poolWords.contains(r.word)).toList();
-      candidates = _filterByDifficulty(fallbackBase, difficulty);
-      if (candidates.length < LevelManager.questionsPerLevel * 4) {
-        candidates = fallbackBase;
-      }
+      candidates = allRecords.where((r) => poolWords.contains(r.word)).toList();
     }
     if (candidates.isEmpty) {
       candidates = List<WsdRecord>.from(allRecords);
@@ -80,19 +80,18 @@ class QuestionGenerator {
 
     candidates.shuffle(random);
 
-    final excluded = excludeRecordIds ?? const <int>{};
-    final usedRecordIds = <int>{...excluded};
-    final usedWords = <String>{};
+    final usedWords = globalUsedWords ?? <String>{};
+    final usedRecordIds = <int>{};
     final questions = <QuizQuestion>[];
-    String? lastWord = avoidWord;
+    String? lastWord;
 
     for (final record in candidates) {
       if (questions.length >= LevelManager.questionsPerLevel) break;
       if (usedRecordIds.contains(record.id)) continue;
       if (lastWord != null && record.word == lastWord) continue;
 
-      // Prefer unique words per session when possible.
-      if (usedWords.contains(record.word) && usedWords.length < poolWords.length) {
+      // CRITICAL: Check if word is already in global used set
+      if (usedWords.contains(record.word.toLowerCase())) {
         continue;
       }
 
@@ -114,51 +113,18 @@ class QuestionGenerator {
       if (question == null) continue;
 
       usedRecordIds.add(record.id);
-      usedWords.add(record.word);
       questions.add(question);
       lastWord = record.word;
     }
 
-    // Fallback: relax unique-word rule.
+    // Fallback: if we couldn't find enough unique words, try with less strict filtering
     if (questions.length < LevelManager.questionsPerLevel) {
-      final fallback = List<WsdRecord>.from(candidates)..shuffle(random);
+      final fallback = List<WsdRecord>.from(allRecords)..shuffle(random);
       for (final record in fallback) {
         if (questions.length >= LevelManager.questionsPerLevel) break;
         if (usedRecordIds.contains(record.id)) continue;
         if (lastWord != null && record.word == lastWord) continue;
-
-        final wordRecords = byWord[record.word] ?? [record];
-        final senses = <String, String>{};
-        for (final wr in wordRecords) {
-          senses[wr.correctSense] = wr.definition;
-        }
-        if (senses.length < 2) continue;
-
-        final question = _buildQuestion(
-          record: record,
-          senses: senses,
-          category: normalizedCategory,
-          level: level,
-          difficulty: difficulty,
-          random: random,
-        );
-        if (question == null) continue;
-
-        usedRecordIds.add(record.id);
-        questions.add(question);
-        lastWord = record.word;
-      }
-    }
-
-    // Last resort: ignore category theming and difficulty slicing.
-    // This prevents hard failures when a themed pool is too small or too sparse
-    // (e.g., many words in the pool only have one sense in the dataset).
-    if (questions.length < LevelManager.questionsPerLevel) {
-      final fallbackAll = List<WsdRecord>.from(allRecords)..shuffle(random);
-      for (final record in fallbackAll) {
-        if (questions.length >= LevelManager.questionsPerLevel) break;
-        if (usedRecordIds.contains(record.id)) continue;
-        if (lastWord != null && record.word == lastWord) continue;
+        if (usedWords.contains(record.word.toLowerCase())) continue;
 
         final wordRecords = byWord[record.word] ?? [record];
         final senses = <String, String>{};
@@ -185,8 +151,9 @@ class QuestionGenerator {
 
     if (questions.length < LevelManager.questionsPerLevel) {
       throw StateError(
-        'Could not generate ${LevelManager.questionsPerLevel} questions for '
-        '$normalizedCategory level $level',
+        'Could not generate ${LevelManager.questionsPerLevel} unique questions for '
+        '$normalizedCategory level $level difficulty $difficulty. '
+        'Global used words count: ${usedWords.length}',
       );
     }
 
@@ -194,7 +161,11 @@ class QuestionGenerator {
     return questions;
   }
 
-  List<WsdRecord> _filterByDifficulty(List<WsdRecord> records, Difficulty difficulty) {
+  List<WsdRecord> _filterByLevelAndDifficulty(
+    List<WsdRecord> records,
+    int level,
+    Difficulty difficulty,
+  ) {
     final sorted = List<WsdRecord>.from(records)
       ..sort((a, b) {
         final cmp = a.sentence.length.compareTo(b.sentence.length);
@@ -203,6 +174,42 @@ class QuestionGenerator {
       });
 
     if (sorted.isEmpty) return sorted;
+
+    // Split into 3 tiers based on level
+    // Level 1: easiest third, Level 2: middle third, Level 3: hardest third
+    final tierSize = (sorted.length / 3).ceil().clamp(1, sorted.length);
+    
+    List<WsdRecord> levelPool;
+    switch (level) {
+      case 1:
+        levelPool = sorted.take(tierSize).toList();
+        break;
+      case 2:
+        final start = tierSize.clamp(0, sorted.length - 1);
+        final end = (tierSize * 2).clamp(start + 1, sorted.length);
+        levelPool = sorted.sublist(start, end);
+        break;
+      case 3:
+        final hardStart = (tierSize * 2).clamp(0, sorted.length - 1);
+        levelPool = sorted.sublist(hardStart);
+        break;
+      default:
+        levelPool = sorted;
+    }
+
+    // Further refine within the level pool based on difficulty
+    return _filterByDifficulty(levelPool, difficulty);
+  }
+
+  List<WsdRecord> _filterByDifficulty(List<WsdRecord> records, Difficulty difficulty) {
+    if (records.isEmpty) return records;
+
+    final sorted = List<WsdRecord>.from(records)
+      ..sort((a, b) {
+        final cmp = a.sentence.length.compareTo(b.sentence.length);
+        if (cmp != 0) return cmp;
+        return a.definition.length.compareTo(b.definition.length);
+      });
 
     final third = (sorted.length / 3).ceil().clamp(1, sorted.length);
 

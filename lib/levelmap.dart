@@ -41,8 +41,8 @@ class LevelMapState extends State<LevelMap> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    theme.secondary.withValues(alpha: 0.55),
-                    theme.primary.withValues(alpha: 0.45),
+                    theme.secondary.withValues(alpha: 0.25),
+                    theme.primary.withValues(alpha: 0.18),
                   ],
                 ),
               ),

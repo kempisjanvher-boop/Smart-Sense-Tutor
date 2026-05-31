@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 
 import 'core/app_categories.dart';
+import 'core/app_palette.dart';
 import 'difficulty_theme.dart';
 import 'models/category_visual_theme.dart';
 import 'models/difficulty.dart';
@@ -243,7 +243,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: _theme.primary.withValues(alpha: 0.12),
+                color: Colors.white.withValues(alpha: 0.15),
               ),
             ),
           ),
@@ -328,7 +328,7 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                         child: Container(
                           height: 12,
                           decoration: BoxDecoration(
-                            color: _theme.accent,
+                            color: AppPalette.timerFill,
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
@@ -382,81 +382,78 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
         const SizedBox(height: 16), // Breathability gap right below the bar layout
         Text(
           widget.levelName,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: _theme.titleText,
+            color: AppPalette.navy,
           ),
         ),
         const SizedBox(height: 4),
         const Text(
           "Click the highlighted word to choose the correct definition.",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, color: Colors.black54),
+          style: TextStyle(fontSize: 14, color: AppPalette.mutedText),
         ),
         const SizedBox(height: 24), // Adjusted gap sizing to pull container higher up
         ClipRRect(
           borderRadius: BorderRadius.circular(24),
-          child: Stack(
-            children: [
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                child: Container(),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  AppPalette.sentenceCardTop,
+                  AppPalette.sentenceCardBottom,
+                ],
               ),
-
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.55),
-                  borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            padding: const EdgeInsets.all(28),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  height: 1.5,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(28),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                      height: 1.5,
-                    ),
-                    children: [
-                      TextSpan(text: question["sentenceBefore"]),
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: GestureDetector(
-                          onTap: () => setState(() => _currentStep = 1),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: _theme.accent,
-                                  width: 3,
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              question["word"],
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: _theme.primary,
-                              ),
+                children: [
+                  TextSpan(text: question["sentenceBefore"]),
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: GestureDetector(
+                      onTap: () => setState(() => _currentStep = 1),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: AppPalette.sentenceHighlight,
+                              width: 3,
                             ),
                           ),
                         ),
+                        child: Text(
+                          question["word"],
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: AppPalette.sentenceHighlight,
+                          ),
+                        ),
                       ),
-                      TextSpan(text: question["sentenceAfter"]),
-                    ],
+                    ),
                   ),
-                ),
+                  TextSpan(text: question["sentenceAfter"]),
+                ],
               ),
-            ],
+            ),
           ),
         )
       ],
@@ -561,148 +558,98 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
     );
   }
 
-  // FIXED INTERMEDIATE SUMMARY SCREEN
-  Widget _buildSummaryScreen(Map<String, dynamic> question) {
+  Widget _buildSummaryScreen(Map<String, dynamic> _) {
+    final showNiceTry =
+        !(_isSelectionCorrect ?? false) || _starsEarnedThisQuestion == 1;
 
-    bool showNiceTry =
-        !(_isSelectionCorrect ?? false) ||
-            _starsEarnedThisQuestion == 1;
-
-    final String titleText =
-    showNiceTry ? "Nice Try" : "GREAT JOB!";
+    final String titleText = showNiceTry ? 'Nice Try' : 'GREAT JOB!';
 
     final String imageAsset = showNiceTry
         ? 'asset/nicetrylogo.png'
         : 'asset/greatjoblogo.png';
 
     return Scaffold(
-      backgroundColor: _theme.primary,
       body: Stack(
         alignment: Alignment.center,
         children: [
           Positioned.fill(
-            child: Opacity(
-              opacity: 0.35,
-              child: Container(color: _theme.secondary),
-            ),
+            child: Image.asset('asset/gameplayscreen.png', fit: BoxFit.cover),
           ),
-
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.80,
               constraints: const BoxConstraints(maxWidth: 360),
               child: Stack(
-                clipBehavior: Clip.none, // Prevents elements from bunching up or clipping
+                clipBehavior: Clip.none,
                 alignment: Alignment.topCenter,
                 children: [
-
-                  // 1. MAIN CARD WHITE CONTAINER
                   Container(
                     margin: const EdgeInsets.only(top: 60),
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(36),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
-                          color: Colors.black,
+                          color: Colors.black26,
                           blurRadius: 15,
-                          offset: const Offset(0, 10),
-                        )
+                          offset: Offset(0, 10),
+                        ),
                       ],
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(height: 75),
-
-                        // CHARACTER ILLUSTRATION
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxHeight: 200),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Image.asset(
-                              imageAsset,
-                              fit: BoxFit.contain,
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: Image.asset(imageAsset, fit: BoxFit.contain),
                           ),
                         ),
-
-                        const SizedBox(height: 20),
-
-                        // ACTION BUTTON BAR
+                        if (!showNiceTry) ...[
+                          const Text(
+                            "You've completed a lesson!",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: AppPalette.bodyText,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 28.0),
+                          padding: const EdgeInsets.only(bottom: 28),
                           child: Row(
                             children: [
-                              // DONE BUTTON
                               Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(24),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: _theme.accent.withValues(alpha: 0.6),
-                                        offset: const Offset(0, 5),
-                                      ),
-                                    ],
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: _theme.accent,
-                                      foregroundColor: _theme.onPrimary,
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24),
-                                        side: const BorderSide(color: Colors.white24, width: 1.5),
-                                      ),
-                                    ),
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("DONE", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, letterSpacing: 0.5)),
-                                  ),
+                                child: _summaryActionButton(
+                                  label: 'DONE',
+                                  color: AppPalette.doneButton,
+                                  onPressed: () => Navigator.pop(context),
                                 ),
                               ),
                               const SizedBox(width: 14),
-
-                              // NEXT BUTTON
                               Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(24),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: _theme.primary.withValues(alpha: 0.5),
-                                        offset: const Offset(0, 5),
-                                      ),
-                                    ],
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: _theme.primary,
-                                      foregroundColor: _theme.onPrimary,
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24),
-                                        side: const BorderSide(color: Colors.white24, width: 1.5),
-                                      ),
-                                    ),
-                                    onPressed: _starsEarnedThisQuestion < 1 ? null : _handleNextAction,
-                                    child: Text(
-                                      _currentQuestionIndex < _questionBank.length - 1 ? "NEXT" : "FINISH",
-                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, letterSpacing: 0.5),
-                                    ),
-                                  ),
+                                child: _summaryActionButton(
+                                  label: _currentQuestionIndex <
+                                          _questionBank.length - 1
+                                      ? 'NEXT'
+                                      : 'FINISH',
+                                  color: AppPalette.nextButton,
+                                  onPressed: _starsEarnedThisQuestion < 1
+                                      ? null
+                                      : _handleNextAction,
                                 ),
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
-
                   Positioned(
                     top: 20,
                     left: 16,
@@ -710,13 +657,11 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-
                         Image.asset(
                           'asset/ribbon.png',
                           height: 120,
                           fit: BoxFit.contain,
                         ),
-
                         Positioned(
                           top: 36,
                           child: Text(
@@ -740,8 +685,6 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                       ],
                     ),
                   ),
-
-                  // 3. OVERLAPPING CELEBRATORY STARS
                   Positioned(
                     top: -50,
                     left: 0,
@@ -757,34 +700,34 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                             child: Icon(
                               Icons.star_rounded,
                               color: _starsEarnedThisQuestion >= 2
-                                  ? _theme.starColor
+                                  ? AppPalette.star
                                   : Colors.grey[300],
                               size: 64,
-                              shadows: [
-                                BoxShadow(color: Colors.black, offset: Offset(3, 4)),
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black38,
+                                  offset: Offset(3, 4),
+                                ),
                               ],
                             ),
                           ),
                         ),
-
-                        // Center Massive Star
                         Transform.translate(
-                          offset: const Offset(5, 15), // x, y
+                          offset: const Offset(5, 15),
                           child: Icon(
                             Icons.star_rounded,
                             color: _starsEarnedThisQuestion >= 1
-                                ? _theme.starColor
+                                ? AppPalette.star
                                 : Colors.grey[300],
                             size: 96,
                             shadows: const [
                               Shadow(
-                                color: Colors.black,
+                                color: Colors.black38,
                                 offset: Offset(2, 4),
                               ),
                             ],
                           ),
                         ),
-
                         Transform.translate(
                           offset: const Offset(-12, 12),
                           child: Transform.rotate(
@@ -792,11 +735,14 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                             child: Icon(
                               Icons.star_rounded,
                               color: _starsEarnedThisQuestion == 3
-                                  ? _theme.starColor
+                                  ? AppPalette.star
                                   : Colors.grey[300],
                               size: 64,
-                              shadows: [
-                                BoxShadow(color: Colors.black, offset: Offset(2, 4)),
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black38,
+                                  offset: Offset(2, 4),
+                                ),
                               ],
                             ),
                           ),
@@ -813,104 +759,155 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
     );
   }
 
-  // FINAL LEVEL COMPLETION SUMMARY
+  Widget _summaryActionButton({
+    required String label,
+    required Color color,
+    required VoidCallback? onPressed,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        disabledBackgroundColor: color.withValues(alpha: 0.45),
+        disabledForegroundColor: Colors.white70,
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: const BorderSide(color: Colors.white24, width: 1.5),
+        ),
+      ),
+      onPressed: onPressed,
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+
   Widget _buildFinalLevelCompletionScreen() {
     final int averageStars = _calculateAverageStars();
+    final showNiceTry = averageStars <= 1;
+    final titleText = showNiceTry ? 'Nice Try' : 'GREAT JOB!';
+    final imageAsset = showNiceTry
+        ? 'asset/nicetrylogo.png'
+        : 'asset/greatjoblogo.png';
 
     return Scaffold(
-      backgroundColor: _theme.primary,
       body: Stack(
         alignment: Alignment.center,
         children: [
           Positioned.fill(
-            child: Opacity(
-              opacity: 0.35,
-              child: Container(color: _theme.secondary),
-            ),
+            child: Image.asset('asset/gameplayscreen.png', fit: BoxFit.cover),
           ),
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(32),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10))
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              constraints: const BoxConstraints(maxWidth: 360),
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topCenter,
                 children: [
-                  Text(
-                    "LEVEL COMPLETE!",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: _theme.accent,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "Great work polishing your definitions!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black54, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 24),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(3, (index) {
-                      return Icon(
-                        Icons.star_rounded,
-                        color: index < averageStars
-                            ? _theme.starColor
-                            : Colors.grey[300],
-                        size: 54,
-                      );
-                    }),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "Your Average Score: $averageStars / 3 Stars",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: _theme.titleText,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-
                   Container(
-                    width: double.infinity,
+                    margin: const EdgeInsets.only(top: 60),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(36),
+                      boxShadow: const [
                         BoxShadow(
-                          color: _theme.primary.withValues(alpha: 0.45),
-                          offset: const Offset(0, 4),
+                          color: Colors.black26,
+                          blurRadius: 20,
+                          offset: Offset(0, 10),
                         ),
                       ],
                     ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _theme.primary,
-                        foregroundColor: _theme.onPrimary,
-                        elevation: 0,
-                        minimumSize: const Size(double.infinity, 52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(color: Colors.black12, width: 1),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 75),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxHeight: 180),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Image.asset(imageAsset, fit: BoxFit.contain),
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context, averageStars);
-                      },
-                      child: const Text(
-                        "DONE",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 1.1),
-                      ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(3, (index) {
+                            return Icon(
+                              Icons.star_rounded,
+                              color: index < averageStars
+                                  ? AppPalette.star
+                                  : Colors.grey[300],
+                              size: 44,
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Your Average Score: $averageStars / 3 Stars',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: _theme.titleText,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 28),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: _summaryActionButton(
+                              label: 'Level Complete',
+                              color: AppPalette.levelCompleteButton,
+                              onPressed: () =>
+                                  Navigator.pop(context, averageStars),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 20,
+                    left: 16,
+                    right: 16,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(
+                          'asset/ribbon.png',
+                          height: 120,
+                          fit: BoxFit.contain,
+                        ),
+                        Positioned(
+                          top: 36,
+                          child: Text(
+                            titleText,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black38,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
