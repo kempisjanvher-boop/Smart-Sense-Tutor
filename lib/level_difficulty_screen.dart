@@ -134,12 +134,14 @@ class _DifficultyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unlocked = ProgressService.isDifficultyUnlocked(
+    // FIX: Updated to ProgressService().
+    final unlocked = ProgressService().isDifficultyUnlocked(
       category,
       levelNumber,
       difficulty,
     );
-    final stars = ProgressService.getStars(category, levelNumber, difficulty);
+    // FIX: Updated to ProgressService().
+    final stars = ProgressService().getStars(category, levelNumber, difficulty);
     final badgeColor = DifficultyTheme.badgeColor(difficulty);
 
     return Opacity(
@@ -176,7 +178,8 @@ class _DifficultyTile extends StatelessWidget {
             );
 
             if (result != null && context.mounted) {
-              ProgressService.setStars(
+              // FIX: Updated to ProgressService().
+              ProgressService().setStars(
                 category,
                 levelNumber,
                 difficulty,
@@ -184,10 +187,13 @@ class _DifficultyTile extends StatelessWidget {
               );
 
               // Only increment progress when all 3 difficulties in the level are completed
-              if (ProgressService.completedDifficultiesCount(category, levelNumber) >= 3) {
-                ProgressService.addCompletion(category);
+              // FIX: Updated to ProgressService().
+              if (ProgressService().completedDifficultiesCount(category, levelNumber) >= 3) {
+                // FIX: Updated to ProgressService().
+                ProgressService().addCompletion(category);
               }
-              ProgressService.unlockNext(category, levelNumber);
+              // FIX: Updated to ProgressService().
+              ProgressService().unlockNext(category, levelNumber);
               onCompleted();
             }
           },

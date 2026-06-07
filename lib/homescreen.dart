@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_sense_tutor/account/profile.dart';
 import 'core/app_palette.dart';
 import 'levelmap.dart';
 import 'lessondata.dart';
@@ -66,26 +67,30 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisSpacing: 12,
               childAspectRatio: 1.5,
               children: [
+                // FIX: Changed ProgressService. to ProgressService().
                 _buildStatCard(
-                  ProgressService.getTotalInProgress().toString(),
+                  ProgressService().getTotalInProgress().toString(),
                   "Lesson(s)\nin progress",
                   AppPalette.statPink,
                   Image.asset("asset/lessonicon.png", width: 40, height: 40),
                 ),
 
+                // FIX: Changed ProgressService. to ProgressService().
                 _buildStatCard(
-                  ProgressService.getTotalCompletedAll().toString(),
+                  ProgressService().getTotalCompletedAll().toString(),
                   "Lessons\ncompleted",
                   AppPalette.statGreen,
                   Image.asset("asset/completedicon.png", width: 40, height: 40),
                 ),
 
+                // FIX: Changed ProgressService. to ProgressService().
                 _buildStatCard(
-                  ProgressService.getCategoriesCompleted().toString(),
+                  ProgressService().getCategoriesCompleted().toString(),
                   "Categories\ncompleted",
                   AppPalette.statBlue,
                   Image.asset("asset/categoriesicon.png", width: 40, height: 40),
                 ),
+
 
                 // Wrap this 4th Achievement card to navigate on click!
                 GestureDetector(
@@ -95,8 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(builder: (context) => const AchievementsScreen()),
                     );
                   },
+                  // FIX: Changed ProgressService. to ProgressService().
                   child: _buildStatCard(
-                    ProgressService.getAchievementsUnlockedCount().toString(),
+                    ProgressService().getAchievementsUnlockedCount().toString(),
                     "Achievement",
                     AppPalette.statYellow,
                     Image.asset(
@@ -185,6 +191,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const SmartLookup(),
+                ),
+              );
+              break;
+
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
                 ),
               );
               break;

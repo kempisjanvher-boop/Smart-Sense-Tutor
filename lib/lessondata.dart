@@ -11,8 +11,6 @@ class LessonData extends StatefulWidget {
 
   @override
   State<LessonData> createState() => _LessonDataState();
-
-
 }
 
 class LessonCategory {
@@ -20,10 +18,12 @@ class LessonCategory {
 
   LessonCategory({required this.title});
 
-  int get totalLessons => ProgressService.totalLessons[title] ?? 3;
+  // FIX: Changed ProgressService.totalLessons to ProgressService().totalLessons
+  int get totalLessons => ProgressService().totalLessons[title] ?? 3;
 
+  // FIX: Changed ProgressService.getCompleted to ProgressService().getCompleted
   int get completedLessons {
-    final done = ProgressService.getCompleted(title);
+    final done = ProgressService().getCompleted(title);
     return done.clamp(0, totalLessons);
   }
 
@@ -212,7 +212,7 @@ class _LessonDataState extends State<LessonData> {
                       value: category.progressPercentage,
                       backgroundColor: AppPalette.border,
                       valueColor:
-                          AlwaysStoppedAnimation<Color>(AppPalette.accent),
+                      AlwaysStoppedAnimation<Color>(AppPalette.accent),
                       minHeight: 12,
                     ),
                   ),

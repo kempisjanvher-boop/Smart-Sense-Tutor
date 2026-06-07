@@ -31,4 +31,7 @@ class AppPalette {
   static const Color sentenceHighlight = Color(0xFFFF8A00);
   static const Color sentenceCardTop = Color(0xFFFFF5EB);
   static const Color sentenceCardBottom = Color(0xFFFFE4C7);
+
+  static const gameplayCard = Color(0x80FFFDF7);
+  static const gameplayCard2 = Color(0x4DFFFADD);
 }

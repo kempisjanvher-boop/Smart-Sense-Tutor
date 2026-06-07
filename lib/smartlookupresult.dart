@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_sense_tutor/account/profile.dart';
 import 'homescreen.dart';
 import 'lessondata.dart';
 import 'smartlookup.dart';
@@ -19,8 +20,37 @@ class SmartLookupResult extends StatefulWidget {
 }
 
 class _SmartLookupResultState extends State<SmartLookupResult> {
-  // FIXED: Set to -1 or leave unselected so clicking the 'Smart Lookup' tab route safely returns home!
   final int _currentIndex = 2;
+
+  // ─── NEW: INLINE CONTROLLER STATE PROPERTIES ───
+  bool _isInlineSearchVisible = false;
+  final TextEditingController _inlineSearchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _inlineSearchController.dispose();
+    super.dispose();
+  }
+
+  // Triggered when a user executes a brand new query from this screen
+  void _executeNewSearch(String query) {
+    final cleanQuery = query.trim();
+    if (cleanQuery.isEmpty) return;
+
+    // Use your engine framework to resolve the new dataset array parameters
+    final newMeanings = PolysemyAnalyzer.getMeaningsForWord(cleanQuery);
+
+    // Push right back into a fresh instance viewport state cleanly
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SmartLookupResult(
+          searchedWord: cleanQuery,
+          dynamicMeanings: newMeanings,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +63,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
         centerTitle: true,
         title: const Text(
           "Smart Lookup",
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [
           Padding(
@@ -59,11 +85,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFE3F7FF),
-              Color(0xFFF3F8FB),
-              Color(0xFFFFFFFF),
-            ],
+            colors: [Color(0xFFE3F7FF), Color(0xFFF3F8FB), Color(0xFFFFFFFF)],
             stops: [0.0, 0.3, 0.7],
           ),
         ),
@@ -75,9 +97,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
               padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
               decoration: const BoxDecoration(
                 color: Color(0xFFFDFBF7),
-                border: Border(
-                  bottom: BorderSide(color: Colors.black12, width: 1),
-                ),
+                border: Border(bottom: BorderSide(color: Colors.black12, width: 1)),
               ),
               child: RichText(
                 textAlign: TextAlign.center,
@@ -87,17 +107,63 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                     const TextSpan(text: "Multiple meanings detected for "),
                     TextSpan(
                       text: '"${widget.searchedWord}"',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFFF8A5B),
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFF8A5B)),
                     ),
                   ],
                 ),
               ),
             ),
 
-            // 2. Main Scrolling Card Area
+            // 2. NEW: DYNAMIC INLINE SEARCH INPUT COMPONENT
+            if (_isInlineSearchVisible)
+              Container(
+                color: const Color(0xFFF1F5F9),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _inlineSearchController,
+                        autofocus: true,
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: _executeNewSearch,
+                        decoration: InputDecoration(
+                          hintText: "Search another word...",
+                          hintStyle: const TextStyle(color: Colors.black38, fontSize: 15),
+                          prefixIcon: const Icon(Icons.search, color: Color(0xFF2C4379)),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.clear, color: Colors.grey),
+                            onPressed: () => _inlineSearchController.clear(),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: const BorderSide(color: Colors.black12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: const BorderSide(color: Color(0xFF70D3F4), width: 1.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _isInlineSearchVisible = false;
+                          _inlineSearchController.clear();
+                        });
+                      },
+                      child: const Text("Cancel", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
+                    )
+                  ],
+                ),
+              ),
+
+            // 3. Main Scrolling Card Area
             Expanded(
               child: Stack(
                 children: [
@@ -108,10 +174,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                         decoration: BoxDecoration(
                           color: const Color(0xFFFDFBF9),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.black.withOpacity(0.7),
-                            width: 1.5,
-                          ),
+                          border: Border.all(color: Colors.black.withOpacity(0.7), width: 1.5),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,14 +183,9 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                               padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0, bottom: 8.0),
                               child: Text(
                                 "Polysemy Explorer",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2C4379),
-                                ),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2C4379)),
                               ),
                             ),
-
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: RichText(
@@ -146,7 +204,6 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                             ),
                             const SizedBox(height: 12),
 
-                            // Dynamic loops constructing definitions from your CSV
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -168,35 +225,47 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                     ),
                   ),
 
-                  // 3. Floating Action Rainbow Ring Accent
+                  // 4. FLOATING AI ACTION RAINBOW RING ACCENT (NOW INTERACTIVE BUTTON)
                   Positioned(
                     right: 24,
                     bottom: 24,
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15), // Softened shadow accent
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: const Color(0xFF62D275),
-                              width: 3.5,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isInlineSearchVisible = !_isInlineSearchVisible;
+                          if (!_isInlineSearchVisible) {
+                            _inlineSearchController.clear();
+                          }
+                        });
+                      },
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: const Color(0xFF62D275), width: 3.5),
+                              gradient: const SweepGradient(
+                                colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.red],
+                              ),
                             ),
-                            gradient: const SweepGradient(
-                              colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.red],
+                            child: Icon(
+                              _isInlineSearchVisible ? Icons.close : Icons.psychology_alt_rounded,
+                              size: 20,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -212,7 +281,6 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
-          // FIXED: Removed strict index guard block so users can exit back to search input
           switch (index) {
             case 0:
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
@@ -222,6 +290,9 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
               break;
             case 2:
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SmartLookup()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
               break;
           }
         },
@@ -268,11 +339,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
         }
         spans.add(TextSpan(
           text: fullExample.substring(match.start, match.end),
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-            color: Color(0xFF2C3E50),
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Color(0xFF2C3E50)),
         ));
         lastMatchEnd = match.end;
       }
@@ -290,9 +357,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Colors.black26, width: 1.5),
-        ),
+        border: Border(top: BorderSide(color: Colors.black26, width: 1.5)),
       ),
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -300,14 +365,9 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16.5,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2C3E50),
-            ),
+            style: const TextStyle(fontSize: 16.5, fontWeight: FontWeight.bold, color: Color(0xFF2C3E50)),
           ),
           const SizedBox(height: 8),
-
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -320,10 +380,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                   text: TextSpan(
                     style: const TextStyle(fontSize: 15, color: Color(0xFF4A4A4A), height: 1.35),
                     children: [
-                      const TextSpan(
-                        text: "Definition: ",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFEBBB3A)),
-                      ),
+                      const TextSpan(text: "Definition: ", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFEBBB3A))),
                       TextSpan(text: definition),
                     ],
                   ),
@@ -332,7 +389,6 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
             ],
           ),
           const SizedBox(height: 8),
-
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -345,10 +401,7 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                   text: TextSpan(
                     style: const TextStyle(fontSize: 15, color: Color(0xFF555555), height: 1.35),
                     children: [
-                      const TextSpan(
-                        text: "Example: ",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF81C281)),
-                      ),
+                      const TextSpan(text: "Example: ", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF81C281))),
                       ...parseExampleSpans(example, keyword),
                     ],
                   ),

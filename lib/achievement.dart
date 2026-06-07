@@ -9,9 +9,10 @@ class AchievementsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int perfectScoresCount = ProgressService.getPerfectScores();
-    bool hasCompletedALesson = ProgressService.hasCompletedAtLeastOneLesson();
-    bool perfectWeekStreak = ProgressService.hasWeekStreak();
+    // FIX: Using ProgressService(). to access instance variables through the Singleton pattern
+    int perfectScoresCount = ProgressService().getPerfectScores();
+    bool hasCompletedALesson = ProgressService().hasCompletedAtLeastOneLesson();
+    bool perfectWeekStreak = ProgressService().hasWeekStreak();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -58,7 +59,7 @@ class AchievementsScreen extends StatelessWidget {
               subtitle: "🔥 Celebrate a full week streak",
               progressValue: perfectWeekStreak ? 1.0 : 0.0,
               progressPercentText: perfectWeekStreak ? "100 %" : "0 %",
-              badgePath: "asset/silver.png", // replace with your silver/grey asset
+              badgePath: "asset/silver.png",
               avatarPath: "asset/legend.png",
             ),
             const SizedBox(height: 16),
@@ -69,7 +70,7 @@ class AchievementsScreen extends StatelessWidget {
               subtitle: "$perfectScoresCount/10 perfect score",
               progressValue: (perfectScoresCount / 10).clamp(0.0, 1.0),
               progressPercentText: "${((perfectScoresCount / 10).clamp(0.0, 1.0) * 100).toInt()} %",
-              badgePath: "asset/bronze.png", // replace with bronze badge
+              badgePath: "asset/bronze.png",
               avatarPath: "asset/perfectscore.png",
             ),
             const SizedBox(height: 16),
@@ -80,14 +81,14 @@ class AchievementsScreen extends StatelessWidget {
               subtitle: "You completed a lesson",
               progressValue: hasCompletedALesson ? 1.0 : 0.0,
               progressPercentText: hasCompletedALesson ? "100 %" : "0 %",
-              badgePath: "asset/gold.png", // replace with gold badge
+              badgePath: "asset/gold.png",
               avatarPath: "asset/conqueror.png",
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3, // Set "More" or add dedicated tab as highlight
+        currentIndex: 3,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF2C3E6B),
@@ -129,7 +130,7 @@ class AchievementsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
+            color: Colors.black.withOpacity(0.1), // Adjusted opacity slightly so shadows look clean
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

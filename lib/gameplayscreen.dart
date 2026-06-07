@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'core/app_categories.dart';
@@ -397,15 +399,17 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
         const SizedBox(height: 24), // Adjusted gap sizing to pull container higher up
         ClipRRect(
           borderRadius: BorderRadius.circular(24),
-          child: Container(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  AppPalette.sentenceCardTop,
-                  AppPalette.sentenceCardBottom,
+                  AppPalette.gameplayCard,
+                  AppPalette.gameplayCard2,
                 ],
               ),
               borderRadius: BorderRadius.circular(24),
@@ -455,7 +459,8 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
               ),
             ),
           ),
-        )
+        ),
+        ),
       ],
     );
   }

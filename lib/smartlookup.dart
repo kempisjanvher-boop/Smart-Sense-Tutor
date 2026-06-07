@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:smart_sense_tutor/account/profile.dart';
 import 'homescreen.dart';
 import 'lessondata.dart';
 import 'smartlookupresult.dart';
@@ -39,6 +40,55 @@ class _SmartLookupState extends State<SmartLookup> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  /// Centralized logic to analyze input text and navigate to the result screen
+  void _processSearchAnalysis() {
+    String textInput = _searchController.text.trim();
+
+    if (textInput.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a word or sentence to analyze!')),
+      );
+      return;
+    }
+
+    List<String> inputTokens = textInput
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-zA-Z0-9 ]'), '')
+        .split(RegExp(r'\s+'))
+        .map((t) => t.trim())
+        .toList();
+
+    String detectedKeyword = "";
+
+    Set<String> validKeywordsInExcel = PolysemyAnalyzer.excelDataset
+        .map((row) => (row["word"] ?? "").toLowerCase().trim())
+        .where((word) => word.isNotEmpty)
+        .toSet();
+
+    for (var token in inputTokens) {
+      if (validKeywordsInExcel.contains(token)) {
+        detectedKeyword = token;
+        break;
+      }
+    }
+
+    if (detectedKeyword.isEmpty && inputTokens.isNotEmpty) {
+      detectedKeyword = inputTokens.first;
+    }
+
+    List<WordMeaning> computedMeanings = PolysemyAnalyzer.analyzeContext(detectedKeyword, textInput);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SmartLookupResult(
+          searchedWord: detectedKeyword,
+          dynamicMeanings: computedMeanings,
+        ),
+      ),
+    );
   }
 
   @override
@@ -192,6 +242,8 @@ class _SmartLookupState extends State<SmartLookup> {
                 child: TextField(
                   controller: _searchController,
                   style: const TextStyle(fontSize: 18),
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: (_) => _processSearchAnalysis(),
                   decoration: InputDecoration(
                     hintText: "Enter a word or sentence to learn...",
                     hintStyle: const TextStyle(color: Colors.black38, fontSize: 18),
@@ -200,11 +252,7 @@ class _SmartLookupState extends State<SmartLookup> {
                     suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 12.0),
                       child: InkWell(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('AI Context Mode Active!')),
-                          );
-                        },
+                        onTap: _processSearchAnalysis, // ◄── Hooked up rainbow ring directly to analysis processing
                         customBorder: const CircleBorder(),
                         child: Container(
                           width: 32,
@@ -232,53 +280,7 @@ class _SmartLookupState extends State<SmartLookup> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    String textInput = _searchController.text.trim();
-
-                    if (textInput.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please enter a word or sentence to analyze!')),
-                      );
-                      return;
-                    }
-
-                    List<String> inputTokens = textInput
-                        .toLowerCase()
-                        .replaceAll(RegExp(r'[^a-zA-Z0-9 ]'), '')
-                        .split(RegExp(r'\s+'))
-                        .map((t) => t.trim())
-                        .toList();
-
-                    String detectedKeyword = "";
-
-                    Set<String> validKeywordsInExcel = PolysemyAnalyzer.excelDataset
-                        .map((row) => (row["word"] ?? "").toLowerCase().trim())
-                        .where((word) => word.isNotEmpty)
-                        .toSet();
-
-                    for (var token in inputTokens) {
-                      if (validKeywordsInExcel.contains(token)) {
-                        detectedKeyword = token;
-                        break;
-                      }
-                    }
-
-                    if (detectedKeyword.isEmpty && inputTokens.isNotEmpty) {
-                      detectedKeyword = inputTokens.first;
-                    }
-
-                    List<WordMeaning> computedMeanings = PolysemyAnalyzer.analyzeContext(detectedKeyword, textInput);
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SmartLookupResult(
-                          searchedWord: detectedKeyword,
-                          dynamicMeanings: computedMeanings,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: _processSearchAnalysis,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF70D3F4),
                     elevation: 2,
@@ -315,11 +317,30 @@ class _SmartLookupState extends State<SmartLookup> {
                 ),
               );
               break;
+
             case 1:
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const LessonData(),
+                ),
+              );
+              break;
+
+            case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SmartLookup(),
+                ),
+              );
+              break;
+
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
                 ),
               );
               break;
@@ -367,7 +388,6 @@ class _SmartLookupState extends State<SmartLookup> {
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   setState(() {
-                    // FIX: This now strictly assigns the clean text keyword to the input box controller
                     _searchController.text = keyword.trim();
                   });
                 },

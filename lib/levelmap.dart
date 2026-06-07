@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_sense_tutor/smartlookup.dart';
 import 'level_difficulty_screen.dart';
 import 'services/level_manager.dart';
 import 'lessondata.dart';
@@ -17,8 +18,10 @@ class LevelMap extends StatefulWidget {
 class LevelMapState extends State<LevelMap> {
   bool _hasPlayedGame = false;
   int _streakCount = 0;
+
+  // FIX: Changed from ProgressService. to ProgressService().
   int get _unlockedLevel =>
-      ProgressService.getUnlockedLevel(widget.category);
+      ProgressService().getUnlockedLevel(widget.category);
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +221,14 @@ class LevelMapState extends State<LevelMap> {
                   IconButton(
                     icon: const Icon(Icons.send,
                         color: Colors.grey, size: 28),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SmartLookup(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -237,9 +247,11 @@ class LevelMapState extends State<LevelMap> {
   }) {
     final characterBaseColor = theme.levelNodeColor(levelNumber);
     bool isLevelLocked = levelNumber > _unlockedLevel;
+
     final starsEarned = List.generate(3, (i) {
       final diff = LevelManager.difficultiesPerLevel[i];
-      return ProgressService.getStars(widget.category, levelNumber, diff) >= 1;
+      // FIX: Changed from ProgressService. to ProgressService().
+      return ProgressService().getStars(widget.category, levelNumber, diff) >= 1;
     });
     final starCount = starsEarned.where((done) => done).length;
 

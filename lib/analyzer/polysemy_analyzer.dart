@@ -1,3 +1,4 @@
+// lib/analyzer/polysemy_analyzer.dart
 import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
@@ -84,6 +85,40 @@ class PolysemyAnalyzer {
     } catch (e) {
       debugPrint("PolysemyAnalyzer Critical Error: $e");
     }
+  }
+
+  /// ─── NEW: ADDED FOR THE INLINE SEARCH BAR SUPPORT ───
+  /// Returns all distinct meanings for a single keyword without context weights.
+  static List<WordMeaning> getMeaningsForWord(String searchWord) {
+    final cleanSearchWord = searchWord.trim().toLowerCase();
+    final matchingRows = excelDataset.where((row) => row["word"] == cleanSearchWord).toList();
+
+    if (matchingRows.isEmpty) {
+      return [
+        WordMeaning(
+          title: "Not Found",
+          definition: "No vocabulary definitions matched '$searchWord' in the database archive.",
+          example: "Try searching another polysemous word example like 'ring' or 'bank'.",
+          confidenceScore: 0.0,
+        )
+      ];
+    }
+
+    Map<String, WordMeaning> uniqueMeaningsMap = {};
+
+    for (var row in matchingRows) {
+      String definition = row["definition"]?.trim() ?? 'No definition provided.';
+      if (!uniqueMeaningsMap.containsKey(definition)) {
+        uniqueMeaningsMap[definition] = WordMeaning(
+          title: row["correct sense"] ?? 'General Meaning',
+          definition: definition,
+          example: row["sentence"] ?? '',
+          confidenceScore: 1.0,
+        );
+      }
+    }
+
+    return uniqueMeaningsMap.values.toList();
   }
 
   /// Evaluates context matches using TF-IDF, grouping identical definitions
@@ -195,6 +230,7 @@ class PolysemyAnalyzer {
       double v1 = vec1[word] ?? 0;
       double v2 = vec2[word] ?? 0;
       dotProduct += v1 * v2;
+      norm1 += v1 * v2; // Note: Dot product sum aggregation
       norm1 += v1 * v1;
       norm2 += v2 * v2;
     }
