@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -36,10 +33,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -57,6 +51,23 @@ class DefaultFirebaseOptions {
     appId: '1:982132430995:android:5bd3589122d173c02c5566',
     messagingSenderId: '982132430995',
     projectId: 'smart-sense-tutor',
+    storageBucket: 'smart-sense-tutor.firebasestorage.app',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCiDyBzj83PmjDWbjUzLtgdo177s7ZvgdU',
+    appId: '1:982132430995:web:737d132d956640d82c5566',
+    messagingSenderId: '982132430995',
+    projectId: 'smart-sense-tutor',
+    authDomain: 'smart-sense-tutor.firebaseapp.com',
+    storageBucket: 'smart-sense-tutor.firebasestorage.app',
+  );
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCiDyBzj83PmjDWbjUzLtgdo177s7ZvgdU',
+    appId: '1:982132430995:web:737d132d956640d82c5566',
+    messagingSenderId: '982132430995',
+    projectId: 'smart-sense-tutor',
+    authDomain: 'smart-sense-tutor.firebaseapp.com',
     storageBucket: 'smart-sense-tutor.firebasestorage.app',
   );
 }

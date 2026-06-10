@@ -98,7 +98,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   // App Branding Logo
                   Center(
                     child: Image.asset(
-                      'asset/logo.png',
+                      'asset/sstlogin.png',
                       width: 240,
                       fit: BoxFit.contain,
                       errorBuilder: (c, e, s) => const Icon(Icons.menu_book, size: 70, color: Color(0xFF70D3F4)),

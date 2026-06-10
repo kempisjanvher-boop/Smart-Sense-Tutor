@@ -18,17 +18,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   User? _currentUser = FirebaseAuth.instance.currentUser;
   bool _isSaving = false;
 
-  // ─── NEW: SETTINGS STATE TRACKERS ───
+  // Settings State Trackers
   bool _notificationsEnabled = true;
   bool _darkModeEnabled = false;
   bool _sstSoundEnabled = true;
 
   final List<String> _avatarOptions = [
     'asset/bear_avatar.png',
-    'asset/cat_avatar.png',
+    'asset/penguin_avatar.png',
     'asset/dog_avatar.png',
-    'asset/fox_avatar.png',
-    'asset/panda_avatar.png',
+    'asset/seal_avatar.png',
   ];
 
   String _currentAvatar = 'asset/bear_avatar.png';
@@ -85,137 +84,137 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             return Padding(
-              padding: EdgeInsets.only(
-                top: 24,
-                left: 24,
-                right: 24,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Edit Profile",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2C4379)),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Choose an Avatar",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 80,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _avatarOptions.length,
-                      itemBuilder: (context, index) {
-                        final avatarPath = _avatarOptions[index];
-                        final isSelected = selectedAvatarLocal == avatarPath;
+                padding: EdgeInsets.only(
+                  top: 24,
+                  left: 24,
+                  right: 24,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Edit Profile",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2C4379)),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Choose an Avatar",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 80,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _avatarOptions.length,
+                        itemBuilder: (context, index) {
+                          final avatarPath = _avatarOptions[index];
+                          final isSelected = selectedAvatarLocal == avatarPath;
 
-                        return GestureDetector(
-                          onTap: () {
-                            setModalState(() {
-                              selectedAvatarLocal = avatarPath;
+                          return GestureDetector(
+                            onTap: () {
+                              setModalState(() {
+                                selectedAvatarLocal = avatarPath;
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 14),
+                              width: 76,
+                              height: 76,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFCBEFFA),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: isSelected ? const Color(0xFF70D3F4) : Colors.transparent,
+                                  width: 3,
+                                ),
+                              ),
+                              child: ClipOval(
+                                child: Image.asset(
+                                  avatarPath,
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (c, e, s) => const Icon(Icons.account_circle, size: 50),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      "Username",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFFF1F5F9),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF70D3F4), width: 2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF70D3F4),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: _isSaving ? null : () async {
+                          final updatedName = nameController.text.trim();
+                          if (updatedName.isEmpty || _currentUser == null) return;
+
+                          setModalState(() => _isSaving = true);
+
+                          try {
+                            await _currentUser!.updateDisplayName(updatedName);
+                            await _currentUser!.updatePhotoURL(selectedAvatarLocal);
+
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(_currentUser!.uid)
+                                .update({
+                              'username': updatedName,
+                              'searchKey': updatedName.toLowerCase(),
+                              'avatarAsset': selectedAvatarLocal,
                             });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 14),
-                            width: 76,
-                            height: 76,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFCBEFFA),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: isSelected ? const Color(0xFF70D3F4) : Colors.transparent,
-                                width: 3,
-                              ),
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                avatarPath,
-                                fit: BoxFit.contain,
-                                errorBuilder: (c, e, s) => const Icon(Icons.account_circle, size: 50),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    "Username",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFFF1F5F9),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.transparent),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF70D3F4), width: 2),
+
+                            setState(() {
+                              _currentUser = FirebaseAuth.instance.currentUser;
+                              _currentAvatar = selectedAvatarLocal;
+                            });
+
+                            if (context.mounted) Navigator.pop(context);
+                          } catch (e) {
+                            print("Error saving profile: $e");
+                          } finally {
+                            setModalState(() => _isSaving = false);
+                          }
+                        },
+                        child: _isSaving
+                            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                            : const Text("Save Changes", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF70D3F4),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      onPressed: _isSaving ? null : () async {
-                        final updatedName = nameController.text.trim();
-                        if (updatedName.isEmpty || _currentUser == null) return;
-
-                        setModalState(() => _isSaving = true);
-
-                        try {
-                          await _currentUser!.updateDisplayName(updatedName);
-                          await _currentUser!.updatePhotoURL(selectedAvatarLocal);
-
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(_currentUser!.uid)
-                              .update({
-                            'username': updatedName,
-                            'searchKey': updatedName.toLowerCase(),
-                            'avatarAsset': selectedAvatarLocal,
-                          });
-
-                          setState(() {
-                            _currentUser = FirebaseAuth.instance.currentUser;
-                            _currentAvatar = selectedAvatarLocal;
-                          });
-
-                          if (context.mounted) Navigator.pop(context);
-                        } catch (e) {
-                          print("Error saving profile: $e");
-                        } finally {
-                          setModalState(() => _isSaving = false);
-                        }
-                      },
-                      child: _isSaving
-                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                          : const Text("Save Changes", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
+                  ],
+                ),
+              );
+            },
         );
       },
     );
@@ -311,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildDivider(),
                   _buildDropdownTile("Account Management"),
                   _buildDivider(),
-                  _buildDropdownTile("Privacy Policy"),
+                  _buildPrivacyPolicyDropdown(), // ◄── Replaced with customized layout builder
                   _buildDivider(),
 
                   const SizedBox(height: 40),
@@ -403,7 +402,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         trailing: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF2C4379), size: 28),
         childrenPadding: EdgeInsets.zero,
         children: [
-          // Hooked up interactive toggles inside our custom sub-rows
           _buildSettingsSubRow(
             "Notifications",
             value: _notificationsEnabled,
@@ -433,22 +431,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ─── UPDATED SUB-ROW RECONSTRUCTED WITH INTERACTIVE SWITCH TOGGLES ───
   Widget _buildSettingsSubRow(String subtitle, {required bool value, required ValueChanged<bool> onChanged}) {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 32, right: 24),
       title: Text(
         subtitle,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
-        ),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
       ),
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
-        activeColor: const Color(0xFF70D3F4), // Uses your app theme's sky blue when active
+        activeColor: const Color(0xFF70D3F4),
         activeTrackColor: const Color(0xFFCBEFFA),
       ),
     );
@@ -470,6 +463,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  // ─── NEW: IMITATED PRIVACY POLICY EXPANSION DROPDOWN ───
+  Widget _buildPrivacyPolicyDropdown() {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        title: const Text(
+          "Privacy Policy",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF2C4379)),
+        ),
+        trailing: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF2C4379), size: 28),
+        childrenPadding: const EdgeInsets.only(left: 24, right: 24, bottom: 20, top: 8),
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildPolicyItem(
+                title: "Last Updated: June 6, 2026",
+                body: "This Privacy Policy explains how we collect and use your information when you use our mobile app. We are committed to protecting your personal data and keeping it secure.",
+                isHeaderItem: true,
+              ),
+              _buildPolicyItem(
+                title: "What We Collect and Why",
+                body: "We collect your name, username, and email address (such as user@gmail.com) when you sign up. We also collect basic device info and data on how you use the app. We use this information to personalize your lessons, track your progress, and fix any technical bugs to improve your experience.",
+              ),
+              _buildPolicyItem(
+                title: "Data Sharing and Security",
+                body: "Your information is stored safely and is never sold, rented, or shared with third parties for marketing. We only share data with essential service providers, like our cloud hosting platform, to keep the app running.",
+              ),
+              _buildPolicyItem(
+                title: "Your Controls and Choices",
+                body: "You have full control over your privacy directly in the app. You can turn notifications on or off, change your account privacy settings, or permanently delete your account and all of your data at any time through the settings menu.",
+              ),
+              _buildPolicyItem(
+                title: "Contact Us",
+                body: "If you have any questions about your privacy, please email our support team at sstsupport@education.co.",
+                isLastItem: true,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Individual Section Render Utility
+  Widget _buildPolicyItem({
+    required String title,
+    required String body,
+    bool isHeaderItem = false,
+    bool isLastItem = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            height: 1.3,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          body,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.black87,
+            height: 1.45,
+          ),
+        ),
+        if (!isLastItem) ...[
+          const SizedBox(height: 12),
+          const Divider(color: Colors.black12, thickness: 0.8, height: 16),
+          const SizedBox(height: 8),
+        ],
+      ],
     );
   }
 
