@@ -264,55 +264,117 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  static const Map<String, String> _categoryIcons = {
+    "Tech & Tradition": "asset/tech_tradition_icon.png",
+    "Finance & Physics": "asset/finance_physics_icon.png",
+    "Objects & Ideas": "asset/objects_ideas_icon.png",
+    "Law & Structures": "asset/law_structures_icon.png",
+    "Attributes & Evaluation": "asset/attributes_evaluation_icon.png",
+    "Actions & Movement": "asset/actions_movement_icon.png",
+    "Directions & Space": "asset/directions_space_icon.png",
+  };
+
+  static const List<String> _categoryOrder = [
+    "Tech & Tradition",
+    "Finance & Physics",
+    "Objects & Ideas",
+    "Law & Structures",
+    "Attributes & Evaluation",
+    "Actions & Movement",
+    "Directions & Space",
+  ];
+
+  bool _isCategoryLocked(String categoryTitle) {
+    final index = _categoryOrder.indexOf(categoryTitle);
+    if (index <= 0) return false;
+    
+    final previousCategory = _categoryOrder[index - 1];
+    return !ProgressService().isCategoryCompleted(previousCategory);
+  }
+
   Widget _buildCategoryCard(String title, {bool isFullWidth = false}) {
     final theme = CategoryVisualTheme.forCategory(title);
+    final isLocked = _isCategoryLocked(title);
+    final iconPath = _categoryIcons[title];
+    final displayIcon = isLocked ? "asset/lock_category_image.png" : iconPath;
 
     return GestureDetector(
-      onTap: () {
+      onTap: isLocked ? null : () {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => LevelMap(category: title)),
         );
       },
-      child: Container(
-        height: isFullWidth ? 100 : 110,
-        decoration: BoxDecoration(
-          color: theme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: theme.primary, width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: theme.primary.withValues(alpha: 0.15),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+      child: Stack(
+        children: [
+          Container(
+            height: isFullWidth ? 100 : 110,
+            decoration: BoxDecoration(
+              color: theme.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: isLocked ? Colors.grey : theme.primary, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: isLocked 
+                      ? Colors.grey.withValues(alpha: 0.15)
+                      : theme.primary.withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-          ],
-        ),
-        padding: const EdgeInsets.all(20),
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            Container(
-              width: 6,
-              height: 48,
-              decoration: BoxDecoration(
-                color: theme.accent,
-                borderRadius: BorderRadius.circular(3),
-              ),
+            padding: const EdgeInsets.all(20),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Container(
+                  width: 6,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: isLocked ? Colors.grey : theme.accent,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                if (displayIcon != null)
+                  Image.asset(
+                    displayIcon,
+                    width: 32,
+                    height: 32,
+                    fit: BoxFit.contain,
+                  )
+                else
+                  const SizedBox(width: 32),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isLocked ? Colors.grey : theme.titleText,
+                    ),
+                  ),
+                ),
+                if (isLocked)
+                  const Icon(
+                    Icons.lock,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+              ],
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: theme.titleText,
+          ),
+          if (isLocked)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.black.withValues(alpha: 0.4),
                 ),
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
