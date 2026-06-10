@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'core/app_categories.dart';
 import '../models/difficulty.dart';
+import 'services/level_manager.dart';
 
 class ProgressService {
   // Singleton pattern instantiation to keep state persistent across screens
@@ -26,7 +28,7 @@ class ProgressService {
     "Settings": 3,
     "Law & Structures": 3,
     "Attributes & Evaluation": 3,
-    "Action & Movement": 3,
+    "Actions & Movement": 3,
     "Directions & Space": 3,
   };
 
@@ -49,7 +51,7 @@ class ProgressService {
     "Settings": 1,
     "Law & Structures": 1,
     "Attributes & Evaluation": 1,
-    "Action & Movement": 1,
+    "Actions & Movement": 1,
     "Directions & Space": 1,
   };
 
@@ -126,6 +128,97 @@ class ProgressService {
         levelStars[categoryKey] = levelMap;
       });
     }
+
+    _migrateLegacyCategoryKeys();
+    _reconcileAllProgress();
+  }
+
+  String _normalizeCategory(String category) {
+    final normalized = AppCategories.normalize(category);
+    if (normalized == 'Action & Movement') {
+      return AppCategories.actionsAndMovement;
+    }
+    return normalized;
+  }
+
+  void _migrateLegacyCategoryKeys() {
+    _mergeCategoryKey('Action & Movement', AppCategories.actionsAndMovement);
+  }
+
+  void _mergeCategoryKey(String oldKey, String newKey) {
+    if (oldKey == newKey) return;
+    if (!completedLessons.containsKey(oldKey) &&
+        !unlockedLevel.containsKey(oldKey) &&
+        !levelStars.containsKey(oldKey)) {
+      return;
+    }
+
+    if (completedLessons.containsKey(oldKey)) {
+      final existing = completedLessons[newKey] ?? 0;
+      completedLessons[newKey] =
+          existing > completedLessons[oldKey]! ? existing : completedLessons[oldKey]!;
+      completedLessons.remove(oldKey);
+    }
+
+    if (unlockedLevel.containsKey(oldKey)) {
+      final existing = unlockedLevel[newKey] ?? 1;
+      unlockedLevel[newKey] =
+          existing > unlockedLevel[oldKey]! ? existing : unlockedLevel[oldKey]!;
+      unlockedLevel.remove(oldKey);
+    }
+
+    if (levelStars.containsKey(oldKey)) {
+      levelStars.putIfAbsent(newKey, () => {});
+      levelStars[oldKey]!.forEach((level, difficultyMap) {
+        levelStars[newKey]!.putIfAbsent(level, () => {});
+        difficultyMap.forEach((difficulty, stars) {
+          final current = levelStars[newKey]![level]![difficulty] ?? 0;
+          if (stars > current) {
+            levelStars[newKey]![level]![difficulty] = stars;
+          }
+        });
+      });
+      levelStars.remove(oldKey);
+    }
+  }
+
+  void _reconcileAllProgress() {
+    final categories = <String>{
+      ...totalLessons.keys,
+      ...levelStars.keys,
+      ...completedLessons.keys,
+      ...unlockedLevel.keys,
+    };
+
+    for (final category in categories) {
+      _reconcileCategoryProgress(_normalizeCategory(category));
+    }
+  }
+
+  void _reconcileCategoryProgress(String category) {
+    _reconcileUnlockedLevel(category);
+    _syncCompletedLessons(category);
+  }
+
+  void _reconcileUnlockedLevel(String category) {
+    int unlocked = 1;
+    for (int level = 1; level <= LevelManager.levelsPerCategory; level++) {
+      if (completedDifficultiesCount(category, level) >=
+          LevelManager.difficultiesPerLevel.length) {
+        unlocked = level + 1;
+      } else {
+        break;
+      }
+    }
+    unlockedLevel[category] = unlocked.clamp(1, LevelManager.levelsPerCategory);
+  }
+
+  void _syncCompletedLessons(String category) {
+    final derived = getCompletedLevelCount(category);
+    final current = completedLessons[category] ?? 0;
+    if (derived != current) {
+      completedLessons[category] = derived;
+    }
   }
 
   /// Pushes local game variables up to the user's explicit profile document ID matching their UID
@@ -162,29 +255,40 @@ class ProgressService {
   // COMPLETION LOGIC
   // =========================
 
-  int getCompleted(String category) => completedLessons[category] ?? 0;
+  int getCompleted(String category) =>
+      getCompletedLevelCount(_normalizeCategory(category));
+
+  int getCompletedLevelCount(String category) {
+    category = _normalizeCategory(category);
+    int count = 0;
+    for (int level = 1; level <= LevelManager.levelsPerCategory; level++) {
+      if (completedDifficultiesCount(category, level) >=
+          LevelManager.difficultiesPerLevel.length) {
+        count++;
+      }
+    }
+    return count;
+  }
 
   void addCompletion(String category) {
-    final total = totalLessons[category] ?? 3;
-    final current = completedLessons[category] ?? 0;
-    if (current < total) {
-      completedLessons[category] = current + 1;
-      uploadProgressToCloud(); // Auto-saves to database
-    }
+    category = _normalizeCategory(category);
+    _syncCompletedLessons(category);
+    uploadProgressToCloud();
   }
 
   int getTotalCompletedAll() => completedLessons.values.fold(0, (a, b) => a + b);
 
   bool isCategoryCompleted(String category) {
-    final done = completedLessons[category] ?? 0;
-    final total = totalLessons[category] ?? 1;
+    category = _normalizeCategory(category);
+    final done = getCompletedLevelCount(category);
+    final total = totalLessons[category] ?? LevelManager.levelsPerCategory;
     return done >= total;
   }
 
   int getTotalInProgress() {
     int count = 0;
     for (final category in totalLessons.keys) {
-      final completed = completedLessons[category] ?? 0;
+      final completed = getCompleted(category);
       final total = totalLessons[category] ?? 0;
       if (completed > 0 && completed < total) count++;
     }
@@ -205,16 +309,13 @@ class ProgressService {
   // LEVEL SYSTEM
   // =========================
 
-  int getUnlockedLevel(String category) => unlockedLevel[category] ?? 1;
+  int getUnlockedLevel(String category) =>
+      unlockedLevel[_normalizeCategory(category)] ?? 1;
 
   void unlockNext(String category, int level) {
-    final current = unlockedLevel[category] ?? 1;
-    if (level < current || current >= 3) return;
-
-    if (completedDifficultiesCount(category, level) >= 3) {
-      unlockedLevel[category] = current + 1;
-      uploadProgressToCloud();
-    }
+    category = _normalizeCategory(category);
+    _reconcileUnlockedLevel(category);
+    uploadProgressToCloud();
   }
 
   // =========================
@@ -222,10 +323,12 @@ class ProgressService {
   // =========================
 
   int getStars(String category, int level, Difficulty difficulty) {
+    category = _normalizeCategory(category);
     return levelStars[category]?[level]?[difficulty] ?? 0;
   }
 
   void setStars(String category, int level, Difficulty difficulty, int stars) {
+    category = _normalizeCategory(category);
     levelStars.putIfAbsent(category, () => {});
     levelStars[category]!.putIfAbsent(level, () => {});
 
@@ -237,13 +340,24 @@ class ProgressService {
     }
   }
 
+  int getLevelTotalStars(String category, int level) {
+    category = _normalizeCategory(category);
+    int total = 0;
+    for (final difficulty in LevelManager.difficultiesPerLevel) {
+      total += getStars(category, level, difficulty);
+    }
+    return total;
+  }
+
   int completedDifficultiesCount(String category, int level) {
+    category = _normalizeCategory(category);
     final byDifficulty = levelStars[category]?[level];
     if (byDifficulty == null) return 0;
     return byDifficulty.values.where((stars) => stars >= 1).length;
   }
 
   bool isDifficultyUnlocked(String category, int level, Difficulty difficulty) {
+    category = _normalizeCategory(category);
     if (level > getUnlockedLevel(category)) return false;
 
     switch (difficulty) {

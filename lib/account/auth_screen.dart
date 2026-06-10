@@ -39,17 +39,22 @@ class _AuthScreenState extends State<AuthScreen> {
     final internalEmail = "${username.toLowerCase().replaceAll(' ', '')}@smartsensetutor.internal";
 
     dynamic user;
+    String? errorMessage;
 
-    if (_isLoginMode) {
-      // 1. LOGIN PROCESS
-      user = await _authService.loginWithEmail(internalEmail, password);
-    } else {
-      // 2. CREATE ACCOUNT PROCESS
-      user = await _authService.signUpWithEmail(internalEmail, password);
+    try {
+      if (_isLoginMode) {
+        // 1. LOGIN PROCESS
+        user = await _authService.loginWithEmail(internalEmail, password);
+      } else {
+        // 2. CREATE ACCOUNT PROCESS
+        user = await _authService.signUpWithEmail(internalEmail, password);
 
-      if (user != null) {
-        await FirebaseAuth.instance.currentUser?.updateDisplayName(username);
+        if (user != null) {
+          await FirebaseAuth.instance.currentUser?.updateDisplayName(username);
+        }
       }
+    } catch (e) {
+      errorMessage = e.toString();
     }
 
     setState(() => _isLoading = false);
@@ -69,12 +74,32 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } else {
       if (mounted) {
+        String displayMessage = errorMessage ?? (_isLoginMode
+            ? "Invalid username or password. Please try again."
+            : "Registration failed. This username might already be in use.");
+        
+        // Clean up Firebase error messages for better UX
+        if (errorMessage != null) {
+          if (errorMessage.contains("email-already-in-use")) {
+            displayMessage = "This username is already taken. Please choose another.";
+          } else if (errorMessage.contains("invalid-email")) {
+            displayMessage = "Invalid username format.";
+          } else if (errorMessage.contains("weak-password")) {
+            displayMessage = "Password is too weak. Please use a stronger password.";
+          } else if (errorMessage.contains("user-not-found")) {
+            displayMessage = "Username not found. Please check your username or register.";
+          } else if (errorMessage.contains("wrong-password")) {
+            displayMessage = "Incorrect password. Please try again.";
+          } else if (errorMessage.contains("network-request-failed")) {
+            displayMessage = "Network error. Please check your internet connection.";
+          }
+        }
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(_isLoginMode
-                ? "Invalid username or password. Please try again."
-                : "Registration failed. This username might already be in use."),
+            content: Text(displayMessage),
             backgroundColor: Colors.redAccent,
+            duration: const Duration(seconds: 4),
           ),
         );
       }
