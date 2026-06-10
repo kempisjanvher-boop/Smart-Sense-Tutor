@@ -7,13 +7,13 @@ import 'package:flutter/foundation.dart'
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
-/// ```dart
+///
 /// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
-/// ```
+///
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -25,19 +25,19 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
         return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
         throw UnsupportedError(
@@ -53,8 +53,7 @@ class DefaultFirebaseOptions {
     projectId: 'smart-sense-tutor',
     storageBucket: 'smart-sense-tutor.firebasestorage.app',
   );
-
-  static const FirebaseOptions windows = FirebaseOptions(
+  static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyCiDyBzj83PmjDWbjUzLtgdo177s7ZvgdU',
     appId: '1:982132430995:web:737d132d956640d82c5566',
     messagingSenderId: '982132430995',
@@ -62,7 +61,8 @@ class DefaultFirebaseOptions {
     authDomain: 'smart-sense-tutor.firebaseapp.com',
     storageBucket: 'smart-sense-tutor.firebasestorage.app',
   );
-  static const FirebaseOptions web = FirebaseOptions(
+
+  static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyCiDyBzj83PmjDWbjUzLtgdo177s7ZvgdU',
     appId: '1:982132430995:web:737d132d956640d82c5566',
     messagingSenderId: '982132430995',

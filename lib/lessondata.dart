@@ -44,6 +44,16 @@ class _LessonDataState extends State<LessonData> {
     "Directions & Space",
   ];
 
+  static const Map<String, String> _categoryIcons = {
+    "Tech & Tradition": "asset/tech_tradition_icon.png",
+    "Finance & Physics": "asset/finance_physics_icon.png",
+    "Objects & Ideas": "asset/objects_ideas_icon.png",
+    "Law & Structures": "asset/law_structures_icon.png",
+    "Attributes & Evaluation": "asset/attributes_evaluation_icon.png",
+    "Actions & Movement": "asset/actions_movement_icon.png",
+    "Directions & Space": "asset/directions_space_icon.png",
+  };
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -162,11 +172,23 @@ class _LessonDataState extends State<LessonData> {
     );
   }
 
+  bool _isCategoryLocked(String categoryTitle) {
+    final index = _categoryTitles.indexOf(categoryTitle);
+    if (index <= 0) return false; // First category is never locked
+    
+    final previousCategory = _categoryTitles[index - 1];
+    final progress = ProgressService();
+    return !progress.isCategoryCompleted(previousCategory);
+  }
+
   Widget _buildLessonCard(LessonCategory category) {
     final theme = CategoryVisualTheme.forCategory(category.title);
+    final isLocked = _isCategoryLocked(category.title);
+    final iconPath = _categoryIcons[category.title];
+    final displayIcon = isLocked ? "asset/lock_category_image.png" : iconPath;
 
     return GestureDetector(
-      onTap: () {
+      onTap: isLocked ? null : () {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -176,75 +198,128 @@ class _LessonDataState extends State<LessonData> {
           ),
         );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppPalette.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppPalette.border),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x14000000),
-              blurRadius: 8,
-              offset: Offset(0, 4),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppPalette.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppPalette.border),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x14000000),
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
-          ],
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    category.title,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: theme.titleText,
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Category Icon
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: theme.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: displayIcon != null
+                      ? Image.asset(
+                          displayIcon,
+                          width: 36,
+                          height: 36,
+                          fit: BoxFit.contain,
+                        )
+                      : Icon(
+                          Icons.category,
+                          color: theme.primary,
+                          size: 32,
+                        ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        category.title,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: isLocked ? Colors.grey : theme.titleText,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinearProgressIndicator(
+                          value: isLocked ? 0.0 : category.progressPercentage,
+                          backgroundColor: AppPalette.border,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            isLocked ? Colors.grey : AppPalette.accent,
+                          ),
+                          minHeight: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        isLocked
+                            ? "Locked until previous category is complete"
+                            : "${category.completedLessons}/${category.totalLessons} Lessons Completed",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: isLocked ? Colors.grey : theme.titleText.withValues(alpha: 0.65),
+                          fontStyle: FontStyle.italic,
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                if (!isLocked)
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: theme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.play_arrow_rounded,
+                      color: theme.onPrimary,
+                      size: 32,
+                    ),
+                  )
+                else
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withValues(alpha: 0.3),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.lock,
+                      color: Colors.grey,
+                      size: 28,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: LinearProgressIndicator(
-                      value: category.progressPercentage,
-                      backgroundColor: AppPalette.border,
-                      valueColor:
-                      AlwaysStoppedAnimation<Color>(AppPalette.accent),
-                      minHeight: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    "${category.completedLessons}/${category.totalLessons} Lessons Completed",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: theme.titleText.withValues(alpha: 0.65),
-                      fontStyle: FontStyle.italic,
-                      height: 1.2,
-                    ),
-                  ),
-                ],
+              ],
+            ),
+          ),
+          if (isLocked)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.black.withValues(alpha: 0.4),
+                ),
               ),
             ),
-            const SizedBox(width: 16),
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: theme.primary,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.play_arrow_rounded,
-                color: theme.onPrimary,
-                size: 32,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

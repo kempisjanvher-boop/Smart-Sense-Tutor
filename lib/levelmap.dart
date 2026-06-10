@@ -248,27 +248,24 @@ class LevelMapState extends State<LevelMap> {
     final characterBaseColor = theme.levelNodeColor(levelNumber);
     bool isLevelLocked = levelNumber > _unlockedLevel;
 
-    final starsEarned = List.generate(3, (i) {
-      final diff = LevelManager.difficultiesPerLevel[i];
-      // FIX: Changed from ProgressService. to ProgressService().
-      return ProgressService().getStars(widget.category, levelNumber, diff) >= 1;
-    });
-    final starCount = starsEarned.where((done) => done).length;
+    final totalStars =
+        ProgressService().getLevelTotalStars(widget.category, levelNumber);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (!isLevelLocked && starCount > 0)
+        if (!isLevelLocked && totalStars > 0)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(3, (index) {
+                final diff = LevelManager.difficultiesPerLevel[index];
+                final earned = ProgressService()
+                    .getStars(widget.category, levelNumber, diff);
                 return Icon(
                   Icons.star_rounded,
-                  color: starsEarned[index]
-                      ? theme.starColor
-                      : Colors.grey[300],
+                  color: earned > 0 ? theme.starColor : Colors.grey[300],
                   size: 22,
                 );
               }),

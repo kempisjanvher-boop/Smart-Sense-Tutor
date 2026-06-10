@@ -91,6 +91,14 @@ flutter:
     - asset/dog_avatar.png
     - asset/penguin_avatar.png
     - asset/seal_avatar.png
+    - asset/tech_tradition_icon.png
+    - asset/finance_physics_icon.png
+    - asset/objects_ideas_icon.png
+    - asset/law_structures_icon.png
+    - asset/attributes_evaluation_icon.png
+    - asset/actions_movement_icon.png
+    - asset/directions_space_icon.png
+    - asset/lock_category_image.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
