@@ -4,6 +4,9 @@ import '../models/quiz_question.dart';
 import 'level_manager.dart';
 import 'question_generator.dart';
 import 'wsd_dataset_loader.dart';
+import 'package:flutter/material.dart';
+import '../account/notif.dart';
+import '../account/profile.dart';
 
 /// Facade for the centralized quiz system. Initialize once at app start.
 class QuizEngine {
@@ -36,7 +39,7 @@ class QuizEngine {
     final normalized = AppCategories.normalize(category);
     final session = _categorySessions.putIfAbsent(
       normalized,
-      () => _CategorySessionState(),
+          () => _CategorySessionState(),
     );
 
     List<QuizQuestion> questions = [];
@@ -70,7 +73,7 @@ class QuizEngine {
         if (questions.length >= LevelManager.questionsPerLevel) {
           // Trim to exact count if we have more
           questions = questions.take(LevelManager.questionsPerLevel).toList();
-          
+
           // Mark words as used
           for (final q in questions) {
             _globalUsedWords.add(q.word.toLowerCase());
@@ -102,6 +105,48 @@ class QuizEngine {
     return questions;
   }
 
+  // ─── NEW METHOD added to fix your compile error ───
+  /// Evaluates game results immediately upon quiz completion to trigger achievement banners
+  void evaluateAndTriggerAchievements({
+    required BuildContext context,
+    required int correctAnswers,
+    required int totalQuestions,
+    required int totalPerfectScoresFromStorage,
+    required bool notificationsEnabled,
+    required bool isDarkMode,
+  }) {
+    if (!notificationsEnabled) return;
+
+    // --- INSTANCE A: CONQUEROR (Completed a Lesson) ---
+    NotificationManager.showAchievement(
+      context: context,
+      title: "Conqueror",
+      description: "You completed a lesson",
+      badgePath: "asset/gold.png",
+      avatarPath: "asset/conqueror.png",
+      isDarkMode: isDarkMode,
+    );
+
+    // --- INSTANCE B: ROYAL (Perfect Score Milestone) ---
+    if (correctAnswers == totalQuestions) {
+      if (totalPerfectScoresFromStorage == 10) {
+        // Delayed slightly so it doesn't conflict with or overlap the Conqueror animation
+        Future.delayed(const Duration(milliseconds: 4500), () {
+          if (context.mounted) {
+            NotificationManager.showAchievement(
+              context: context,
+              title: "Royal",
+              description: "10/10 perfect scores achieved!",
+              badgePath: "asset/bronze.png",
+              avatarPath: "asset/perfectscore.png",
+              isDarkMode: isDarkMode,
+            );
+          }
+        });
+      }
+    }
+  }
+
   List<String> get allCategories => AppCategories.all;
 
   /// Reset the global used words set (for testing or starting a new game session)
@@ -114,12 +159,7 @@ class QuizEngine {
 }
 
 class _CategorySessionState {
-  // Simplified tracking - only need last word for consecutive duplicate prevention
-  // Global word tracking is handled by QuizEngine._globalUsedWords
   String? lastWord;
 
-  void markUsed(int level, Difficulty difficulty, int recordId) {
-    // Record ID tracking no longer needed since we use global word tracking
-    // Kept for potential future use or debugging
-  }
+  void markUsed(int level, Difficulty difficulty, int recordId) {}
 }

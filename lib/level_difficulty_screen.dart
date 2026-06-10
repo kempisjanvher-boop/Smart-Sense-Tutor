@@ -6,6 +6,7 @@ import 'models/category_visual_theme.dart';
 import 'models/difficulty.dart';
 import 'progress.dart';
 import 'services/level_manager.dart';
+import 'services/quiz_engine.dart';
 
 /// Pick Easy / Moderate / Hard before starting a level (per mockups).
 class LevelDifficultyScreen extends StatefulWidget {
@@ -134,13 +135,11 @@ class _DifficultyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FIX: Updated to ProgressService().
     final unlocked = ProgressService().isDifficultyUnlocked(
       category,
       levelNumber,
       difficulty,
     );
-    // FIX: Updated to ProgressService().
     final stars = ProgressService().getStars(category, levelNumber, difficulty);
     final badgeColor = DifficultyTheme.badgeColor(difficulty);
 
@@ -178,7 +177,6 @@ class _DifficultyTile extends StatelessWidget {
             );
 
             if (result != null && context.mounted) {
-              // FIX: Updated to ProgressService().
               ProgressService().setStars(
                 category,
                 levelNumber,
@@ -187,13 +185,32 @@ class _DifficultyTile extends StatelessWidget {
               );
 
               // Only increment progress when all 3 difficulties in the level are completed
-              // FIX: Updated to ProgressService().
               if (ProgressService().completedDifficultiesCount(category, levelNumber) >= 3) {
-                // FIX: Updated to ProgressService().
                 ProgressService().addCompletion(category);
               }
-              // FIX: Updated to ProgressService().
               ProgressService().unlockNext(category, levelNumber);
+
+              // ─── NEW: TRIGGER ACHIEVEMENT EVALUATION ───
+              // Adjust userWantsNotifs and userIsUsingDarkMode tracking if you want to pull dynamically
+              const bool userWantsNotifs = true;
+              const bool userIsUsingDarkMode = false;
+
+              // Define how many maximum matching points equal a perfect clear profile
+              const int maxQuestionsPerRound = 3;
+
+              // Get actual historical values to check milestone limits
+              final int totalPerfectScoresRecorded = ProgressService().getUnlockedLevel(category);
+
+              QuizEngine.instance.evaluateAndTriggerAchievements(
+                context: context,
+                correctAnswers: result,
+                totalQuestions: maxQuestionsPerRound,
+                totalPerfectScoresFromStorage: totalPerfectScoresRecorded,
+                notificationsEnabled: userWantsNotifs,
+                isDarkMode: userIsUsingDarkMode,
+              );
+              // ───────────────────────────────────────────
+
               onCompleted();
             }
           },

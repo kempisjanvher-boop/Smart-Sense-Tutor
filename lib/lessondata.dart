@@ -5,6 +5,7 @@ import 'levelmap.dart';
 import 'homescreen.dart';
 import 'models/category_visual_theme.dart';
 import 'progress.dart';
+import '../account/profile.dart';
 
 class LessonData extends StatefulWidget {
   const LessonData({super.key});
@@ -141,6 +142,15 @@ class _LessonDataState extends State<LessonData> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const SmartLookup(),
+                ),
+              );
+              break;
+
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
                 ),
               );
               break;

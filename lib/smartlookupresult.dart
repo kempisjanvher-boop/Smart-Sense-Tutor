@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:smart_sense_tutor/account/profile.dart';
 import 'homescreen.dart';
@@ -22,7 +23,7 @@ class SmartLookupResult extends StatefulWidget {
 class _SmartLookupResultState extends State<SmartLookupResult> {
   final int _currentIndex = 2;
 
-  // ─── NEW: INLINE CONTROLLER STATE PROPERTIES ───
+  // ─── FLOATING INLINE CONTROLLER STATE PROPERTIES ───
   bool _isInlineSearchVisible = false;
   final TextEditingController _inlineSearchController = TextEditingController();
 
@@ -37,10 +38,8 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
     final cleanQuery = query.trim();
     if (cleanQuery.isEmpty) return;
 
-    // Use your engine framework to resolve the new dataset array parameters
     final newMeanings = PolysemyAnalyzer.getMeaningsForWord(cleanQuery);
 
-    // Push right back into a fresh instance viewport state cleanly
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -54,6 +53,13 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
 
   @override
   Widget build(BuildContext context) {
+    // UNIFIED CHECK: Securely catches "Database Alert", "Not Found", and definition fragment anomalies
+    final bool isWordMissing = widget.dynamicMeanings.isEmpty ||
+        (widget.dynamicMeanings.length == 1 &&
+            (widget.dynamicMeanings.first.title == "Database Alert" ||
+                widget.dynamicMeanings.first.title == "Not Found" ||
+                widget.dynamicMeanings.first.definition.contains("No matching rows")));
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -104,66 +110,25 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                 text: TextSpan(
                   style: const TextStyle(fontSize: 16, color: Color(0xFF4A4A4A)),
                   children: [
-                    const TextSpan(text: "Multiple meanings detected for "),
-                    TextSpan(
-                      text: '"${widget.searchedWord}"',
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFF8A5B)),
-                    ),
+                    if (isWordMissing) ...[
+                      const TextSpan(text: "Not found: "),
+                      TextSpan(
+                        text: '"${widget.searchedWord}"',
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFE53935)),
+                      ),
+                    ] else ...[
+                      const TextSpan(text: "Multiple meanings detected for "),
+                      TextSpan(
+                        text: '"${widget.searchedWord}"',
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFF8A5B)),
+                      ),
+                    ],
                   ],
                 ),
               ),
             ),
 
-            // 2. NEW: DYNAMIC INLINE SEARCH INPUT COMPONENT
-            if (_isInlineSearchVisible)
-              Container(
-                color: const Color(0xFFF1F5F9),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _inlineSearchController,
-                        autofocus: true,
-                        textInputAction: TextInputAction.search,
-                        onSubmitted: _executeNewSearch,
-                        decoration: InputDecoration(
-                          hintText: "Search another word...",
-                          hintStyle: const TextStyle(color: Colors.black38, fontSize: 15),
-                          prefixIcon: const Icon(Icons.search, color: Color(0xFF2C4379)),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear, color: Colors.grey),
-                            onPressed: () => _inlineSearchController.clear(),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: const BorderSide(color: Colors.black12),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: const BorderSide(color: Color(0xFF70D3F4), width: 1.5),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isInlineSearchVisible = false;
-                          _inlineSearchController.clear();
-                        });
-                      },
-                      child: const Text("Cancel", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
-                    )
-                  ],
-                ),
-              ),
-
-            // 3. Main Scrolling Card Area
+            // 2. Main Scrolling Card Area
             Expanded(
               child: Stack(
                 children: [
@@ -186,89 +151,153 @@ class _SmartLookupResultState extends State<SmartLookupResult> {
                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2C4379)),
                               ),
                             ),
+
+                            // Explanatory Paragraph
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: RichText(
                                 text: TextSpan(
                                   style: const TextStyle(fontSize: 15.5, color: Color(0xFF4A4A4A), height: 1.4),
                                   children: [
-                                    const TextSpan(text: "The AI detected that "),
-                                    TextSpan(
-                                      text: '"${widget.searchedWord}"',
-                                      style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFF8A5B)),
-                                    ),
-                                    const TextSpan(text: " is a polysemous word. Explore its different meanings and usage examples below:"),
+                                    if (isWordMissing) ...[
+                                      const TextSpan(text: "The word "),
+                                      TextSpan(
+                                        text: '"${widget.searchedWord}"',
+                                        style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFE53935)),
+                                      ),
+                                      const TextSpan(
+                                        text: " was not found in our lesson database. This means it either has a single literal meaning or hasn't been added to our vocabulary tracks yet.",
+                                      ),
+                                    ] else ...[
+                                      const TextSpan(text: "The AI detected that "),
+                                      TextSpan(
+                                        text: '"${widget.searchedWord}"',
+                                        style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFF8A5B)),
+                                      ),
+                                      const TextSpan(text: " is a polysemous word. Explore its different meanings and usage examples below:"),
+                                    ],
                                   ],
                                 ),
                               ),
                             ),
                             const SizedBox(height: 12),
 
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: widget.dynamicMeanings.length,
-                              itemBuilder: (context, index) {
-                                final meaning = widget.dynamicMeanings[index];
-                                return _buildMeaningSection(
-                                  title: meaning.title,
-                                  definition: meaning.definition,
-                                  example: meaning.example,
-                                  keyword: widget.searchedWord,
-                                  isLast: index == widget.dynamicMeanings.length - 1,
-                                );
-                              },
-                            ),
+                            // Display entries or clear placeholder graphic layout block
+                            if (!isWordMissing)
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: widget.dynamicMeanings.length,
+                                itemBuilder: (context, index) {
+                                  final meaning = widget.dynamicMeanings[index];
+                                  return _buildMeaningSection(
+                                    title: meaning.title,
+                                    definition: meaning.definition,
+                                    example: meaning.example,
+                                    keyword: widget.searchedWord,
+                                    isLast: index == widget.dynamicMeanings.length - 1,
+                                  );
+                                },
+                              )
+                            else
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(vertical: 40.0),
+                                child: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.find_in_page_outlined, size: 64, color: Colors.grey),
+                                    SizedBox(height: 12),
+                                    Text(
+                                      "Not Found in Database",
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey),
+                                    )
+                                  ],
+                                ),
+                              ),
                           ],
                         ),
                       ),
                     ),
                   ),
 
-                  // 4. FLOATING AI ACTION RAINBOW RING ACCENT (NOW INTERACTIVE BUTTON)
+                  // 3. FLOATING COMPONENT AREA (Morphic Search Field Wrapped Around Colorful Circle)
                   Positioned(
-                    right: 24,
-                    bottom: 24,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isInlineSearchVisible = !_isInlineSearchVisible;
-                          if (!_isInlineSearchVisible) {
-                            _inlineSearchController.clear();
-                          }
-                        });
-                      },
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: const Color(0xFF62D275), width: 3.5),
-                              gradient: const SweepGradient(
-                                colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.red],
+                    right: 16,
+                    bottom: 16,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOutCubic,
+                      width: _isInlineSearchVisible ? (MediaQuery.of(context).size.width - 32) : 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          if (_isInlineSearchVisible)
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: TextField(
+                                  controller: _inlineSearchController,
+                                  autofocus: true,
+                                  style: const TextStyle(fontSize: 17),
+                                  textInputAction: TextInputAction.search,
+                                  onSubmitted: _executeNewSearch,
+                                  decoration: const InputDecoration(
+                                    hintText: "Search another word...",
+                                    hintStyle: TextStyle(color: Colors.black38, fontSize: 17),
+                                    border: InputBorder.none,
+                                  ),
+                                ),
                               ),
                             ),
-                            child: Icon(
-                              _isInlineSearchVisible ? Icons.close : Icons.psychology_alt_rounded,
-                              size: 20,
-                              color: Colors.white,
+
+                          // The Exact AI Anchor Button Action Container
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (_isInlineSearchVisible) {
+                                    if (_inlineSearchController.text.trim().isNotEmpty) {
+                                      _executeNewSearch(_inlineSearchController.text);
+                                    } else {
+                                      _isInlineSearchVisible = false;
+                                    }
+                                  } else {
+                                    _isInlineSearchVisible = true;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: const Color(0xFF62D275), width: 3.5),
+                                  gradient: const SweepGradient(
+                                    colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.red],
+                                  ),
+                                ),
+                                child: Icon(
+                                  _isInlineSearchVisible ? Icons.search : Icons.psychology_alt_rounded,
+                                  size: 22,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),

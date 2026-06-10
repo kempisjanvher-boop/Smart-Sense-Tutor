@@ -78,7 +78,21 @@ class _SmartLookupState extends State<SmartLookup> {
       detectedKeyword = inputTokens.first;
     }
 
+    // Generate context results array parameters from your engine
     List<WordMeaning> computedMeanings = PolysemyAnalyzer.analyzeContext(detectedKeyword, textInput);
+
+    // SAFETY FALLBACK: If your analyzer completely bypasses the mock list mapping or returns nothing,
+    // explicitly inject the "Database Alert" title object so both screens are aligned.
+    if (computedMeanings.isEmpty) {
+      computedMeanings = [
+        WordMeaning(
+          title: "Database Alert",
+          definition: "No matching rows found for '$detectedKeyword'.",
+          example: detectedKeyword,
+          confidenceScore: 0.0,
+        )
+      ];
+    }
 
     Navigator.push(
       context,
@@ -252,7 +266,7 @@ class _SmartLookupState extends State<SmartLookup> {
                     suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 12.0),
                       child: InkWell(
-                        onTap: _processSearchAnalysis, // ◄── Hooked up rainbow ring directly to analysis processing
+                        onTap: _processSearchAnalysis,
                         customBorder: const CircleBorder(),
                         child: Container(
                           width: 32,
@@ -265,6 +279,7 @@ class _SmartLookupState extends State<SmartLookup> {
                             ),
                             gradient: const SweepGradient(
                               colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.red],
+                              stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
                             ),
                           ),
                         ),
@@ -310,39 +325,16 @@ class _SmartLookupState extends State<SmartLookup> {
 
           switch (index) {
             case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
               break;
-
             case 1:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LessonData(),
-                ),
-              );
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LessonData()));
               break;
-
             case 2:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SmartLookup(),
-                ),
-              );
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SmartLookup()));
               break;
-
             case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfileScreen(),
-                ),
-              );
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
               break;
           }
         },

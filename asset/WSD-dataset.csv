@@ -1,85 +1,1301 @@
-Word,Sentence,Correct Sense,Definition
+﻿Word,Sentence,Correct Sense,Definition
+abstract,The paper includes an abstract.,Summary,A brief overview of a document.
+abstract,Modern art can be abstract.,Non-Representational,Not depicting real objects directly.
+abstractor,The abstractor prepared the title report.,Legal Professional,A person who summarizes property records.
+abstractor,The abstractor condensed the article.,Summarizer,One who creates summaries.
+academy,She studied at a military academy.,School,An educational institution.
+academy,The academy awarded the prize.,Organization,A society promoting a field of study.
+accelerator,The driver pressed the accelerator.,Vehicle Control,Pedal that increases speed.
+accelerator,The startup joined an accelerator.,Business Program,Organization helping startups grow.
+access,Employees need access to the database.,Permission,The right to enter or use something.
+access,The mountain is difficult to access.,Approach,To reach or enter a place.
+accommodation,The hotel provides accommodation.,Lodging,A place to stay.
+accommodation,The eye changes accommodation to focus.,Biological Adjustment,Adjustment of vision.
+account,She opened a bank account.,Financial Record,An arrangement with a bank.
+account,His account of the event was accurate.,Narrative,A description of an event.
+acquisition,The company announced an acquisition.,Business Purchase,Buying another company.
+acquisition,Language acquisition begins early.,Learning Process,Gaining knowledge or skills.
+act,The actor forgot his act.,Performance,An entertainment performance.
+act,Congress passed an act.,Law,A formal piece of legislation.
+act,Please act responsibly.,Behave,To conduct oneself.
+adapter,Use an adapter for the plug.,Connector,Device joining incompatible parts.
+adapter,The novel's adapter changed the ending.,Converter,Person who modifies a work.
 address,The president delivered an address to the nation.,Speech / Formal Discourse,A formal speech delivered to an audience
 address,Please write your home address on this form.,Location Details,The particulars of the place where someone lives or an organization is situated
 address,We need to address the safety concerns immediately.,Handle / Deal With,Think about and begin to deal with an issue or problem
+addressable,The memory is addressable by byte.,Computing Property,Able to be accessed by an address.
+addressable,The issue is addressable through policy.,Solvable,Capable of being dealt with.
+admission,Admission to the museum is free.,Entry,Permission to enter.
+admission,His admission surprised everyone.,Confession,A statement acknowledging something.
+agenda,The agenda lists meeting topics.,Schedule,Items for discussion.
+agenda,Critics claimed a political agenda.,Hidden Objective,Underlying purpose.
+agent,The travel agent booked our flight.,Representative,A person acting for another.
+agent,Water is the cleaning agent.,Substance,Something that causes an effect.
+agent,The travel agent booked our tickets.,Representative,A person acting on behalf of others.
+agent,Soap is a cleaning agent.,Substance,Something that causes an effect.
+aggregate,The report shows aggregate sales.,Total,Combined amount.
+aggregate,Gravel is an aggregate.,Construction Material,Collection of particles used in building.
+aggregate,Aggregate the survey responses.,Combine,To gather into a whole.
+aggregate,Concrete contains aggregate.,Material,"Sand, gravel, or crushed stone."
+algorithm,The search algorithm was updated.,Computing Procedure,Step-by-step problem-solving method.
+algorithm,The teacher explained the algorithm.,Mathematical Process,Defined calculation procedure.
+alias,The hacker used an alias online.,Assumed Name,A false or alternative name.
+alias,"In SQL, AS creates an alias.",Alternate Identifier,Another name for a database object.
+alignment,The wheels need alignment.,Positioning,Correct arrangement of parts.
+alignment,The countries formed an alignment.,Alliance,Cooperative relationship.
+allocation,The budget allocation was approved.,Distribution,Assignment of resources.
+allocation,Memory allocation failed.,Computing Assignment,Reserving computer resources.
+allocation,Budget allocation increased.,Distribution,Assignment of resources.
+allocation,Memory allocation failed.,Computing Reservation,Assignment of computer memory.
+anchor,The ship dropped its anchor.,Ship Device,A heavy object used to secure a vessel.
+anchor,She works as a news anchor.,Broadcaster,A presenter of news programs.
+angle,Measure the angle carefully.,Geometric Figure,The space between two intersecting lines.
+angle,The reporter approached the story from a new angle.,Perspective,A particular viewpoint.
+annotation,Add an annotation to the image.,Note,Explanatory comment.
+annotation,The annotation process took hours.,Action,Act of adding notes.
+antenna,The insect moved its antenna.,Sensory Organ,Feelers on insects.
+antenna,The antenna receives signals.,Receiving Device,Equipment for communication signals.
+aperture,Adjust the camera aperture.,Camera Opening,Opening through which light passes.
+aperture,The wall has a small aperture.,Opening,A hole or gap.
+apparatus,The laboratory apparatus is expensive.,Equipment,Tools used for experiments.
+apparatus,The state apparatus expanded.,Organization,Administrative structure.
+appeal,The lawyer filed an appeal.,Legal Request,A request for a higher court review.
+appeal,The product has broad appeal.,Attractiveness,The quality of being appealing.
+application,Submit your application online.,Request,Formal submission for consideration.
+application,This application runs on Android.,Software,A computer program.
+architecture,The city's architecture is impressive.,Building Design,Style and design of structures.
+architecture,Computer architecture affects performance.,System Design,Structure of a computer system.
+archive,The library keeps an archive of newspapers.,Collection,A stored collection of records.
+archive,Please archive the old emails.,Store,To place records in long-term storage.
+archive,The documents were placed in an archive.,Record Collection,Stored historical materials.
+archive,Please archive old emails.,Store,Move to long-term storage.
+archivebox,The documents were placed in an archive box.,Storage Container,A box for preserving records.
+archivebox,The archive box was labeled by year.,Filing Unit,Organizational storage item.
 arm,He injured his left arm during the basketball game.,Body Part,An upper limb of the human body from the shoulder to the wrist
 arm,The country decided to arm its border security guards.,Equip With Weapons,Supply with weapons or firearms for defense or warfare
+arm,The arm of the chair is broken.,Furniture Part,A side support on a chair.
+arm,He injured his arm.,Body Part,Upper limb of the body.
+arm,They armed the soldiers.,Equip With Weapons,To provide weapons.
+array,The store displayed an array of products.,Assortment,A large collection.
+array,Create an array in Python.,Data Structure,Ordered collection of elements.
+article,She wrote a journal article.,Publication,A written composition.
+article,The noun is preceded by an article.,Grammar Term,"A word like ""a"" or ""the""."
+articulation,Her articulation is excellent.,Speech Clarity,Clear pronunciation.
+articulation,The knee is an articulation.,Joint,Connection between bones.
+artifact,The museum displays artifacts.,Historical Object,Item from the past.
+artifact,Compression created image artifacts.,Distortion,Unwanted visual defect.
+assembly,The parts moved to assembly.,Manufacturing Process,Putting components together.
+assembly,The school assembly starts at 8.,Gathering,A meeting of people.
+assemblyman,The assemblyman proposed legislation.,Politician,Member of a legislative assembly.
+assemblyman,The assemblyman addressed voters.,Representative,Elected official.
+asset,The building is a valuable asset.,Resource,Something of value.
+asset,Her creativity is an asset.,Advantage,A useful quality.
+attribute,Patience is a valuable attribute.,Characteristic,Quality or feature.
+attribute,Scientists attribute success to effort.,Assign Cause,To regard as resulting from.
+audit,The company passed the audit.,Inspection,Official examination of records.
+audit,She audited the course.,Educational Attendance,Attending without credit.
+auditor,The auditor reviewed finances.,Inspector,Person examining records.
+auditor,The auditorium seated many auditors.,Listener,Person attending a lecture.
+authority,The authority issued a permit.,Governing Body,Organization with power.
+authority,She is an authority on linguistics.,Expert,A recognized specialist.
+avenue,Trees line the avenue.,Street,A broad road.
+avenue,Research is a possible avenue.,Approach,A means of achieving something.
+avenue,The parade moved down the avenue.,Street,A broad road.
+avenue,Research offers an avenue for discovery.,Means,A method of achieving something.
+axis,The Earth rotates on its axis.,Imaginary Line,Central line of rotation.
+axis,The graph shows the x-axis.,Coordinate Line,Reference line on a graph.
+backing,The singer performed with backing vocals.,Support Music,Accompanying vocals.
+backing,The proposal has government backing.,Support,Approval or assistance.
+badge,The officer showed her badge.,Identification,An emblem showing authority or membership.
+badge,Earning the badge unlocked a new level.,Award,A symbol of achievement.
+badgeholder,Every employee received a badgeholder.,Id Accessory,Item used to hold identification cards.
+badgeholder,The badgeholder clipped it to her shirt.,Attachment Device,A holder for credentials.
+balance,She struggled to keep her balance.,Stability,The ability to remain upright.
+balance,Check your account balance.,Remaining Amount,Money left in an account.
+balance,Balance the budget this month.,Equalize,To bring into equilibrium.
+balance,She lost her balance.,Stability,Physical equilibrium.
+balance,Check your balance online.,Account Amount,Money remaining in an account.
+balance sheet,The accountant reviewed the balance sheet.,Financial Statement,Record of assets and liabilities.
+balance sheet,The balance sheet looks healthy.,Business Record,Summary of financial position.
+ball,The ball rolled across the floor.,Toy/Sports Object,A round object used in games.
+ball,The royal ball lasted all night.,Formal Dance,A large social dance event.
+ballast,The ship carries ballast.,Stabilizing Weight,Material used for balance.
+ballast,The railway ballast supports tracks.,Track Material,Crushed stone beneath rails.
+ballastless,The railway uses a ballastless track.,Rail Design,Track without crushed stone support.
+ballastless,Engineers studied ballastless systems.,Infrastructure Type,Railway construction method.
+band,The band performed on stage.,Music Group,A group of musicians.
+band,He wore a wedding band.,Ring,A circular piece of jewelry.
+band,A rubber band snapped.,Strip,A loop of elastic material.
+band,The band played jazz music.,Music Group,Group of musicians.
+band,He wore a gold band.,Ring,Circular strip of material.
+band,A band of clouds covered the sky.,Strip,A narrow region.
+bandwidth,The network needs more bandwidth.,Data Capacity,Data transfer capability.
+bandwidth,I don't have the bandwidth for that task.,Mental Capacity,Available attention or effort.
 bank,She deposited money in the bank.,Financial Institution,"A place that stores, invests, and manages money"
 bank,They sat on the river bank and watched the sunset.,River Edge,"The rising ground bordering a lake, river, or sea"
+bank,The pilot banked the airplane left.,Tilt,To incline during a turn.
+banner,A banner hung across the street.,Sign,A large display of text or graphics.
+banner,It was a banner year for sales.,Outstanding,Exceptionally successful.
+bar,We met at a bar.,Establishment,A place serving drinks.
+bar,The chocolate bar melted.,Block,A solid rectangular piece.
+bar,The prisoner was behind bars.,Metal Rod,A long rigid piece of metal.
+barge,A barge moved along the river.,Boat,A flat-bottomed cargo vessel.
+barge,He barged into the room.,Enter Rudely,To move forcefully into a place.
 bark,The dog began to bark loudly at the mailman.,Animal Sound,"The sharp explosive cry of a dog, fox, or seal"
 bark,The rough bark of the oak tree scraped his hand.,Tree Layer,The tough protective outer sheath of the trunk and branches of a tree
+barker,The barker attracted customers.,Promoter,A person who calls out to attract business.
+barker,The dog was a loud barker.,Dog,An animal that frequently barks.
+bass,The bass is very nutritious for the person suffering from heart diseases.,Fish,A species of prized edible spiny-finned fish found in fresh or salt water.
+bass,Most bass guitar strings are made of nickel-wrapped steel. ,Musical Instrument,The lowest pitch range of an instrument.
+bass,The bass of female voice is different than that of male voice.,Vocal Tone / Pitch,The lowest adult singing voice.
 bat,A bat flew out of the cave into the night sky.,Mammal,A nocturnal flying mammal with webbed wings
 bat,He bought a new baseball bat for the upcoming season.,Sports Equipment,An implement used for hitting the ball in games like baseball or cricket
+bat,A bat flew out of the cave.,Animal,A flying mammal.
+bat,He swung the bat and hit a home run.,Sports Equipment,A club used in baseball.
+batch,The bakery produced a batch of bread.,Quantity Produced,A group made together.
+batch,The system processes data in batches.,Processing Group,A set handled at one time.
+battery,Replace the battery.,Power Source,Device supplying electricity.
+battery,The suspect faced battery charges.,Legal Offense,Physical attack on another person.
+beacon,The lighthouse served as a beacon.,Signal Light,A guiding light.
+beacon,She became a beacon of hope.,Inspiration,A source of encouragement.
+beam,A beam of sunlight entered the room.,Ray,A line of light.
+beam,The roof is supported by a beam.,Structural Support,A long piece of wood or metal.
+beam,A beam of light entered the cave.,Ray,A line of light.
+beam,The roof rests on a steel beam.,Support Structure,A long support made of wood or metal.
+beam,She beamed with pride.,Smile Broadly,To show happiness through expression.
+belt,He tightened his belt.,Clothing Accessory,A strap worn around the waist.
+belt,The conveyor belt stopped moving.,Machine Part,A loop used to transfer motion.
+benchmark,This score is the benchmark.,Standard,Reference point for comparison.
+benchmark,The CPU benchmark finished.,Performance Test,Measurement of computing speed.
+benchmark,Use this benchmark for comparison.,Standard,Reference point.
+benchmark,The software benchmark finished.,Performance Test,Evaluation of speed or efficiency.
+bias,The survey showed bias.,Prejudice,Unfair preference.
+bias,The circuit requires bias voltage.,Electrical Setting,Predetermined operating voltage.
+binary,Computers use binary.,Numeral System,Base-2 representation.
+binary,The answer is binary.,Two-State System,Having only two possibilities.
+blockquote,The article used a blockquote.,Document Element,Indented quotation section.
+blockquote,The HTML blockquote displayed properly.,Web Tag,Element for quoted text.
+blueprint,The architect reviewed the blueprint.,Technical Plan,Detailed construction drawing.
+blueprint,The document became a blueprint for reform.,Model,A guide for future action.
+bluff,The cliff ended in a bluff.,Cliff,A steep bank or cliff.
+bluff,He won the game with a bluff.,Deception,A false display of confidence.
+bold,The headline was printed in bold.,Thick Typeface,"A dark, heavy style of text."
+bold,She made a bold decision.,Courageous,Showing confidence and willingness to take risks.
+bolt,Tighten the bolt.,Fastener,A metal pin used for joining.
+bolt,The horse made a bolt for freedom.,Sudden Run,A rapid dash away.
+bolt,Secure the door with a bolt.,Lock Fastener,Bar used for locking.
+bolt,The horse made a bolt for freedom.,Sudden Run,Quick escape movement.
+bolt,A bolt of lightning struck.,Lightning Flash,Electrical discharge.
+bond,The bond between them is strong.,Relationship,A connection between people.
+bond,He invested in government bonds.,Financial Security,A debt investment instrument.
+bond,The friends share a strong bond.,Relationship,A close connection.
+bond,He purchased government bonds.,Investment,A debt security.
+bond,Concrete forms a bond with steel.,Connection,Physical joining.
+bond,Investors purchased bonds.,Security,Financial debt instrument.
+book,I borrowed a book from the library.,Written Work,A set of written or printed pages.
+book,We need to book a hotel room.,Reserve,To arrange for something in advance.
+bowl,She ate cereal from a bowl.,Container,A round dish for food.
+bowl,He bowled a strike.,Sports Action,To roll a ball in bowling.
+branch,A branch fell from the tree.,Tree Limb,A part growing from a trunk.
+branch,The bank opened a new branch.,Office,A local division of an organization.
+branch,Computer science is a branch of knowledge.,Subdivision,A specialized area of study.
+bright,The bright student solved the problem quickly.,Intelligent,Quick to learn and understand things.
+bright,The bright sunlight filled the room.,Giving Off Light,Emitting a strong amount of light.
+broadcast,The station broadcast the game.,Transmit,Send information electronically.
+broadcast,The broadcast starts at noon.,Program,Transmitted content.
+broker,The broker sold the stocks.,Financial Agent,Person arranging transactions.
+broker,She brokered a peace agreement.,Negotiator,One who arranges agreements.
+brokered,She brokered the agreement.,Negotiated,Arranged a deal between parties.
+brokered,The brokered sale was completed.,Mediated,Conducted through an intermediary.
+brush,Use a brush to paint.,Tool,An instrument with bristles.
+brush,The branches brushed against the window.,Touch Lightly,To make slight contact.
+buffer,The editor used a text buffer.,Temporary Storage,Area holding data temporarily.
+buffer,Trees serve as a noise buffer.,Protective Barrier,Something reducing impact.
+buffering,The video is buffering.,Data Loading,Temporary loading of content.
+buffering,Trees provide buffering from noise.,Protection,Reduction of impact.
+bug,A bug crawled across the leaf.,Insect,A small insect.
+bug,The software contains a bug.,Program Error,A flaw in software.
+bug,The room may be bugged.,Listening Device,A hidden surveillance device.
+bug,A bug landed on the leaf.,Insect,A small crawling/flying insect.
+bug,The software has a bug.,Software Error,A flaw in a computer program.
+bulletin,The school posted a bulletin.,Notice,An official announcement.
+bulletin,The station aired a news bulletin.,News Report,A brief information broadcast.
+cabinet,The dishes are in the cabinet.,Furniture,Storage furniture with shelves.
+cabinet,The cabinet met today.,Government Body,Senior government officials.
+cache,The browser cache is full.,Temporary Storage,Stored data for quick access.
+cache,The hikers found a cache of supplies.,Hidden Collection,Stored items kept for later use.
+caliber,The weapon's caliber is small.,Gun Diameter,Internal diameter of a firearm barrel.
+caliber,She is a person of high caliber.,Quality,Degree of excellence.
+canvas,The artist painted on canvas.,Fabric Surface,Cloth used for painting.
+canvas,The campaign canvassed neighborhoods.,Solicit Support,To seek opinions or votes.
+capital,Manila is the capital of the Philippines.,City,The principal city of a country.
+capital,The company needs more capital.,Wealth,Money used for investment.
+capital,Use a capital letter at the beginning.,Uppercase Letter,A large form of a letter.
+capital,Tokyo is Japan's capital.,City,Seat of government.
+capital,The startup needs capital.,Money,Funds for investment.
+capsule,Take one capsule daily.,Medicine,A small soluble container holding medication.
+capsule,The astronauts entered the capsule.,Spacecraft Compartment,A small enclosed vehicle section.
+capsuleer,The astronaut entered the capsule.,Spacecraft Occupant,Person inside a space capsule.
+capsuleer,The capsuleer completed training.,Pilot,Operator of a capsule vehicle.
+carrier,The carrier delivered the package.,Transporter,A company that transports goods.
+carrier,Mosquitoes can be disease carriers.,Transmitter,An organism that spreads disease.
+carrier,The airline is a major carrier.,Transport Company,Organization transporting people or goods.
+carrier,Mosquitoes are disease carriers.,Transmitter,Organism spreading disease.
+cartridge,Replace the ink cartridge.,Printer Component,Container holding ink.
+cartridge,The rifle uses this cartridge.,Ammunition Unit,Package containing a bullet and propellant.
+cascade,A cascade flowed down the rocks.,Waterfall,Small waterfall.
+cascade,One error caused a cascade of failures.,Chain Reaction,Series of connected events.
+case,The lawyer presented the case.,Legal Matter,A dispute brought before a court.
+case,Put the phone in its case.,Container,A protective covering or box.
+case,"In this case, we should wait.",Situation,A particular instance or circumstance.
+cast,The cast applauded after the play.,Performers,Actors in a production.
+cast,The fisherman cast his line.,Throw,To send outward.
+cast,Her broken arm needed a cast.,Medical Support,A rigid bandage for healing bones.
+cast,The cast took a bow.,Actors,The performers in a play.
+cast,Cast the fishing line.,Throw,To send outward.
+cast,His leg was in a cast.,Medical Covering,A hard support for healing bones.
+catalog,The catalog lists products.,Product Listing,Organized inventory.
+catalog,Librarians catalog books.,Classify,To systematically organize.
+catalyst,Platinum acts as a catalyst.,Chemical Agent,Substance speeding a reaction.
+catalyst,The event was a catalyst for change.,Trigger,Something causing action.
+celluloid,Old films used celluloid.,Material,Early plastic film.
+celluloid,Hollywood celebrated celluloid history.,Film Industry,Motion-picture medium.
+chamber,The king entered the chamber.,Room,An enclosed room.
+chamber,The bullet entered the chamber.,Firearm Compartment,Part of a gun holding ammunition.
+chamberlain,The chamberlain managed the palace.,Royal Officer,Official in charge of household affairs.
+chamberlain,The chamberlain greeted guests.,Administrator,Household manager.
 change,Don't forget to collect your change at the cash register.,Money Returned,Money returned to someone as the balance of the sum paid for something
 change,Technology can change the way we live and work.,Alter / Modify,Make or become different; alter or modify
+channel,Change the TV channel.,Station,A broadcasting frequency.
+channel,The ship entered the channel.,Waterway,A navigable body of water.
+channel,She channeled her anger into art.,Direct,To guide toward a purpose.
+channeler,She acted as a channeler of ideas.,Intermediary,One who transmits information.
+channeler,Some claim to be spiritual channelers.,Medium,A person who communicates with spirits.
+channeling,The river channeling reduced floods.,Directing Flow,Guiding movement.
+channeling,She is channeling her energy wisely.,Focusing Effort,Directing effort toward a goal.
+channelize,Engineers channelized the river.,Direct Flow,Guide water movement.
+channelize,She channelized her efforts.,Focus,Direct energy toward a goal.
+charter,The city received a charter.,Legal Document,Grant of rights or authority.
+charter,They chartered a plane.,Rent Exclusively,To hire for private use.
+chartered,They chartered a yacht.,Rented,Hired for exclusive use.
+chartered,She is a chartered accountant.,Certified,Professionally accredited.
+check,Please check your answers.,Verify,To examine for accuracy.
+check,He paid with a check.,Payment Document,A written order directing a bank to pay money.
+check,The hotel requires check-in at noon.,Registration Process,The act of officially arriving or registering.
+checkpoint,Cars stopped at the checkpoint.,Inspection Station,Place for examination.
+checkpoint,The game saved at a checkpoint.,Save Point,Progress marker.
+checksum,Verify the checksum.,Validation Code,Value used to detect errors.
+checksum,The checksum failed.,Integrity Test,Verification mechanism.
 chest,He complained of a sharp pain in his chest.,Body Anatomy,The front surface of a person's body between the neck and the abdomen
 chest,The old pirate chest was filled with gold coins.,Storage Box,"A large heavy box or chest, typically made of wood, used for storage"
+circuit,The runner completed the circuit.,Route,A complete path around an area.
+circuit,The circuit controls the lights.,Electrical System,A path for electrical current.
+citation,The paper includes citations.,Reference,Source acknowledgment.
+citation,The officer issued a citation.,Legal Notice,Official violation notice.
+clause,The contract contains a clause.,Legal Provision,A section of a document.
+clause,Identify the subordinate clause.,Grammar Unit,A group of words with a subject and verb.
+clearance,The aircraft received clearance.,Authorization,Official permission.
+clearance,The store held a clearance sale.,Inventory Reduction,Sale to remove stock.
+clique,The clique excluded newcomers.,Social Group,Small exclusive circle.
+clique,Researchers identified a clique in the network.,Graph Structure,Fully connected subgroup.
+club,He joined the chess club.,Organization,A group with a shared interest.
+club,The golfer selected a club.,Sports Equipment,A stick used in golf.
+club,The club stayed open until midnight.,Nightclub,A venue for entertainment and dancing.
+club,He joined the chess club.,Organization,A group with a shared interest.
+club,The golfer selected a club.,Sports Equipment,A stick used in golf.
+club,The club stayed open until midnight.,Nightclub,A venue for entertainment and dancing.
+cluster,A cluster of stars appeared.,Group,A collection of similar things.
+cluster,The servers form a computing cluster.,Computer Network,Connected computers acting together.
+cluster,The stars form a cluster.,Group,Collection of similar items.
+cluster,A server cluster improves reliability.,Computing Group,Connected computers working together.
+clusterhead,The clusterhead coordinated the group.,Leader,Head of a cluster.
+clusterhead,The network elected a clusterhead.,Network Node,Coordinating node in a system.
+clusterize,The software can clusterize data.,Group Automatically,Organize into clusters.
+clusterize,Scientists clusterized observations.,Classify,Group by similarity.
+coat,Wear a coat in cold weather.,Outer Garment,Clothing worn over other clothes.
+coat,Apply a coat of paint.,Layer,A covering spread over a surface.
+code,The programmer wrote code.,Instructions,Commands for a computer.
+code,Enter the security code.,Symbol System,A set of numbers or letters used for identification.
+colony,The ants formed a colony.,Animal Group,A community of animals.
+colony,The nation was once a colony.,Territory,Land controlled by another country.
+commission,The artist earned a commission.,Payment,Fee based on sales.
+commission,The commission released findings.,Committee,Official investigative group.
+commissioner,The commissioner announced new rules.,Official,Person with authority.
+commissioner,The sports commissioner suspended a player.,League Executive,Head administrator of a league.
+compilation,The songs appear in a compilation.,Collection,Gathered works in one source.
+compilation,The compilation took five minutes.,Code Translation,Converting source code to machine code.
+compilation,The album is a compilation.,Collection,Gathered works.
+compilation,Compilation completed successfully.,Code Conversion,Translating source code.
+compiler,The compiler found an error.,Software Tool,Program translating source code.
+compiler,She worked as a compiler of dictionaries.,Collector,Person who gathers information.
+compound,Water is a chemical compound.,Chemical Substance,A substance made of elements.
+compound,The family lived in a compound.,Enclosed Area,A group of buildings within a boundary.
+concession,The company made a concession.,Compromise,Something granted reluctantly.
+concession,Buy snacks at the concession.,Sales Stand,Food or merchandise booth.
+conduit,The conduit carries wires.,Pipe,Protective tube.
+conduit,She became a conduit for information.,Channel,Means of transmission.
+conduit,Wires run through the conduit.,Tube,Protective channel.
+conduit,She became a conduit of information.,Intermediary,Means of transmission.
+conduit,Water flows through the conduit.,Pipe,Channel for liquids or cables.
+conduit,He served as a conduit of information.,Intermediary,Means of transmission.
+configuration,Check the router configuration.,Settings,Arrangement of options.
+configuration,The mountain range has a unique configuration.,Shape,Spatial arrangement.
+console,The player bought a console.,Gaming Device,Electronic gaming system.
+console,Friends tried to console her.,Comfort,To ease sadness.
+consortium,The consortium funded research.,Alliance,Association of organizations.
+consortium,Universities formed a consortium.,Partnership,Cooperative group.
+constituency,The senator met her constituency.,Voters,Group represented politically.
+constituency,The product has a global constituency.,Supporters,People sharing an interest.
+context,The quote lacks context.,Surrounding Information,Circumstances around something.
+context,Programming uses execution context.,Computing Environment,Conditions under which code runs.
+convention,The convention begins tomorrow.,Meeting,Large organized gathering.
+convention,Handshakes are a social convention.,Custom,Accepted practice.
+corridor,Walk through the corridor.,Hallway,Passage inside a building.
+corridor,The trade corridor connects nations.,Route,Path for movement or transport.
+corridor,Walk down the corridor.,Hallway,Passage inside a building.
+corridor,The air corridor was restricted.,Route,Designated travel path.
+counterpart,The minister met his counterpart.,Equivalent Person,One holding a similar role.
+counterpart,The digital counterpart mirrors the object.,Equivalent Thing,Corresponding version.
+counterpart,She met her foreign counterpart.,Equivalent Person,Person with a similar role.
+counterpart,The digital counterpart mirrors the object.,Equivalent Thing,Corresponding version.
+courier,The courier delivered the package.,Delivery Worker,Person transporting items.
+courier,The company hired a courier.,Transport Service,Delivery organization.
+court,The court ruled in her favor.,Legal Institution,A place where legal cases are heard.
+court,The players entered the basketball court.,Sports Area,A playing surface for sports.
+court,The prince tried to court the princess.,Pursue Romantically,To seek someone's affection.
+crack,There is a crack in the wall.,Fracture,A narrow break.
+crack,He heard a crack of thunder.,Sharp Sound,A sudden loud noise.
+crack,She cracked the code.,Solve,To figure out a difficult problem.
+crane,The crane lifted the steel beams.,Lifting Machine,A machine used to raise and move heavy objects.
+crane,We spotted a crane near the lake.,Crane,A tall long-legged wading bird.
+crane,He craned his neck to see the stage.,Stretch Neck,To extend the neck to see better.
+crane,A crane lifted the steel beam.,Machine,Heavy lifting equipment.
+crane,A crane stood near the lake.,Bird,A long-legged bird.
+crane,He craned his neck to see.,Stretch Neck,To extend the neck forward.
+crane,The construction crane lifted steel.,Machine,Heavy lifting equipment.
+crash,The computer crashed.,System Failure,Sudden program or system failure.
+crash,The cars were involved in a crash.,Collision,An accident involving impact.
+credential,Enter your credentials.,Login Information,Authentication details.
+credential,She has excellent credentials.,Qualification,Evidence of competence.
+credentialing,Credentialing took several weeks.,Certification Process,Verification of qualifications.
+credentialing,Hospitals require credentialing.,Approval Procedure,Formal authorization process.
+credit,The store gave me credit.,Financial Trust,Ability to borrow money.
+credit,She deserves credit for the project.,Recognition,Praise for achievement.
+crest,The wave reached its crest.,Highest Point,Top of a wave.
+crest,The family crest is displayed.,Emblem,Symbol of a family.
+crop,Farmers harvested the rice crop in June.,Agricultural Yield,Plants grown for food or profit.
+crop,She cropped the photo before uploading it.,Cut/Trim,To remove unwanted parts of an image.
+cross,Cross the street carefully.,Move Across,To pass from one side to another.
+cross,The church displayed a cross.,Religious Symbol,A Christian emblem.
+cross,She became cross with her brother.,Annoyed,Slightly angry.
+crown,The king wore a crown.,Royal Headpiece,Symbol of monarchy.
+crown,The dentist repaired the crown.,Dental Cap,Artificial covering for a tooth.
+crown,The tree's crown was wide.,Top Portion,Upper part of a tree.
+cue,That's my cue to leave.,Signal,Prompt for action.
+cue,He chalked the cue.,Pool Stick,Stick used in billiards.
+culture,The company has a positive culture.,Organizational Values,Shared attitudes and practices.
+culture,French culture is influential.,Social Customs,Traditions and beliefs of a society.
+current,The river current is strong.,Water Flow,Movement of water in a direction.
+current,Current events are discussed in class.,Present Time,Existing or occurring now.
+current,Electric current flows through the wire.,Electricity Flow,Movement of electric charge.
+custodian,The custodian cleaned the school.,Caretaker,Person maintaining property.
+custodian,The bank is custodian of the assets.,Guardian,Institution holding property for others.
+custody,The child remained in her custody.,Guardianship,Legal care responsibility.
+custody,The evidence is in police custody.,Possession,Official control.
+cycle,The washing machine completed a cycle.,Sequence,Repeating process.
+cycle,He rides a cycle to school.,Bicycle,Two-wheeled vehicle.
+dam,The dam controls the river.,Barrier,A structure holding back water.
+dam,The puppy stayed with its dam.,Mother Animal,A female parent animal.
+dam,The dam controls flooding.,Barrier,A structure holding back water.
+dam,The foal stayed near its dam.,Mother Animal,A female parent anima
+dashboard,The dashboard displayed speed.,Vehicle Panel,Instrument area in a vehicle.
+dashboard,The dashboard shows analytics.,Interface,Information display screen.
+database,The database stores records.,Data Collection,Organized information storage.
+database,The library database is searchable.,Information System,Structured retrieval system.
+datastore,The datastore contains records.,Storage System,Repository for information.
+datastore,The app connects to a datastore.,Database,Structured storage resource.
 date,What is the date of your graduation ceremony?,Calendar Time,The day of the month or year as specified by a number
 date,They went out on a romantic date to an Italian restaurant.,Romantic Meeting,A social or romantic appointment or engagement
 date,"The palm tree produced sweet, delicious date fruits.",Fruit,"A sweet, dark brown, oval fruit that grows on a palm tree"
+debit,The purchase was a debit.,Account Deduction,Removal of funds.
+debit,Enter the transaction as a debit.,Accounting Entry,Left-side bookkeeping entry.
+debrief,The team held a debrief.,Review Meeting,Discussion after an event.
+debrief,The officer debriefed witnesses.,Question,Gather information after an event.
+decree,The king issued a decree.,Order,Official command.
+decree,The court decree was enforced.,Judgment,Legal ruling.
+delegate,The delegate attended the conference.,Representative,Person acting for a group.
+delegate,Managers delegate tasks.,Assign Authority,Transfer responsibility.
+delegate,The delegate attended the summit.,Representative,Person acting for others.
+delegate,Managers delegate responsibility.,Assign,Transfer authority.
+deployment,The software deployment succeeded.,Software Release,Installation into production.
+deployment,Military deployment increased.,Troop Placement,Strategic positioning.
+deposit,Make a deposit at the bank.,Money Placement,Money added to an account.
+deposit,Mineral deposits were discovered.,Natural Accumulation,A concentration of materials.
+depot,The train stopped at the depot.,Station,Transportation center.
+depot,Supplies were stored in the depot.,Warehouse,Storage facility.
+derivative,Futures are derivative instruments.,Financial Product,Value based on another asset.
+derivative,The derivative of x² is 2x.,Calculus Concept,Rate of change function.
+descriptor,"""Large"" is a descriptor.",Descriptive Term,Word providing detail.
+descriptor,The dataset includes descriptors.,Metadata Element,Information describing data.
+digest,Read the news digest.,Summary,Condensed information.
+digest,Humans digest food.,Process Food,Break down nutrients.
+disclosure,Full disclosure is required.,Revelation,Making information known.
+disclosure,The company filed a disclosure.,Report,Official information release.
+dispatch,The dispatcher sent the truck.,Send,To direct somewhere.
+dispatch,The reporter filed a dispatch.,Report,News message from a location.
+displacement,The flood caused displacement.,Relocation,Forced movement of people.
+displacement,Measure the displacement of the object.,Physics Quantity,Change in position.
+dividend,Shareholders received a dividend.,Payment,Distribution of profits.
+dividend,Peace produced a diplomatic dividend.,Benefit,Advantage gained.
+docket,The case is on the docket.,Court Schedule,Official list of cases.
+docket,Check the shipment docket.,Document,Official record.
+docking,The spacecraft completed docking.,Attachment Maneuver,Connecting vehicles in space.
+docking,Docking the ship took hours.,Mooring Process,Bringing a vessel to a dock.
+doctrine,The doctrine guides policy.,Principle,Set of beliefs.
+doctrine,Military doctrine evolved.,Strategy Framework,Established operational principles.
+doctrine,The church follows a doctrine.,Belief System,Set of principles.
+doctrine,Military doctrine evolved.,Strategy,Operational philosophy.
+domain,The website's domain expired.,Internet Address,A web identifier.
+domain,Mathematics is his domain.,Field,Area of expertise.
+draft,She wrote the first draft.,Preliminary Version,An early form of a document.
+draft,A cold draft entered through the window.,Air Flow,A current of air.
+draft,The athlete entered the military draft.,Selection System,Mandatory recruitment process.
+drafting,She is drafting a proposal.,Writing,Preparing a preliminary version.
+drafting,Drafting is used in architecture.,Technical Drawing,Creating plans and designs.
+drift,The boat began to drift.,Float,To move slowly without control.
+drift,I understand the drift of your argument.,Meaning,The general tendency or sense.
 duck,A beautiful duck was swimming gracefully in the pond.,Waterfowl Bird,"A waterbird with a broad blunt bill, short legs, and webbed feet"
 duck,You need to duck your head when entering the low doorway.,Lower The Body,Lower the head or body quickly to avoid a blow or so as not to be seen
+duck,A duck swam across the pond.,Bird,A waterbird with a broad bill.
+duck,Duck before the ball hits you!,Lower Head,To move down quickly.
+echo,The canyon produced an echo.,Reflected Sound,A repeated sound.
+echo,She echoed his opinion.,Repeat,To express the same idea.
+ecosystem,The forest ecosystem is diverse.,Biological System,Community of organisms.
+ecosystem,The software ecosystem is growing.,Network Of Products,Interconnected technologies.
+edge,The knife has a sharp edge.,Cutting Side,A sharpened boundary.
+edge,He has an edge over competitors.,Advantage,A favorable position.
+edition,I bought the first edition.,Publication Version,A particular release of a work.
+edition,Tonight's edition airs at 6 PM.,Broadcast Version,A specific issue of a program.
+element,Gold is an element.,Chemical Substance,Pure chemical type.
+element,Surprise was the key element.,Component,Essential part of something.
+emission,Vehicle emissions increased.,Discharge,Release of substances.
+emission,Light emission was measured.,Radiation,Release of energy.
+enclave,The village is an enclave.,Territory,Area enclosed by another territory.
+enclave,The neighborhood became an enclave.,Community,Distinct cultural group.
+endorsement,The celebrity gave an endorsement.,Approval,Public support.
+endorsement,Sign the endorsement section.,Signature Authorization,Transfer authorization.
+equilibrium,The market reached equilibrium.,Balance State,Stable condition.
+equilibrium,The gymnast maintained equilibrium.,Balance,Physical stability.
+estate,The estate covers 500 acres.,Property,Large area of land.
+estate,The estate was divided among heirs.,Possessions,Property left after death.
+estate,The estate includes several farms.,Property,Large landholding.
+estate,The estate was settled after death.,Inheritance,Property left by someone.
 execution,The execution of the project was flawless.,Performance / Carrying Out,"The carrying out or bearing to fruition of a plan, order, or course of action"
 execution,The historical museum detailed the execution of King Louis XVI.,Capital Punishment,The carrying out of a sentence of death on a condemned person
+execution,The program execution started.,Program Running,Carrying out instructions.
+execution,The execution occurred publicly.,Legal Punishment,Carrying out a death sentence.
+executioner,The executioner carried out the sentence.,Official Role,Person performing executions.
+executioner,The bug became the executioner of the project.,Destroyer,Cause of failure.
+exposure,Camera exposure was adjusted.,Photography Setting,Amount of light received.
+exposure,Exposure to sunlight helps vitamin D production.,Contact,Being subjected to something.
 express,She used the express lane to avoid the long grocery lines.,Fast/Direct Route,Operating at high speed with few or no stops along the way
 express,It is important to express your feelings openly.,Communicate Thoughts,Convey a thought or feeling in words or by gestures and conduct
+extraction,Tooth extraction was necessary.,Removal,Taking something out.
+extraction,Oil extraction increased.,Resource Recovery,Removing valuable material.
+fabric,Cotton is a common fabric.,Cloth,Material used to make clothing.
+fabric,The social fabric was damaged.,Structure,The underlying framework of society.
+fabricator,The fabricator built steel parts.,Manufacturer,Person making structures.
+fabricator,He is a fabricator of stories.,Liar,One who invents falsehoods.
+face,Wash your face.,Body Part,Front part of the head.
+face,We must face the challenge.,Confront,To deal with directly.
+face,The clock face is damaged.,Front Surface,Visible front part of an object.
+facet,The diamond has many facets.,Surface,Flat face of a gem.
+facet,This is one facet of the issue.,Aspect,Particular feature.
+facilitator,The facilitator led the workshop.,Coordinator,Person guiding discussion.
+facilitator,Technology is a facilitator of learning.,Enabler,Something making a task easier.
+faculty,The faculty voted today.,Teaching Staff,Academic employees.
+faculty,She lost the faculty of speech.,Ability,A natural capability.
 fair,The judge made a fair and unbiased decision.,Just / Equitable,Treating people equally without favoritism or discrimination
 fair,We spent the entire Saturday afternoon at the county fair.,Exhibition / Festival,"A gathering of people for various competitive exhibitions, rides, and entertainment"
+fair,The county fair starts tomorrow.,Exhibition,A public event with displays and entertainment.
+fair,The teacher was fair to all students.,Just,Treating people equally.
+fair,She has fair skin.,Light-Colored,Pale in complexion.
+fall,Leaves fall in autumn.,Drop Downward,To move downward.
+fall,We visited last fall.,Season,The autumn season.
+fall,The empire's fall shocked many people.,Collapse,Loss of power or position.
+fallback,We need a fallback plan.,Backup Option,Alternative solution.
+fallback,The software used fallback settings.,Default Alternative,Secondary configuration.
+fan,The fan keeps the room cool.,Appliance,A device that circulates air.
+fan,She is a fan of the singer.,Admirer,Someone who strongly likes something.
 fast,The sports car is incredibly fast on the racetrack.,Rapid Speed,Moving or capable of moving at high speed
 fast,He decided to fast for 24 hours for health reasons.,Abstain From Food,"Abstain from all or some kinds of food or drink, especially as a religious observance"
+federation,The federation includes many states.,Union,Alliance of entities.
+federation,The sports federation set rules.,Governing Body,Supervising organization.
+fiber,Fiber improves digestion.,Dietary Material,Indigestible plant matter.
+fiber,Fiber internet is available.,Communication Medium,Thin strands carrying signals.
+fidelity,Audio fidelity is excellent.,Accuracy,Faithfulness to original quality.
+fidelity,Fidelity between partners matters.,Loyalty,Faithful commitment.
+field,The cows grazed in the field.,Open Land,An area of grassland.
+field,Physics is my field.,Area Of Study,A branch of knowledge.
+field,The team entered the field.,Playing Area,Surface for sports.
+figure,The figure in the painting looked familiar.,Shape/Person,A form or person.
+figure,Sales reached six figures.,Number,A numerical value.
+figure,I can't figure out the answer.,Understand,To solve or comprehend.
+file,Save the file on your computer.,Digital Document,A stored collection of data.
+file,Place the papers in the file.,Folder,A container for documents.
+file,Use a file to smooth the metal.,Tool,A tool for shaping surfaces.
+filter,Replace the water filter.,Screening Device,Removes unwanted material.
+filter,The app uses a photo filter.,Image Effect,Digital modification.
+find,I found my keys.,Discover,To locate something.
+find,The court may find him guilty.,Determine,To reach a conclusion.
+fine,The restaurant was fine.,Satisfactory,Acceptable or good enough.
+fine,He paid a fine for speeding.,Penalty,Money paid as punishment.
+finish,She crossed the finish line first.,Complete,To bring to an end.
+finish,The table has a glossy finish.,Surface Coating,The final appearance of a surface.
+firewall,The firewall blocked traffic.,Security Software,System preventing unauthorized access.
+firewall,A firewall separated the buildings.,Barrier,Structure preventing fire spread.
+firmware,Update the firmware.,Device Software,Software embedded in hardware.
+firmware,The firmware controls startup.,Control Code,Low-level operational software.
+fit,These shoes fit perfectly.,Proper Size,To be the right size.
+fit,She is physically fit.,Healthy,In good physical condition.
+fix,Please fix the broken chair.,Repair,To restore something.
+fix,The company is in a fix.,Difficult Situation,A troublesome circumstance.
+fixture,The lamp fixture is broken.,Installed Object,Permanently attached equipment.
+fixture,The football fixture is tomorrow.,Scheduled Match,Planned sporting event.
+flag,Raise the national flag.,Banner,Symbolic piece of cloth.
+flag,The referee flagged the player.,Mark,To identify for attention.
+flare,The flare illuminated the night.,Signal Light,A bright signaling device.
+flare,Tempers began to flare.,Intensify Suddenly,To become more intense.
+flash,A flash of lightning lit the sky.,Burst Of Light,A sudden bright light.
+flash,He flashed his ID card.,Display Briefly,To show quickly.
+flat,They rented a flat downtown.,Apartment,A set of rooms for living.
+flat,The road became flat.,Level Surface,Without significant elevation.
+flat,The soda tastes flat.,Lacking Gas,Having lost carbonation.
+fleet,The navy deployed its fleet.,Group Of Ships,A collection of vessels.
+fleet,A fleet runner won the race.,Swift,Fast-moving.
+float,The boat can float.,Stay On Water,To remain on a liquid surface.
+float,Ideas floated around the room.,Move Freely,To drift without direction.
+flotation,The company planned a flotation.,Stock Offering,Initial public sale of shares.
+flotation,The device aids flotation.,Floating Ability,Capacity to remain afloat.
+flow,Water flows downhill.,Movement Of Liquid,Continuous movement of a fluid.
+flow,The conversation had good flow.,Smooth Progression,Natural continuity.
+fly,A fly landed on the table.,Insect,A winged insect.
+fly,Birds fly south in winter.,Move Through Air,To travel by air.
+fold,Fold the paper in half.,Bend,To double over.
+fold,The sheep returned to the fold.,Enclosure,A fenced area for animals.
+follow,Please follow the instructions.,Obey,To act according to directions.
+follow,The dog followed its owner.,Go After,To move behind someone.
+foot,Just use your foot while you kick a ball.,Anatomical Part,"The lower extremity of the leg below the ankle, on which a person stands or walks."
+foot,She is five foot two inch.,Unit Of Measurement,A unit of linear measure equal to 12 inches (30.48 cm).
+force,The force of the impact was strong.,Physical Power,Strength exerted on an object.
+force,Police force increased patrols.,Organized Group,A body of personnel.
+force,They forced the door open.,Compel,To make someone do something.
+forecast,The weather forecast predicts rain.,Prediction,Statement about the future.
+forecast,Economists forecast growth.,Estimate Future,Predict upcoming events.
+forge,Blacksmiths work at a forge.,Workshop,A place for shaping metal.
+forge,He forged a signature.,Counterfeit,To create a fake copy.
+fork,Use a fork to eat.,Utensil,A tool for eating food.
+fork,The road reaches a fork.,Road Split,A point where paths divide.
+fork,Developers created a fork of the project.,Software Branch,A copied version of software.
+formulation,The scientist proposed a formulation.,Expression,Specific way of stating something.
+formulation,The medicine's formulation changed.,Composition,Particular mixture of ingredients.
+foul,The smell was foul.,Unpleasant,Offensive to the senses.
+foul,The player committed a foul.,Rule Violation,An infraction in sports.
+foundation,The building's foundation is strong.,Structural Base,The supporting base.
+foundation,She started a foundation.,Organization,A charitable institution.
+frame,The picture frame is wooden.,Border,A structure surrounding something.
+frame,The police framed the suspect.,Falsely Accuse,To make someone appear guilty.
+framework,The building's framework is steel.,Structure,Supporting skeleton.
+framework,Python has many frameworks.,Software Platform,Reusable development structure.
+fresh,The bread is fresh.,Recently Made,Newly produced.
+fresh,She brought fresh ideas.,Original,New and innovative.
+fret,He fretted about the exam.,Worry,To be anxious.
+fret,The guitarist pressed the fret.,Guitar Ridge,A raised strip on a fingerboard.
+front,The front of the house faces east.,Forward Part,The side facing outward.
+front,A cold front is approaching.,Weather Boundary,Meeting point of air masses.
+full,The glass is full.,Filled,Containing as much as possible.
+full,She works full time.,Complete,Entire or whole.
+gain,The company gained new customers.,Acquire,To obtain something.
+gain,There was a gain in profits.,Increase,Growth in amount or value.
+game,We played a board game.,Activity,A structured form of play.
+game,Deer are common game animals.,Hunted Animals,Animals hunted for sport or food.
+gate,Open the gate.,Barrier,A movable entrance.
+gate,Passengers waited at Gate 12.,Terminal Area,A boarding location.
+gateway,The gateway leads into town.,Entrance,Access point.
+gateway,The router acts as a gateway.,Network Connector,Device linking networks.
+gatewayed,Traffic was gatewayed through servers.,Routed,Directed through a gateway.
+gatewayed,Data was gatewayed externally.,Transferred,Passed through an access point.
+gauge,Check the fuel gauge.,Measuring Instrument,A device for measurement.
+gauge,It's hard to gauge her reaction.,Estimate,To judge approximately.
+glass,The glass broke.,Drinking Container,A vessel for liquids.
+glass,The window is made of glass.,Material,A hard transparent substance.
 glasses,She needs to wear reading glasses to see small text.,Eyewear,A pair of lenses set in a frame worn to correct or assist defective eyesight
 glasses,He filled the crystal glasses with cold sparkling water.,Drinking Vessels,Containers made of glass used for drinking liquids
-grave,They visited the historical grave of the unknown soldier.,Burial Site,"A place of burial for a dead body, typically a hole dug in the ground"
-grave,The doctor had a grave expression when discussing the diagnosis.,Serious / Solemn,"Giving cause for alarm; serious, solemn, or somber in manner"
+gold,The ring is made of gold.,Metal,A valuable yellow metal.
+gold,She won gold in the Olympics.,Medal,First-place award.
+grade,She received a high grade.,Academic Score,Evaluation of performance.
+grade,The road has a steep grade.,Slope,Inclination of a surface.
+grain,Rice is a grain.,Seed,Small hard seed of a cereal plant.
+grain,The wood has fine grain.,Texture,Natural pattern in wood.
+grain,Rice is a grain.,Seed,Small hard edible seed.
+grain,The wood has visible grain.,Texture Pattern,Natural arrangement of fibers.
+grave,The flowers were placed on the grave.,Burial Site,A place where a body is buried.
+grave,The situation is grave.,Serious,Requiring urgent attention.
+gray,The sky turned gray.,Color,A color between black and white.
+gray,The issue is a gray area.,Unclear,Not clearly defined.
+green,The leaves are green.,Color,Color associated with vegetation.
+green,She is green at the job.,Inexperienced,Lacking experience.
+grid,The city follows a grid layout.,Pattern,Network of intersecting lines.
+grid,The power grid failed.,Electrical Network,System distributing electricity.
+ground,The ball fell to the ground.,Earth Surface,The solid surface of Earth.
+ground,Coffee is made from ground beans.,Crushed Material,Reduced to small particles.
+ground,The pilot grounded the aircraft.,Prevent Operation,To stop from functioning.
+guard,A guard watched the gate.,Protector,A person who protects.
+guard,Guard your belongings.,Protect,To keep safe.
+gum,She chewed gum after lunch.,Chewing Substance,A soft material chewed for flavor.
+gum,My gums hurt after brushing.,Mouth Tissue,Flesh surrounding the teeth.
+gum,Tree gum oozed from the bark.,Sticky Substance,A natural plant secretion.
+hack,The programmer found a useful hack.,Clever Solution,An efficient trick or shortcut.
+hack,Criminals hacked the system.,Gain Unauthorized Access,To break into a computer system.
+hamper,Put the laundry in the hamper.,Laundry Basket,A container for dirty clothes.
+hamper,Bad weather hampered travel.,Hinder,To obstruct progress.
+hand,Raise your hand.,Body Part,The end part of the arm.
+hand,Please hand me the book.,Give,To pass something to someone.
+handle,Hold the handle firmly.,Grip,Part used for holding.
+handle,She can handle the pressure.,Manage,To deal with effectively.
+handle,His online handle is unique.,Username,A name used online.
+hang,The picture hangs on the wall.,Suspend,To be attached above the ground.
+hang,We like to hang out together.,Spend Time,To socialize casually.
+harbor,Ships entered the harbor.,Port,A sheltered place for vessels.
+harbor,He harbored doubts about the plan.,Keep Feeling,To maintain thoughts or emotions.
+harbor,Ships entered the harbor.,Port,A sheltered docking area.
+harbor,He harbored resentment.,Keep Feeling,To maintain thoughts or emotions.
+harbormaster,The harbormaster inspected vessels.,Port Official,Manager of a harbor.
+harbormaster,The harbormaster approved docking.,Authority Figure,Supervisor of harbor operations.
+hard,The rock is hard.,Solid,Difficult to break or bend.
+hard,She works hard every day.,Diligently,With great effort.
+hard,The exam was hard.,Difficult,Requiring much skill or effort.
+hatch,The eggs began to hatch.,Emerge From Egg,To come out of an egg.
+hatch,Open the roof hatch.,Opening,A door-like opening.
+hatch,They hatched a clever plan.,Devise,To create or develop secretly.
 head,He wore a protective helmet to shield his head.,Body Part,"The upper part of the human body containing the brain, eyes, ears, nose, and mouth"
 head,She was appointed as the head of the marketing department.,Leader / Director,The person in charge of an organization or group; the leader
+heap,A heap of sand lay nearby.,Pile,Collection in a mound.
+heap,Java uses a heap.,Memory Region,Dynamic storage area.
+heave,They heaved the box onto the truck.,Lift With Effort,To raise something heavy.
+heave,The ocean heaved during the storm.,Rise And Fall,To move up and down.
+hide,The rabbit hid behind the bush.,Conceal Oneself,To keep out of sight.
+hide,The cabin was hidden in the forest.,Conceal Object,To place out of view.
+hide,The boots are made of hide.,Animal Skin,Skin removed from an animal.
+hinge,The door hinge squeaked.,Joint,A movable connector.
+hinge,Success may hinge on effort.,Depend,To rely upon something.
+home,They returned home.,Residence,Place where one lives.
+home,The team played a home game.,Local Venue,A team's own location.
+horn,The car horn is loud.,Signaling Device,Device producing warning sounds.
+horn,The deer has large horns.,Animal Structure,Hard growth on an animal's head.
+horn,She plays the French horn.,Musical Instrument,A brass wind instrument.
+host,The host welcomed the guests.,Organizer,A person receiving visitors.
+host,The mosquito is a host for parasites.,Biological Carrier,An organism supporting another.
+hub,The airport is a transport hub.,Center,Important focal point.
+hub,The USB hub adds ports.,Connector Device,Device linking peripherals.
+hubcap,The hubcap fell off the wheel.,Wheel Cover,Decorative wheel component.
+hubcap,He replaced the damaged hubcap.,Vehicle Part,Cover protecting wheel hub.
+hunt,Hunters hunt deer.,Pursue Animals,To search for game.
+hunt,I'm hunting for my keys.,Search,To look for something.
+hurt,His ankle hurt after running.,Feel Pain,To experience discomfort.
+hurt,Her words hurt him.,Cause Emotional Pain,To upset emotionally.
+incubator,The eggs stayed in the incubator.,Warming Device,Equipment for hatching eggs.
+incubator,The startup joined an incubator.,Business Program,Organization supporting new companies.
+index,The book has an index.,Reference List,Alphabetical topic guide.
+index,Stock indexes rose today.,Measurement Indicator,A statistical measure.
+inflation,Inflation increased prices.,Economic Growth Of Prices,Rise in general price levels.
+inflation,Balloon inflation took seconds.,Filling With Air,Expansion using gas.
+intake,Monitor your water intake.,Consumption,Amount taken in.
+intake,The engine intake is blocked.,Air Entry,Opening for incoming air.
+interest,Reading is one of my interests.,Hobby,Something that attracts attention.
+interest,The bank pays interest.,Financial Return,Money earned on investments.
 iron,"The structural beams were made of solid, reinforced iron.",Chemical Element,"A strong, hard magnetic silvery-gray metal used for structural engineering"
 iron,She used a hot steam iron to smooth out her wrinkled shirt.,Appliance,A handheld appliance with a flat heated bottom surface used to smooth fabric
-jam,She spread sweet strawberry jam over her toasted bread.,Fruit Spread,A sweet spread or preserve made by boiling fruit and sugar to a thick consistency
-jam,We were stuck in a massive traffic jam for three hours.,Blockage / Squeeze,A situation in which a network or road is crowded and movement is blocked
+iron,The iron is hot.,Appliance,Device used for pressing clothes.
+iron,Iron is a strong metal.,Element,A metallic chemical element.
+issue,The magazine issue arrived today.,Edition,A published release.
+issue,Climate change is an important issue.,Topic/Problem,A matter of concern.
+issue,The bank issued a new card.,Distribute,To provide officially.
+itinerary,Follow the travel itinerary.,Travel Plan,Schedule of a journey.
+itinerary,The conference itinerary changed.,Event Schedule,Planned sequence of activities.
+jack,Use the jack to lift the car.,Lifting Device,A tool used to raise heavy objects.
+jack,He won a jack in the card game.,Playing Card,A face card ranked between ten and queen.
+jam,I spread jam on toast.,Fruit Preserve,Sweet fruit spread.
+jam,Traffic caused a jam.,Congestion,A crowded blockage.
+jam,The printer has a paper jam.,Obstruction,Something preventing movement.
+jerk,The bus jerked to a stop.,Sudden Movement,A quick abrupt motion.
+jerk,Stop being a jerk.,Rude Person,An unpleasant or inconsiderate person.
+joint,My knee joint hurts.,Body Connection,Place where bones meet.
+joint,They opened a burger joint.,Establishment,Informal term for a business.
+journal,She published in a journal.,Academic Publication,A scholarly periodical.
+journal,He kept a travel journal.,Diary,A personal written record.
+journal,She writes in her journal.,Diary,Personal record of events.
+journal,The article appeared in a journal.,Academic Publication,Scholarly periodical.
+junction,Meet me at the junction.,Intersection,Point where routes meet.
+junction,A transistor contains a junction.,Electronics Interface,Boundary between materials.
+junctionbox,The electrician opened the junction box.,Electrical Enclosure,Housing for wiring connections.
+junctionbox,The junction box required repair.,Utility Component,Box containing cable junctions.
+kernel,The corn kernel popped.,Seed,The edible seed of grain.
+kernel,The operating system kernel crashed.,Core Software,The central part of an OS.
+kernel,The corn kernel popped.,Grain Seed,Edible grain seed.
+kernel,Linux uses a kernel.,Operating System Core,Central software component.
 key,He inserted the metal key into the deadbolt lock.,Unlocking Tool,A small piece of shaped metal with incisions cut to fit the wards of a particular lock
 key,Hard work is the primary key to achieving professional success.,Crucial Factor,"An explanatory scale, crucial factor, or solution to a problem"
-left,Turn left at the next traffic intersection.,Direction,"On, towards, or relating to the side of a human body or thing which is to the west when facing north"
-left,The guests left the dinner party around midnight.,Departed,Past tense of leave; departed from a place
+key,I lost my house key.,Lock Opener,A device used to open locks.
+key,Trust is key to success.,Essential Factor,Something very important.
+key,The song is in the key of G.,Musical Scale,A tonal framework in music.
+kick,He kicked the ball into the goal.,Strike With Foot,To hit using the foot.
+kick,The medicine gave her a kick of energy.,Stimulation,A sudden feeling of excitement.
+kid,The kid rode a bicycle.,Child,A young person.
+kid,The goat cared for her kid.,Young Goat,The offspring of a goat.
+kid,Are you kidding me?,Joke,To tease or not be serious.
+kind,She is a kind person.,Caring,Showing generosity and concern.
+kind,What kind of music do you like?,Type,A category or variety.
+kiosk,The kiosk sold newspapers.,Booth,Small sales stand.
+kiosk,Use the airport kiosk.,Self-Service Machine,Automated terminal.
+lap,The cat sat on my lap.,Upper Legs,Area formed when sitting.
+lap,She ran another lap.,Circuit,One complete trip around a track.
+lap,The cat sat on her lap.,Body Area,Upper legs when seated.
+lap,He completed another lap.,Circuit,One trip around a track.
+lash,The sailor secured the boxes with a lash.,Rope Fastening,To bind with rope.
+lash,Her lashes are very long.,Eyelash,Hair growing on the eyelid.
+lash,The storm lashed the coast.,Strike Violently,To hit repeatedly with force.
+last,He was the last person to arrive.,Final,Coming after all others.
+last,These batteries last a long time.,Endure,To continue functioning.
+latch,Close the latch securely.,Fastening Device,A mechanism for holding closed.
+latch,The baby latched onto the toy.,Grasp,To attach firmly.
+late,She arrived late to class.,Delayed,Occurring after the expected time.
+late,His late grandfather was a teacher.,Deceased,No longer living.
+lead,The guide will lead the group.,Guide,To direct others.
+lead,The company took the lead.,First Position,The state of being ahead.
+lead,Pipes were once made of lead.,Metal,A heavy metallic element.
+leaves,Leaves covered the ground.,Plant Parts,Flat structures growing from stems.
+leaves,The train leaves at noon.,Departs,Goes away from a place.
+ledger,The accountant checked the ledger.,Financial Record,Book of accounts.
+ledger,The stone rested on a ledger.,Shelf-Like Support,Horizontal projecting surface.
+ledgerbook,The accountant updated the ledger book.,Accounting Record,Book of financial entries.
+ledgerbook,Auditors inspected the ledger book.,Register,Official transaction log.
+left,Turn left at the corner.,Direction,Opposite of right.
+left,Only two cookies were left.,Remaining,Still available.
+left,She left the office early.,Departed,Went away from a place.
+level,The floor is level.,Flat,Even and horizontal.
+level,She reached the next level in the game.,Stage,A degree or position in a system.
+library,The library closes at six.,Book Collection Facility,A place containing books and resources.
+library,Python has a large library ecosystem.,Software Collection,Reusable programming resources.
+lie,Please do not lie to your parents.,Tell A Falsehood,To intentionally say something untrue.
+lie,The keys lie on the table.,Be Located,To rest or remain in a place.
+life,Marine life thrives here.,Living Organisms,Plants and animals collectively.
+life,She lived a happy life.,Existence,The period between birth and death.
+lift,The elevator provides a lift upstairs.,Raising Transport,A device that moves people upward.
+lift,Can you lift this box?,Raise,To move upward.
+lift,The news gave her a lift.,Encouragement,A feeling of improvement or happiness.
 light,The sun provides natural light to the entire planet.,Illumination,The natural agent that stimulates sight and makes things visible
 light,The feather felt incredibly light in the palm of her hand.,Low Weight,Of little weight; not heavy or burdensome to carry
+light,Turn on the light.,Illumination,Visible energy that enables sight.
+light,This bag is very light.,Low Weight,Not heavy.
+light,Light the candle.,Ignite,To start burning.
+light,Turn on the light.,Illumination,Visible energy.
+light,This suitcase is light.,Low Weight,Not heavy.
+light,Light the candle.,Ignite,To start burning.
+like,I like ice cream.,Enjoy,To find pleasant or appealing.
+like,She looks like her mother.,Resemble,To be similar to.
+like,There were tools like hammers and drills.,Such As,Used to give examples.
+line,Draw a straight line.,Mark,A long narrow stroke.
+line,The customers formed a line.,Queue,People waiting in order.
+line,The actor forgot his lines.,Dialogue,Words in a script.
+link,Click the link to continue.,Connection,A reference connecting resources.
+link,Scientists found a link between the events.,Relationship,A connection between things.
+live,They live near the beach.,Reside,To have a home in a place.
+live,The concert was broadcast live.,Real-Time,Occurring as it happens.
+load,The truck carried a heavy load.,Burden,Something being transported.
+load,Please load the software.,Place Into Memory,To transfer data for use.
+lock,Lock the door before leaving.,Secure,To fasten against opening.
+lock,The key fits the lock.,Fastening Device,A mechanism securing an opening.
+lodge,They stayed at a lodge.,Accommodation,A small hotel.
+lodge,He lodged a complaint.,Submit Formally,To officially present.
+log,The cabin was built from logs.,Wood Piece,A cut section of tree trunk.
+log,The server stores a log.,Record,A written history of events.
+look,Look at the painting.,Direct Eyes,To see intentionally.
+look,She has a professional look.,Appearance,The way someone appears.
+loom,A loom was used to weave cloth.,Weaving Machine,Equipment for making fabric.
+loom,Trouble loomed ahead.,Appear Threateningly,To seem likely to happen.
+loop,The rope formed a loop.,Circular Shape,A curve that closes on itself.
+loop,The program runs in a loop.,Repeated Cycle,A sequence repeated continuously.
+major,Biology is her major.,Academic Specialization,Main field of study.
+major,This is a major problem.,Important,Significant in size or effect.
+make,She can make a cake.,Create,To produce something.
+make,The car makes a strange noise.,Produce,To cause something to occur.
+man,The man waved to us.,Adult Male,A grown male human.
+man,They need more workers to man the station.,Operate,To staff or run.
+manifest,The ship's manifest was checked.,Cargo List,Official inventory.
+manifest,Symptoms may manifest later.,Become Evident,To appear clearly.
+mantle,Lava rose through the mantle.,Earth Layer,Layer beneath Earth's crust.
+mantle,The trophy sat on the mantle.,Fireplace Shelf,Shelf above a fireplace.
+march,Soldiers march in formation.,Walk Formally,To walk rhythmically.
+march,Flowers bloom in March.,Month,The third month of the year.
+margin,Write in the margin.,Page Border,Blank edge of a page.
+margin,The company increased its margin.,Profit Difference,Excess of revenue over cost.
+mark,The ink left a mark.,Stain,A visible impression.
+mark,He earned a high mark.,Score,A grade or rating.
+mark,Mark the correct answer.,Indicate,To identify something.
+mask,Wear a mask indoors.,Face Covering,Protective item worn over the face.
+mask,The perfume masks the odor.,Conceal,To hide something.
+master,She earned a master's degree.,Advanced Qualification,A postgraduate academic degree.
+master,He became a master carpenter.,Expert,A highly skilled person.
 match,He struck a match to light the firewood in the hearth.,Igniter Tool,A short thin piece of wood or cardboard tipped with a chemical substance that ignites when rubbed against a rough surface
-match,The tennis match lasted for nearly four grueling hours.,Sporting Contest,A contest or game in which people or teams compete against each other
+match,The tennis match lasted for nearly four grueling hours.,Sport Contest,A contest or game in which people or teams compete against each other
+match,The curtains match the carpet.,Correspond,To be similar or compatible.
+mate,My roommate is my mate.,Companion,A friend or partner.
+mate,Many birds mate in spring.,Reproduce,To pair for breeding.
+matrix,The data formed a matrix.,Table,Rectangular arrangement of values.
+matrix,The film showed a virtual matrix.,Environment,A surrounding framework.
+matter,Matter occupies space.,Physical Substance,Material that has mass and volume.
+matter,It doesn't matter.,Importance,Significance or consequence.
+mean,What does this word mean?,Signify,To represent an idea.
+mean,He can be mean sometimes.,Unkind,Not kind or generous.
+mean,The mean score was 85.,Average,Arithmetic average.
+measure,Measure the table's length.,Determine Size,To find dimensions.
+measure,The law is a safety measure.,Action,A step taken for a purpose.
+medium,Television is a medium.,Communication Channel,Means of communication.
+medium,She ordered a medium coffee.,Size,Intermediate size.
+middleware,Middleware connects applications.,Software Layer,Program linking systems.
+middleware,The middleware handled requests.,Integration Tool,Software between components.
+mine,The gold mine closed last year.,Excavation Site,A place where minerals are extracted.
+mine,That book is mine.,Possession,Belonging to me.
+mine,The gold mine closed last year.,Excavation Site,A place where minerals are extracted.
+mine,That book is mine.,Possession,Belonging to me.
+mission,The spacecraft began its mission.,Operation,A planned task.
+mission,The church's mission is service.,Purpose,A guiding objective.
+model,The architect built a model.,Representation,A smaller version of something.
+model,She works as a fashion model.,Professional Poser,A person displaying products or clothing.
+model,Scientists use climate models.,Simulation,A system used for study or prediction.
+mold,Bread developed mold.,Fungus,A type of fungal growth.
+mold,The artist poured metal into a mold.,Shaping Form,A hollow form for casting.
+mold,Parents help mold a child's character.,Shape Development,To influence formation.
 mole,A small brown mole appeared on the surface of his skin.,Skin Mark,"A small, dark spot or mark on the human skin"
 mole,The mole tunneled deep underground beneath the lawn.,Burrowing Animal,A small burrowing insectivorous mammal with dark velvety fur and a long muzzle
+mole,A mole dug through the garden.,Animal,A small burrowing mammal.
+mole,The doctor checked a mole on her skin.,Skin Mark,A dark spot on the skin.
+monitor,The computer monitor is large.,Display Screen,A screen for viewing information.
+monitor,Teachers monitor student progress.,Observe,To watch and check regularly.
 nail,She painted her fingernail with a vibrant shade of pink.,Body Anatomy,A hornlike keratinous plate at the tip of the fingers and toes in humans
 nail,He pounded a heavy iron nail into the wooden plank.,Fastener,"A small metal spike with a broadened flat head, driven into wood to join things together"
+nail,Hammer the nail carefully.,Fastener,A metal pin for joining.
+nail,She painted her nails.,Body Part,Hard covering of fingers or toes.
+nail,He nailed the audition.,Succeed Greatly,To perform exceptionally well.
+namespace,Avoid conflicts using a namespace.,Programming Scope,Named context for identifiers.
+namespace,Biology uses taxonomic namespaces.,Classification System,Naming framework.
+navy,She wore a navy blazer.,Color,A dark blue color.
+navy,The navy conducted exercises at sea.,Military Branch,The armed forces operating at sea.
+negative,The result was negative.,Absent Finding,Indicating something was not found.
+negative,She has a negative attitude.,Pessimistic,Characterized by lack of optimism.
+negative,Negative five is less than zero.,Mathematical Value,A number below zero.
+net,The fisherman repaired his net.,Mesh,Material made of interlaced cords.
+net,The ball hit the net.,Goal Mesh,Mesh attached to a goal.
+net,The company's net profit increased.,Remaining Amount,Amount left after deductions.
+network,The office network was upgraded.,Computer System,Interconnected computers and devices.
+network,She built a professional network.,Social Connections,A group of connected people.
+network,Television network coverage expanded.,Broadcasting System,Linked broadcasting stations.
+nib,The nib of the pen is bent.,Pen Tip,The writing point of a pen.
+nib,He took a nib of the cookie.,Small Bite,A small bite or nibble.
+niche,The bird built a niche in the wall.,Recess,A shallow space in a wall.
+niche,The company serves a niche market.,Specialty Area,A focused segment.
+node,Each router acts as a node.,Network Point,A connection point in a network.
+node,The stem has several nodes.,Plant Joint,A point where leaves or branches grow.
+node,The lymph node was swollen.,Body Structure,A small gland-like structure in the body.
+nodebase,The nodebase stores metadata.,Computing Repository,Storage associated with nodes.
+nodebase,Administrators updated the nodebase.,System Component,Central node information store.
+note,I left a note on your desk.,Message,A short written message.
+note,She sang a high note.,Musical Tone,A sound of definite pitch.
+note,Please note the deadline.,Observe,To pay attention to.
+notice,The notice was posted on the wall.,Announcement,A public written announcement.
+notice,Did you notice the change?,Observe,To become aware of something.
+notice,He gave two weeks' notice.,Warning,Advance notification before leaving.
+nut,The squirrel carried a nut.,Seed,A hard-shelled edible seed.
+nut,He's a football nut.,Enthusiast,A person obsessed with a subject.
+nut,Tighten the nut with a wrench.,Fastener,A metal piece threaded onto a bolt.
 object,There was a strange metallic object floating in the water.,Physical Item,A material thing that can be seen and touched
 object,The defense attorney stood up to object to the question.,Protest / Disagree,Say something to express one's disapproval of or disagreement with something
+object,The object fell from the shelf.,Thing,A physical item.
+object,I object to the proposal.,Oppose,To express disagreement.
+odd,That's an odd idea.,Unusual,Different from what is expected.
+odd,Seven is an odd number.,Mathematical,Not divisible by two.
+odd,The odds are against us.,Unlikely,Having low probability of success.
+off,Turn off the television.,Deactivate,To stop operation.
+off,The milk smells off.,Spoiled,No longer fresh.
+off,He is off today.,Absent,Not present or working.
+offer,She received a job offer.,Proposal,An opportunity presented for acceptance.
+offer,They offer free delivery.,Provide,To make available.
+offer,I offered to help.,Volunteer,To express willingness to do something.
+olive,Olive trees grow well here.,Tree,A tree producing olives.
+olive,I ate an olive.,Fruit,The fruit of the olive tree.
+olive,He wore an olive jacket.,Color,A yellowish-green color.
+open,The store is open.,Operating,Available for business.
+open,Please open the door.,Unlock,To move something to allow access.
+open,We had an open discussion.,Unrestricted,Allowing free participation.
+operation,The operation lasted four hours.,Surgical Procedure,A medical procedure performed by surgeons.
+operation,The factory resumed operation.,Functioning,The state of working or running.
+operation,The military operation began at dawn.,Mission,A planned military activity.
+orange,She peeled an orange.,Fruit,A citrus fruit.
+orange,Orange is my favorite color.,Color,A color between red and yellow.
+orange,The orange team won the game.,Team Identifier,A group identified by orange color.
+orbit,The moon remains in orbit.,Path,Curved path around an object.
+orbit,Celebrities travel in the same orbit.,Social Circle,Sphere of influence.
+order,I placed an order for a new laptop.,Purchase Request,A request to buy goods.
+order,The teacher asked for order in the classroom.,Organization,A state of arrangement or discipline.
+order,The judge issued a court order.,Command,An authoritative direction.
+organ,The heart is an organ.,Body Part,A structure with a special function.
+organ,The church has a large organ.,Musical Instrument,A keyboard instrument.
+out,The lights are out.,Extinguished,No longer operating or illuminated.
+out,She is out of town.,Absent,Away from a place.
+out,The secret is out.,Revealed,Made known publicly.
+outlet,Plug the charger into the outlet.,Power Socket,A source of electrical connection.
+outlet,The newspaper is a media outlet.,Publication Source,An organization that distributes information.
+outlet,Sports provide an outlet for stress.,Means Of Expression,A way to release emotions or energy.
+outline,He drew an outline of the building.,Boundary Shape,The outer edge of something.
+outline,She prepared an outline for her report.,Summary,A brief plan of main points.
+outpost,Soldiers guarded the outpost.,Remote Station,Small military position.
+outpost,The company opened an outpost abroad.,Branch Location,Small remote office.
+over,The plane flew over the city.,Above,Higher than something.
+over,The game is over.,Finished,Having ended.
+over,Hand the document over.,Transfer,To give control or possession.
+pack,Wolves hunt in a pack.,Group,A collection of animals.
+pack,She packed her suitcase.,Fill,To place items into a container.
+pack,Buy a pack of batteries.,Package Unit,A bundle sold together.
+package,The package arrived today.,Parcel,An item wrapped for delivery.
+package,Install the software package.,Software Bundle,A collection of computer programs.
+package,The benefits package is generous.,Set Of Benefits,A group of related offerings.
+pad,Write your ideas on the pad.,Notepad,Sheets of paper bound together.
+pad,The dog has soft paw pads.,Cushion,A soft protective surface.
+pad,The goalkeeper wore knee pads.,Protective Gear,Equipment that protects body parts.
+page,Turn to page ten.,Sheet In Book,One side of a leaf in a book.
+page,The website's home page loaded quickly.,Web Document,A document displayed on the internet.
+page,The doctor was paged immediately.,Summon,To contact via paging system.
+pale,She looked pale after the race.,Lacking Color,Having little natural color.
+pale,The pale blue wall matched the furniture.,Light-Colored,Having a weak or soft color.
 palm,"She held the tiny, fragile bird carefully in her palm.",Hand Anatomy,The inner surface of the hand between the wrist and the bases of the fingers
 palm,The tropical beach was lined with beautiful coconut palm trees.,Tree Variety,An unbranched evergreen tree with a crown of long feathered or fan-shaped leaves
+palm,She palmed the card during the trick.,Conceal In Hand,To hide using the hand.
+palm,He held the coin in his palm.,Hand Part,The inner surface of the hand.
+palm,Palm trees grow near the beach.,Tree,A tropical tree species.
+panel,The discussion panel answered questions.,Group,A selected group of people.
+panel,The door has a wooden panel.,Flat Section,A piece forming part of a surface.
+panel,The panel discussed climate change.,Committee,A group of experts.
+panel,The door has a glass panel.,Section,A flat piece forming part of a surface.
+parcel,The courier delivered the parcel.,Package,A wrapped item for delivery.
+parcel,They parceled the land.,Divide,To split into sections.
+park,The children played in the park.,Recreation Area,Public green space.
+park,Park the car here.,Leave Vehicle,To stop a vehicle temporarily.
+pass,Please pass the salt.,Hand Over,To give something to another person.
+pass,She managed to pass the exam.,Succeed,To meet the required standard in a test.
+passage,Read the passage carefully.,Text Excerpt,A section of written material.
+passage,The passage connects the two rooms.,Corridor,A way between places.
+passage,The ship's passage took ten days.,Journey,Travel from one place to another.
+patch,Sew a patch onto the jacket.,Fabric Piece,A piece used for repair.
+patch,The company released a security patch.,Software Update,A fix for software issues.
+patch,We found a patch of grass.,Small Area,A limited section of land.
+patent,The inventor filed a patent.,Legal Protection,Exclusive rights to an invention.
+patent,The error was patent.,Obvious,Clearly visible or evident.
+patient,The patient recovered quickly.,Medical Recipient,A person receiving healthcare.
+patient,She remained patient despite delays.,Tolerant,Able to wait calmly.
+payload,The rocket carried a payload.,Cargo,Goods transported by vehicle.
+payload,The packet contained a payload.,Data Content,Main information being transmitted.
 pen,He used a smooth black ink pen to sign the contract.,Writing Tool,"An instrument for writing or drawing with ink, typically consisting of a metal nib or ball"
 pen,The sheep were safely gathered inside their outdoor pen.,Animal Enclosure,A small enclosure in which domestic animals are kept
+pen,The pen ran out of ink.,Writing Instrument,A tool used for writing.
+pen,The sheep were kept in a pen.,Enclosure,A fenced area for animals.
+period,The class lasts one period.,Time Interval,A portion of time.
+period,The Renaissance was an important period.,Historical Era,A span characterized by events.
+period,The sentence ends with a period.,Punctuation Mark,A dot marking sentence end.
+pick,Pick an answer from the list.,Choose,To select.
+pick,He used a pick to break the rock.,Tool,A tool for digging or breaking.
+pick,She picked an apple from the tree.,Remove,To take from a source.
+pipe,Smoke came from the pipe.,Tube,Hollow cylinder for liquids/gases.
+pipe,The old man smoked a pipe.,Smoking Device,Instrument for smoking tobacco.
+pitch,The singer hit the correct pitch.,Musical Tone,Degree of highness or lowness of sound.
+pitch,The sales pitch was convincing.,Presentation,An attempt to persuade.
+pitch,The players entered the pitch.,Playing Field,A sports field.
+pitch,The singer hit the pitch perfectly.,Musical Tone,Degree of sound frequency.
+pitch,The sales pitch was convincing.,Presentation,An attempt to persuade.
+pitch,Players entered the soccer pitch.,Field,Sports playing area.
+pitcher,The pitcher threw a fastball.,Baseball Player,Player who throws the ball.
+pitcher,Fill the pitcher with water.,Container,A vessel for liquids.
+plane,The plane landed safely.,Aircraft,A vehicle for air travel.
+plane,The carpenter used a plane.,Woodworking Tool,A tool for smoothing wood.
+plane,The points lie on the same plane.,Flat Surface,A two-dimensional surface.
+plant,The plant needs water.,Living Organism,A member of the plant kingdom.
+plant,The company built a power plant.,Factory,An industrial facility.
+plant,Detectives planted evidence.,Place Secretly,To position deliberately.
+play,The children play outside.,Engage In Activity,To participate for enjoyment.
+play,We watched a play.,Theatrical Work,A dramatic performance.
+play,Press play on the video.,Start Media,To begin playback.
+plot,The novel has an exciting plot.,Storyline,Sequence of events in a story.
+plot,He bought a plot of land.,Land Parcel,A small area of land.
+plot,The criminals plotted an escape.,Scheme,To plan secretly.
+point,The pencil has a sharp point.,Tip,A tapered end.
+point,She made a good point.,Idea,An important statement.
+point,The team earned three points.,Score Unit,A unit of scoring.
+pole,The flag hung from the pole.,Long Rod,A long cylindrical object.
+pole,The North Pole is extremely cold.,Geographic Point,One end of Earth's axis.
+pole,The debate showed opposite poles of opinion.,Extreme Position,An opposing viewpoint.
+pool,We swam in the pool.,Swimming Area,A man-made water basin.
+pool,The players contributed to a pool.,Shared Fund,Money collected together.
+pop,The balloon made a loud pop.,Bursting Sound,A short sharp sound from bursting.
+pop,Pop music is popular worldwide.,Music Genre,A style of popular music.
+pop,I'll pop into the store later.,Go Briefly,To visit quickly.
+port,The ship arrived at the port.,Harbor,A place where ships dock.
+port,Plug the cable into the USB port.,Connection Socket,An interface for devices.
+post,He mailed the post yesterday.,Mail,Letters and parcels delivered.
+post,She got a new post in the company.,Position,A job or duty assignment.
+post,He shared a post on social media.,Online Message,Content published online.
+pound,The recipe requires a pound of sugar.,Weight Unit,A unit of mass.
+pound,He pounded the nail into the wall.,Strike Repeatedly,To hit forcefully many times.
+pound,The dog stayed in the pound.,Animal Shelter,A place for stray animals.
+press,The press attended the conference.,News Media,Organizations that publish news.
+press,Press the button.,Apply Force,To push something.
+press,The machine can press metal sheets.,Compress,To flatten by force.
+pressure,The tire pressure is low.,Physical Force,Force exerted on a surface.
+pressure,She felt pressure before the exam.,Stress,Mental strain or anxiety.
+pressure,The group applied pressure on management.,Influence,Attempts to persuade or force action.
+primary,Primary education begins at age six.,Elementary Level,First stage of education.
+primary,Red is a primary color.,Fundamental,Basic and not derived.
+prime,Seven is a prime number.,Mathematical Number,Divisible only by 1 and itself.
+prime,He is in his prime.,Best Condition,Peak stage of life or performance.
+prime,Prime the wall before painting.,Prepare,To make ready for use.
+principal,The principal addressed the students.,School Head,Leader of a school.
+principal,The principal reason was cost.,Main,Most important.
+profile,The website profile was updated.,Personal Record,Information about a person.
+profile,The mountain's profile was visible.,Outline,Side view or shape.
+profile,The company has a high profile.,Public Visibility,Level of public attention.
+prompt,The teacher gave a writing prompt.,Cue,Something that encourages a response.
+prompt,She was prompt for the meeting.,Punctual,Arriving on time.
+proof,The receipt is proof of payment.,Evidence,Information confirming truth.
+proof,The mathematician completed the proof.,Logical Demonstration,A verification of a theorem.
+proof,This wall is waterproof.,Resistant,Protected against something.
+property,She owns valuable property.,Real Estate,Land and buildings.
+property,Density is a property of matter.,Characteristic,An attribute of something.
+property,The stolen property was recovered.,Possession,Something owned.
+prospect,The job prospect looks good.,Opportunity,Possibility of success.
+prospect,They prospected for gold.,Search Target,Potential source of value.
+pulse,The nurse checked his pulse.,Heartbeat Rate,Rhythmic blood flow.
+pulse,The laser emitted a pulse.,Burst,A short emission of energy.
+pulse,Beans and lentils are pulses.,Edible Seeds,Dry legumes used as food.
+punch,He threw a punch.,Strike,A blow with the fist.
+punch,Use a hole punch on the paper.,Tool,Device for making holes.
+punch,The fruit punch was delicious.,Beverage,A mixed drink.
+punch,He threw a punch.,Hit,A blow with the fist.
+punch,Use a hole punch.,Tool,Device for making holes.
+punch,The fruit punch tasted good.,Drink,A mixed beverage.
 quarry,The builders extracted fine granite blocks from the quarry.,Stone Excavation,"A place, typically a large, deep pit, from which stone or other materials are extracted"
 quarry,The cheetah closely stalked its unsuspecting quarry.,Hunted Prey,"An animal pursued by a hunter, hound, or predatory mammal"
+quarry,The stone came from a quarry.,Excavation Site,Place where stone is extracted.
+quarry,The detective finally caught his quarry.,Target,The object of pursuit.
+quarryman,The quarryman cut stone.,Worker,Person employed in a quarry.
+quarryman,The quarryman inspected equipment.,Laborer,Stone extraction worker.
+race,She won the race.,Competition,A speed contest.
+race,The human race evolved over time.,Population Group,People sharing common ancestry.
+race,We raced to the station.,Hurry,To move quickly.
+rack,The clothes are on the rack.,Storage Frame,Structure for holding items.
+rack,The rack of ribs was served hot.,Rib Section,Bones from an animal's chest.
+rack,He was racked with guilt.,Torment,To cause suffering.
+register,Please register for the event.,Enroll,To sign up officially.
+register,The cashier opened the register.,Cash Machine,Device used for sales transactions.
+register,His voice dropped to a low register.,Vocal Range,A section of pitch range.
+relative,She is my relative.,Family Member,Person related by blood or marriage.
+relative,Success is relative.,Dependent,Existing in relation to something else.
+remote,The TV remote is missing.,Control Device,A handheld control unit.
+remote,They lived in a remote village.,Isolated,Far from populated areas.
+remote,Remote work is becoming common.,Distant Access,Performed away from a central location.
+report,The report was submitted.,Document,A formal written account.
+report,Please report the incident.,Inform,To give information.
+report,The weather report predicted rain.,Broadcast Summary,Information update.
+repository,The repository stores code.,Code Storage,Central location for software.
+repository,The museum is a repository of history.,Collection,Place where items are preserved.
+reservoir,The city uses a reservoir.,Water Storage,A large artificial lake.
+reservoir,She has a reservoir of patience.,Supply,A large reserve of something.
+rest,Take some rest.,Relaxation,A period of inactivity.
+rest,The rest of the cake is yours.,Remainder,What remains.
+rest,The ladder rests against the wall.,Be Supported,To lie on something.
+resume,Please resume your work.,Continue,To begin again after interruption.
+resume,She submitted her resume.,Job Document,A summary of qualifications and experience.
+right,You got the answer right.,Correct,Accurate or true.
+right,Turn right at the corner.,Direction,Opposite of left.
+right,Everyone has the right to vote.,Entitlement,A legal or moral claim.
 ring,He presented her with a stunning diamond engagement ring.,Jewelry Loop,A small circular band of precious metal worn on a finger as jewelry
 ring,Please give me a phone ring when you safely arrive.,Sound / Call,An act of causing a bell to sound or making a telephone call
+ring,She wore a gold ring.,Jewelry,A circular ornament worn on a finger.
+ring,I heard the phone ring.,Sound,A resonant bell-like sound.
+ring,The children formed a ring.,Circle,A circular arrangement.
+ring,She wore a gold ring.,Jewelry,A circular ornament worn on a finger.
+ring,I heard the phone ring.,Sound,A resonant bell-like sound.
+ring,The children formed a ring.,Circle,A circular arrangement.
+rock,The climber stood on a rock.,Stone,A naturally occurring solid mineral mass.
+rock,Rock music filled the room.,Music Genre,A style of popular music.
+rock,The earthquake rocked the building.,Shake,To move back and forth.
 rock,"The climbers scales the steep, sheer face of the rock.",Geological Stone,The solid mineral material forming part of the surface of the earth
 rock,She began to gently rock the sleeping baby to sleep.,Sway Motion,Move gently back and forth or from side to side
+root,The root of the tree is deep.,Plant Structure,Part that anchors a plant.
+root,We must find the root of the problem.,Cause,The source or origin.
+root,What is the square root of 49?,Mathematical Value,A number that produces another when multiplied by itself.
+row,We sat in the front row.,Line,A series arranged side by side.
+row,They rowed across the river.,Paddle Boat,To propel a boat with oars.
+row,The neighbors had a row.,Argument,A noisy dispute.
+ruler,The ruler measured 30 cm.,Measuring Tool,Instrument for measuring length.
+ruler,The ruler governed wisely.,Leader,Monarch or sovereign.
+run,"In the experimental run, the scientist succeeded to verify his theory.",Manage / Operate,"To direct, manage, or be in charge of an organization or business."
+run,We need energy to run fast.,Physical Action (Sprint),"To move at a speed faster than a walk, never having both feet on the ground at the same time."
+sanction,The country imposed sanctions.,Penalty,Punitive restrictions.
+sanction,The committee sanctioned the project.,Approval,Official authorization.
+sandbox,Children played in the sandbox.,Play Area,Box filled with sand.
+sandbox,Test the code in a sandbox.,Isolated Environment,Safe testing system.
+saw,He used a saw to cut wood.,Cutting Tool,A tool with a toothed blade.
+saw,I saw a rainbow yesterday.,Perceive Visually,To view with the eyes.
 scale,He stepped onto the digital scale to check his weight.,Measuring Device,An instrument or machine for weighing
 scale,The brave explorers set out to scale the mountain peak.,Climb Upward,Climb up or over something high and steep
-spring,Beautiful flowers begin to bloom vibrantly in the spring.,Season,"The season after winter and before summer, in which vegetation begins to appear"
-spring,The mechanical spring inside the old clock was broken.,Coiled Metal,"A resilient device, typically a helical metal coil, that can be pressed or pulled but returns to its former shape"
+scale,Fish are covered in scales.,Body Covering,Small hard plates on animals.
+scale,The map uses a scale.,Ratio,Relationship between measurements.
+seal,The seal balanced a ball.,Marine Animal,A sea-dwelling mammal.
+seal,Put a seal on the envelope.,Closure,Something that closes securely.
+seal,The king's seal appeared on the document.,Official Mark,A symbol of authenticity.
+second,She finished second in the race.,Position,Rank after first.
+second,Wait one second.,Time Unit,One-sixtieth of a minute.
+second,I second the motion.,Support Proposal,To formally support a suggestion.
+service,The restaurant provides excellent service.,Assistance,Help provided to customers.
+service,He joined military service.,Employment Duty,Work performed for an organization.
+service,The technician serviced the machine.,Maintenance,Inspection and repair work.
+shell,The beach was covered with shells.,Outer Covering,Hard covering of marine animals.
+shell,The tank fired a shell.,Ammunition,Explosive projectile.
+shift,She worked the night shift.,Work Period,A scheduled work session.
+shift,Public opinion began to shift.,Change,To move from one state to another.
+shift,Shift the chair closer.,Move Position,To relocate something slightly.
+side,The house is on the other side of the street.,Surface/Location,One part of something.
+side,Both sides presented arguments.,Faction,A group in opposition.
+side,He ordered a side of fries.,Accompaniment,Food served with a main dish.
+sign,The sign pointed to the exit.,Notice,A display conveying information.
+sign,Please sign the contract.,Write Signature,To mark with one's name.
+sign,Dark clouds were a sign of rain.,Indication,Evidence of something.
+sink,The dishes are in the sink.,Basin,Fixture for washing.
+sink,The ship began to sink.,Go Downward,To descend below a surface.
+slate,Write your answer on the slate.,Writing Board,A flat surface for writing.
+slate,The committee slated the project for review.,Schedule,To assign for a purpose.
+sound,I heard a strange sound.,Noise,Something that can be heard.
+sound,The bridge is structurally sound.,Solid,Reliable and in good condition.
+sound,Her argument was sound.,Logical,Based on good reasoning.
+space,The room has little space.,Area,An available physical area.
+space,Astronauts traveled into space.,Outer Space,The region beyond Earth.
+space,Add a space between words.,Blank Gap,An empty area in writing.
+spoon,Use a spoon for soup.,Utensil,Tool for eating.
+spoon,They spooned the sauce carefully.,Action,To transfer using a spoon.
+spot,The dog has a black spot.,Mark,A small distinct area.
+spot,We found a parking spot.,Location,A particular place.
+spot,She spotted the mistake.,Notice,To observe something.
+spring,Flowers bloom in spring.,Season,The season after winter.
+spring,The mattress contains springs.,Coil Device,Elastic metal component.
+spring,Water flows from the spring.,Water Source,A natural source of water.
+stable,The horse stayed in the stable overnight.,Building For Horses,A structure where horses are kept.
+stable,Her condition remained stable after treatment.,Steady,Not likely to change or fail.
+stamp,Put a stamp on the envelope.,Postage Label,A mark showing postage paid.
+stamp,Collectors trade stamps.,Collectible Item,A postal label kept as a hobby item.
+stamp,He stamped his foot angrily.,Forceful Step,To strike the ground with the foot.
+stand,Please stand up.,Be Upright,To rise to one's feet.
+stand,The vendor worked at a fruit stand.,Booth,A small place for selling goods.
+stand,She took a stand against bullying.,Position,A firmly held opinion.
+star,The star shines brightly tonight.,Celestial Body,A luminous object in space.
+star,She became a movie star.,Celebrity,A famous performer.
+star,The teacher drew a gold star.,Symbol,A star-shaped mark.
+step,Take one step forward.,Movement,A movement made while walking.
+step,The first step is planning.,Stage,A phase in a process.
+step,She is my stepmother.,Family Relation,Related through marriage.
+stick,He picked up a stick.,Branch,A thin piece of wood.
+stick,The label won't stick.,Adhere,To remain attached.
+stick,Stick to your plan.,Remain Faithful,To continue following something.
+stock,The store has stock available.,Inventory,Goods available for sale.
+stock,He bought company stock.,Shares,Ownership units in a company.
+strike,Workers planned a strike.,Work Stoppage,Refusal to work as protest.
+strike,Lightning struck the tree.,Hit,To impact forcefully.
+strike,The idea struck me suddenly.,Occur To Mind,To come suddenly into thought.
+suit,He wore a suit to the wedding.,Clothing,Matching formal jacket and trousers.
+suit,The schedule suits me.,Be Appropriate,To fit or satisfy.
+suit,The company filed a lawsuit.,Legal Action,A case brought before a court.
+table,The books are on the table.,Furniture,A piece of furniture with a flat top and legs.
+table,The committee decided to table the proposal.,Postpone Discussion,To delay consideration of a matter.
+table,Table 3 shows the survey results.,Chart,Data arranged in rows and columns.
 tank,The armored military tank moved across the rough terrain.,Combat Vehicle,A heavy armored fighting vehicle carrying guns and moving on continuous tracks
 tank,They installed a massive glass fish tank in the living room.,Liquid Container,A large receptacle or container for holding liquid or gas
+tap,Turn off the tap.,Faucet,Device controlling water flow.
+tap,He tapped the table twice.,Light Hit,A gentle strike.
+terminal,The airport terminal was crowded.,Transport Building,Area for passengers.
+terminal,The disease reached a terminal stage.,Final Stage,End point of a process.
+terminal,The airport terminal was crowded.,Transport Building,Passenger facility.
+terminal,The disease reached a terminal stage.,Final Stage,Last phase before the end.
+throttle,Reduce the throttle.,Engine Control,Device controlling power.
+throttle,The provider throttled bandwidth.,Limit,Restrict performance or speed.
+tie,He wore a tie to the interview.,Neckwear,A strip of fabric worn around the neck.
+tie,The game ended in a tie.,Draw,A result in which competitors have equal scores.
 tire,The front left tire of the sedan went completely flat.,Rubber Wheel,A rubber ring placed around a wheel to provide traction
 tire,Walking up the steep flights of stairs will tire you out.,Become Fatigued,Lose energy or cause to feel weary; exhaust the stamina of
+track,The runners entered the track.,Racecourse,A path for racing.
+track,Scientists track hurricanes.,Monitor,To follow movement or progress.
+track,The train followed the track.,Rail Path,Rails on which trains move.
+train,The train arrived at the station on time.,Railway Vehicle,A series of connected railway cars.
+train,They train every morning for the competition.,Practice,To teach or develop a skill through exercise.
+treat,Doctors treat patients daily.,Provide Care,To give medical attention.
+treat,Ice cream is a special treat.,Pleasure,Something enjoyable.
+treat,Please treat everyone fairly.,Behave Toward,To act in a certain manner.
+trunk,The elephant lifted its trunk.,Body Part,The long nose of an elephant.
+trunk,Put the luggage in the trunk.,Storage Compartment,The rear storage area of a car.
+trunk,The tree trunk is thick.,Stem,The main woody stem of a tree.
+trunk,Put the bags in the trunk.,Vehicle Compartment,Storage space in a car.
+trunk,The elephant lifted its trunk.,Nose,Long flexible appendage.
+trust,I trust my best friend.,Confidence,Belief in reliability.
+trust,The trust manages family assets.,Legal Arrangement,Property managed for beneficiaries.
+trust,Trust is important in teamwork.,Reliability,Confidence between people.
+uplink,The satellite uplink failed.,Communication Channel,Connection to a satellite.
+uplink,Establish an uplink immediately.,Transmission Path,Route for outgoing signals.
 utter,The shocking news was met with a state of utter disbelief.,Complete / Absolute,"Complete, absolute, or total"
 utter,She opened her mouth but could not utter a single word.,Speak / Voice,Make a sound with one's voice; speak or articulate words
 value,The fair market value of the estate increased significantly.,Monetary Worth,"The monetary worth of something; importance, worth, or usefulness"
 value,We deeply value your contribution to our corporate team.,Appreciate / Prize,Estimate the monetary worth of; consider to be important or beneficial
+vault,The bank keeps cash in a vault.,Secure Room,A reinforced storage area.
+vault,The gymnast performed a vault.,Athletic Move,A leap using support equipment.
+vaulting,Vaulting is an Olympic sport.,Gymnastics Event,Athletic jumping discipline.
+vaulting,The ceiling uses vaulting.,Architecture,Arched structural design.
+vessel,The vessel sailed away.,Ship,A watercraft.
+vessel,Blood flows through a vessel.,Tube,A channel carrying fluid.
+virus,The computer has a virus.,Malicious Software,A program that spreads harmfully.
+virus,The virus spread rapidly.,Microorganism,An infectious biological agent.
+volume,Turn down the volume.,Sound Level,Intensity of sound.
+volume,The encyclopedia has ten volumes.,Book Unit,One book in a series.
+volume,Calculate the volume of the box.,Space Measurement,Amount of three-dimensional space.
+ward,The patient stayed in the ward.,Hospital Section,A hospital room area.
+ward,The knight protected his ward.,Dependent Person,Someone under care.
 watch,He checked his silver wrist watch to see if he was late.,Timepiece,A small timepiece worn typically on a strap on one's wrist
 watch,The security guards watch the building entrances carefully.,Observe Closely,"Look at or observe a person, object, or event attentively over a period of time"
+watch,I bought a new watch.,Timepiece,A device worn to tell time.
+watch,Please watch the children.,Observe,To keep under observation.
 wave,A massive ocean wave crashed powerfully against the pier.,Water Surge,A long body of water curling into an arched form and breaking on the shore
 wave,She stood on the platform to wave goodbye to her family.,Hand Gesture,Move one's hand to and fro in greeting or as a signal
+wave,A huge wave hit the shore.,Water Movement,A moving swell of water.
+wave,Radio waves carry signals.,Energy Pattern,A disturbance that transfers energy.
+wave,Radio waves transmit signals.,Energy Pattern,A disturbance carrying energy.
+waypoint,The pilot reached the waypoint.,Navigation Marker,Reference point on a route.
+waypoint,Set a waypoint on the map.,Route Marker,Location used for navigation.
+well,The village uses a well for water.,Water Source,A deep hole accessing groundwater.
+well,She performed well on the test.,Successfully,In a satisfactory manner.
+well,He is feeling well today.,Healthy,In good health.
+wing,The bird spread its wing.,Body Part,Limb used for flying.
+wing,The hospital added a new wing.,Building Section,Part of a larger structure.
 x-ray,The medical technician took an x-ray of the fractured arm.,Medical Image,A photographic image produced by x-rays passing through an object
 x-ray,Customs officers will x-ray all international cargo containers.,Scan / Inspect,Examine or photograph someone or something with x-rays
-yard,The children love to play tag in the spacious green yard.,Outdoor Lawn,"A piece of ground adjoining a building or house, typically covered with grass"
-yard,The fabric store salesman measured out exactly one yard of silk.,Unit Of Length,A unit of linear measure equal to 3 feet or 36 inches (0.9144 meters)
+yard,The children played in the yard.,Outdoor Area,Land around a building.
+yard,The cloth measured three yards.,Measurement Unit,A unit equal to 36 inches.
+yard,The train sat in the rail yard.,Storage Area,A place where vehicles are kept.
+yield,The farm's yield increased.,Production,Amount produced.
+yield,Drivers must yield at the sign.,Give Way,To allow others to proceed.
 zip,Please remember to zip up your heavy jacket before going outside.,Fastener Action,Fasten or unfasten something with a zipper
 zip,The swift race cars zip past the spectator grandstands at top speed.,Move Rapidly,Move at high speed or with a sharp buzzing sound

@@ -70,7 +70,7 @@ flutter:
     - asset/nicetry.png
     - asset/greatjoblogo.png
     - asset/nicetrylogo.png
-    - asset/WSD-dataset.xlsx
+    - asset/WSD-dataset.csv
     - asset/English_WSD_Dataset.csv
     - asset/ribbon.png
     - asset/smartlookup.png
@@ -85,7 +85,6 @@ flutter:
     - asset/bronze.png
     - asset/gold.png
     - asset/achievement.png
-    - asset/WSD-dataset.csv
     - asset/sstlogin.png
     - asset/bear_avatar.png
     - asset/dog_avatar.png

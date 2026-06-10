@@ -5,6 +5,8 @@ import '../homescreen.dart';
 import '../lessondata.dart';
 import '../smartlookup.dart';
 import '../account/auth_screen.dart';
+import '../account/notif.dart';
+import '../progress.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,9 +21,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isSaving = false;
 
   // Settings State Trackers
-  bool _notificationsEnabled = true;
+  bool _notificationsEnabled = false;
   bool _darkModeEnabled = false;
-  bool _sstSoundEnabled = true;
+  bool _sstSoundEnabled = false;
 
   final List<String> _avatarOptions = [
     'asset/bear_avatar.png',
@@ -84,137 +86,137 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             return Padding(
-                padding: EdgeInsets.only(
-                  top: 24,
-                  left: 24,
-                  right: 24,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Edit Profile",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2C4379)),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Choose an Avatar",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 80,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _avatarOptions.length,
-                        itemBuilder: (context, index) {
-                          final avatarPath = _avatarOptions[index];
-                          final isSelected = selectedAvatarLocal == avatarPath;
+              padding: EdgeInsets.only(
+                top: 24,
+                left: 24,
+                right: 24,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Edit Profile",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2C4379)),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Choose an Avatar",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: 80,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _avatarOptions.length,
+                      itemBuilder: (context, index) {
+                        final avatarPath = _avatarOptions[index];
+                        final isSelected = selectedAvatarLocal == avatarPath;
 
-                          return GestureDetector(
-                            onTap: () {
-                              setModalState(() {
-                                selectedAvatarLocal = avatarPath;
-                              });
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 14),
-                              width: 76,
-                              height: 76,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFCBEFFA),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: isSelected ? const Color(0xFF70D3F4) : Colors.transparent,
-                                  width: 3,
-                                ),
-                              ),
-                              child: ClipOval(
-                                child: Image.asset(
-                                  avatarPath,
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (c, e, s) => const Icon(Icons.account_circle, size: 50),
-                                ),
+                        return GestureDetector(
+                          onTap: () {
+                            setModalState(() {
+                              selectedAvatarLocal = avatarPath;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 14),
+                            width: 76,
+                            height: 76,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFCBEFFA),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isSelected ? const Color(0xFF70D3F4) : Colors.transparent,
+                                width: 3,
                               ),
                             ),
-                          );
-                        },
+                            child: ClipOval(
+                              child: Image.asset(
+                                avatarPath,
+                                fit: BoxFit.contain,
+                                errorBuilder: (c, e, s) => const Icon(Icons.account_circle, size: 50),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Username",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xFFF1F5F9),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF70D3F4), width: 2),
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      "Username",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xFFF1F5F9),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Color(0xFF70D3F4), width: 2),
-                        ),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF70D3F4),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
+                      onPressed: _isSaving ? null : () async {
+                        final updatedName = nameController.text.trim();
+                        if (updatedName.isEmpty || _currentUser == null) return;
+
+                        setModalState(() => _isSaving = true);
+
+                        try {
+                          await _currentUser!.updateDisplayName(updatedName);
+                          await _currentUser!.updatePhotoURL(selectedAvatarLocal);
+
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(_currentUser!.uid)
+                              .update({
+                            'username': updatedName,
+                            'searchKey': updatedName.toLowerCase(),
+                            'avatarAsset': selectedAvatarLocal,
+                          });
+
+                          setState(() {
+                            _currentUser = FirebaseAuth.instance.currentUser;
+                            _currentAvatar = selectedAvatarLocal;
+                          });
+
+                          if (context.mounted) Navigator.pop(context);
+                        } catch (e) {
+                          print("Error saving profile: $e");
+                        } finally {
+                          setModalState(() => _isSaving = false);
+                        }
+                      },
+                      child: _isSaving
+                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                          : const Text("Save Changes", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                     ),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF70D3F4),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: _isSaving ? null : () async {
-                          final updatedName = nameController.text.trim();
-                          if (updatedName.isEmpty || _currentUser == null) return;
-
-                          setModalState(() => _isSaving = true);
-
-                          try {
-                            await _currentUser!.updateDisplayName(updatedName);
-                            await _currentUser!.updatePhotoURL(selectedAvatarLocal);
-
-                            await FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(_currentUser!.uid)
-                                .update({
-                              'username': updatedName,
-                              'searchKey': updatedName.toLowerCase(),
-                              'avatarAsset': selectedAvatarLocal,
-                            });
-
-                            setState(() {
-                              _currentUser = FirebaseAuth.instance.currentUser;
-                              _currentAvatar = selectedAvatarLocal;
-                            });
-
-                            if (context.mounted) Navigator.pop(context);
-                          } catch (e) {
-                            print("Error saving profile: $e");
-                          } finally {
-                            setModalState(() => _isSaving = false);
-                          }
-                        },
-                        child: _isSaving
-                            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                            : const Text("Save Changes", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );
@@ -310,7 +312,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildDivider(),
                   _buildDropdownTile("Account Management"),
                   _buildDivider(),
-                  _buildPrivacyPolicyDropdown(), // ◄── Replaced with customized layout builder
+                  _buildPrivacyPolicyDropdown(),
                   _buildDivider(),
 
                   const SizedBox(height: 40),
@@ -405,8 +407,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildSettingsSubRow(
             "Notifications",
             value: _notificationsEnabled,
-            onChanged: (bool newValue) {
-              setState(() => _notificationsEnabled = newValue);
+            onChanged: (bool newValue) async {
+              setState(() {
+                _notificationsEnabled = newValue;
+              });
+
+              if (newValue) {
+                NotificationManager.showAchievement(
+                  context: context,
+                  title: "Notifications Enabled!",
+                  description: "You'll now see alerts when you hit milestones.",
+                  badgePath: "asset/gold.png",
+                  avatarPath: _currentAvatar,
+                  isDarkMode: _darkModeEnabled,
+                );
+
+                final int totalPerfectScores = ProgressService().getUnlockedLevel('General');
+                if (totalPerfectScores >= 10) {
+                  await Future.delayed(const Duration(milliseconds: 4000));
+
+                  if (mounted) {
+                    NotificationManager.showAchievement(
+                      context: context,
+                      title: "Royal",
+                      description: "Re-verified: 10/10 perfect scores achieved!",
+                      badgePath: "asset/bronze.png",
+                      avatarPath: "asset/perfectscore.png",
+                      isDarkMode: _darkModeEnabled,
+                    );
+                  }
+                }
+              }
             },
           ),
           _buildSubDivider(),
@@ -414,7 +445,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Dark Mode",
             value: _darkModeEnabled,
             onChanged: (bool newValue) {
-              setState(() => _darkModeEnabled = newValue);
+              setState(() {
+                _darkModeEnabled = newValue;
+              });
             },
           ),
           _buildSubDivider(),
@@ -422,7 +455,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "SST Sound",
             value: _sstSoundEnabled,
             onChanged: (bool newValue) {
-              setState(() => _sstSoundEnabled = newValue);
+              setState(() {
+                _sstSoundEnabled = newValue;
+              });
             },
           ),
           const SizedBox(height: 8),
@@ -466,7 +501,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ─── NEW: IMITATED PRIVACY POLICY EXPANSION DROPDOWN ───
   Widget _buildPrivacyPolicyDropdown() {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -510,7 +544,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Individual Section Render Utility
   Widget _buildPolicyItem({
     required String title,
     required String body,
@@ -556,5 +589,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: EdgeInsets.only(left: 32.0, right: 16.0),
       child: Divider(color: Color(0xFFE2E8F0), thickness: 0.8, height: 1),
     );
+  }
+}
+
+class NotificationManager {
+  static OverlayEntry? _currentEntry;
+
+  static void showAchievement({
+    required BuildContext context,
+    required String title,
+    required String description,
+    required String badgePath,
+    required String avatarPath,
+    required bool isDarkMode,
+  }) {
+    _currentEntry?.remove();
+
+    _currentEntry = OverlayEntry(
+      builder: (context) => AchievementNotification(
+        title: title,
+        description: description,
+        badgePath: badgePath,
+        avatarPath: avatarPath,
+        isDarkMode: isDarkMode,
+        onDismissed: () {
+          _currentEntry?.remove();
+          _currentEntry = null;
+        },
+      ),
+    );
+
+    Overlay.of(context).insert(_currentEntry!);
   }
 }

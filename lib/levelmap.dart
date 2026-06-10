@@ -248,24 +248,35 @@ class LevelMapState extends State<LevelMap> {
     final characterBaseColor = theme.levelNodeColor(levelNumber);
     bool isLevelLocked = levelNumber > _unlockedLevel;
 
-    final totalStars =
-        ProgressService().getLevelTotalStars(widget.category, levelNumber);
+    // 1. Calculate the average stars across all difficulties
+    int totalEarnedStars = 0;
+    final difficulties = LevelManager.difficultiesPerLevel; // Assuming this has 3 elements: ['easy', 'moderate', 'hard']
+
+    for (var diff in difficulties) {
+      totalEarnedStars += ProgressService().getStars(widget.category, levelNumber, diff);
+    }
+
+    // Calculate average. Using .round() to get the closest integer (e.g., 1.6 stars becomes 2 stars).
+    // If you want to truncate instead, use .toInt() or ~/ operator.
+    int averageStars = difficulties.isNotEmpty
+        ? (totalEarnedStars / difficulties.length).round()
+        : 0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (!isLevelLocked && totalStars > 0)
+        // 2. Display stars if the level is unlocked and average stars > 0
+        if (!isLevelLocked && averageStars > 0)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(3, (index) {
-                final diff = LevelManager.difficultiesPerLevel[index];
-                final earned = ProgressService()
-                    .getStars(widget.category, levelNumber, diff);
+                // Fill the star if the current index is less than our calculated average
+                bool isFilled = index < averageStars;
                 return Icon(
                   Icons.star_rounded,
-                  color: earned > 0 ? theme.starColor : Colors.grey[300],
+                  color: isFilled ? theme.starColor : Colors.grey[300],
                   size: 22,
                 );
               }),
@@ -309,9 +320,7 @@ class LevelMapState extends State<LevelMap> {
                 width: 76,
                 height: 76,
                 decoration: BoxDecoration(
-                  color: isLevelLocked
-                      ? Colors.grey[300]
-                      : characterBaseColor,
+                  color: isLevelLocked ? Colors.grey[300] : characterBaseColor,
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 3.5),
                   boxShadow: const [
@@ -323,8 +332,7 @@ class LevelMapState extends State<LevelMap> {
                   ],
                 ),
                 child: isLevelLocked
-                    ? Icon(Icons.lock,
-                    color: Colors.grey[600], size: 32)
+                    ? Icon(Icons.lock, color: Colors.grey[600], size: 32)
                     : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
@@ -346,8 +354,7 @@ class LevelMapState extends State<LevelMap> {
         const SizedBox(height: 6),
 
         Container(
-          padding:
-          const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
           decoration: BoxDecoration(
             color: theme.secondary,
             borderRadius: BorderRadius.circular(10),
