@@ -13,23 +13,26 @@ class ProgressService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  bool isLevelCompleted(String category, int level) {
+    category = _normalizeCategory(category);
+
+    return completedDifficultiesCount(category, level) >=
+        LevelManager.difficultiesPerLevel.length;
+  }
+
   // =========================
   // COMPLETION DATA
   // =========================
   final Map<String, int> completedLessons = {};
 
   final Map<String, int> totalLessons = {
-    "Objects & Ideas": 3,
+    "Objects\n& Ideas": 3,
     "Tech & Tradition": 3,
-    "Finance & Physics": 3,
-    "All About Me...": 3,
-    "Feelings": 3,
-    "Greetings": 3,
-    "Settings": 3,
-    "Law & Structures": 3,
-    "Attributes & Evaluation": 3,
-    "Actions & Movement": 3,
-    "Directions & Space": 3,
+    "Finance\n& Physics": 3,
+    "Law\n& Structures": 3,
+    "Attributes\n& Evaluation": 3,
+    "Actions\n& Movement": 3,
+    "Directions\n& Space": 3,
   };
 
   // =========================
@@ -42,17 +45,13 @@ class ProgressService {
   // LEVEL UNLOCK SYSTEM
   // =========================
   final Map<String, int> unlockedLevel = {
-    "Objects & Ideas": 1,
+    "Objects\n& Ideas": 1,
     "Tech & Tradition": 1,
-    "Finance & Physics": 1,
-    "All About Me...": 1,
-    "Feelings": 1,
-    "Greetings": 1,
-    "Settings": 1,
-    "Law & Structures": 1,
-    "Attributes & Evaluation": 1,
-    "Actions & Movement": 1,
-    "Directions & Space": 1,
+    "Finance\n& Physics": 1,
+    "Law\n& Structures": 1,
+    "Attributes\n& Evaluation": 1,
+    "Actions\n& Movement": 1,
+    "Directions\n& Space": 1,
   };
 
   // =========================
@@ -303,7 +302,14 @@ class ProgressService {
     return count;
   }
 
-  bool hasCompletedAtLeastOneLesson() => completedLessons.values.any((value) => value > 0);
+  bool hasCompletedAtLeastOneLesson() {
+    for (final category in totalLessons.keys) {
+      if (getCompletedLevelCount(category) > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // =========================
   // LEVEL SYSTEM

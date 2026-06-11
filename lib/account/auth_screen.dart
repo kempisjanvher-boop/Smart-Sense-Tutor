@@ -121,15 +121,22 @@ class _AuthScreenState extends State<AuthScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // App Branding Logo
-                  Center(
-                    child: Image.asset(
-                      'asset/sstlogin.png',
-                      width: 240,
-                      fit: BoxFit.contain,
-                      errorBuilder: (c, e, s) => const Icon(Icons.menu_book, size: 70, color: Color(0xFF70D3F4)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Center(
+                      child: Image.asset(
+                        'asset/sstlogin.png',
+                        width: 240,
+                        fit: BoxFit.contain,
+                        errorBuilder: (c, e, s) => const Icon(
+                          Icons.menu_book,
+                          size: 70,
+                          color: Color(0xFF70D3F4),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 0),
 
                   // DYNAMIC HEADER BLOCK (Provides explicit context to the user)
                   Column(

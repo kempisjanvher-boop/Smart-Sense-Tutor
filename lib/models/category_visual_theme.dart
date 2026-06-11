@@ -41,9 +41,9 @@ class CategoryVisualTheme {
     surface: AppPalette.surface,
     titleText: AppPalette.navy,
     levelNodeColors: [
-      AppPalette.navyDark,
-      AppPalette.navy,
-      AppPalette.accent,
+      Color(0xFFA7D8FF),
+      Color(0xFFFDFFB6),
+      Color(0xFFE4F1EE),
     ],
   );
 

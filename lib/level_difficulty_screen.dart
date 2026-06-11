@@ -65,10 +65,11 @@ class _LevelDifficultyScreenState extends State<LevelDifficultyScreen> {
                             const SizedBox(height: 4),
                             Text(
                               'Category: ${widget.category}',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
+                                color: theme.titleText.withValues(alpha: 0.85),
                                 fontWeight: FontWeight.w600,
-                                color: theme.titleText.withValues(alpha: 0.75),
                               ),
                             ),
                           ],
@@ -184,30 +185,28 @@ class _DifficultyTile extends StatelessWidget {
                 result,
               );
 
-              // Only increment progress when all 3 difficulties in the level are completed
-              if (ProgressService().completedDifficultiesCount(category, levelNumber) >= 3) {
-                ProgressService().addCompletion(category);
-              }
+              ProgressService().addCompletion(category);
+
               ProgressService().unlockNext(category, levelNumber);
 
-              // ─── NEW: TRIGGER ACHIEVEMENT EVALUATION ───
-              // Adjust userWantsNotifs and userIsUsingDarkMode tracking if you want to pull dynamically
               const bool userWantsNotifs = true;
-              const bool userIsUsingDarkMode = false;
 
               // Define how many maximum matching points equal a perfect clear profile
               const int maxQuestionsPerRound = 3;
 
               // Get actual historical values to check milestone limits
-              final int totalPerfectScoresRecorded = ProgressService().getUnlockedLevel(category);
+              final int totalPerfectScoresRecorded =
+              ProgressService().getPerfectScores();
 
               QuizEngine.instance.evaluateAndTriggerAchievements(
                 context: context,
+                category: category,
+                level: levelNumber,
                 correctAnswers: result,
                 totalQuestions: maxQuestionsPerRound,
-                totalPerfectScoresFromStorage: totalPerfectScoresRecorded,
+                totalPerfectScoresFromStorage:
+                ProgressService().getPerfectScores(),
                 notificationsEnabled: userWantsNotifs,
-                isDarkMode: userIsUsingDarkMode,
               );
               // ───────────────────────────────────────────
 

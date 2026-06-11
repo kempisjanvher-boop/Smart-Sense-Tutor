@@ -10,6 +10,7 @@ import 'models/difficulty.dart';
 import 'models/quiz_question.dart';
 import 'services/level_manager.dart';
 import 'services/quiz_engine.dart';
+import 'progress.dart';
 
 class GameplayScreen extends StatefulWidget {
   final String category;
@@ -56,6 +57,11 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
       CategoryVisualTheme.forCategory(widget.category);
 
   Difficulty get _difficulty => widget.difficulty;
+
+  // 🔥 REAL AUTO-UPDATING VALUE
+  int get _streakCount =>
+      ProgressService().getTotalCompletedAll();
+
 
   @override
   void initState() {
@@ -292,12 +298,13 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                             const SizedBox(height: 6),
                             Text(
                               'Category: ${currentQuestion['category']}',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: _theme.titleText.withValues(alpha: 0.85),
                                 fontWeight: FontWeight.w600,
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ),
@@ -350,23 +357,72 @@ class _GameplayScreenState extends State<GameplayScreen> with SingleTickerProvid
                   ),
                 ),
 
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0, right: 24.0),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: _theme.primary,
-                        shape: BoxShape.circle,
+                Positioned(
+                  bottom: 30,
+                  right: 40,
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {});
+                        },
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            gradient: _streakCount > 0
+                                ? const LinearGradient(
+                              colors: [
+                                Color(0xFFFFCE56),
+                                Color(0xFFFF705D),
+                                Color(0xFF92B3F3),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            )
+                                : LinearGradient(
+                              colors: [
+                                Colors.grey.shade400,
+                                Colors.grey.shade500,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            shape: BoxShape.circle,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black38,
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.local_fire_department,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
                       ),
-                      child: Icon(
-                        Icons.local_fire_department,
-                        color: _theme.starColor,
-                        size: 36,
-                      ),
-                    ),
+
+                      if (_streakCount > 0)
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            color: Colors.orange,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            "$_streakCount",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ],

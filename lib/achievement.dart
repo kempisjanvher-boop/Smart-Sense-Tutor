@@ -56,7 +56,7 @@ class AchievementsScreen extends StatelessWidget {
             // Card 1: Legend (Week Streak Achievement)
             _buildAchievementCard(
               title: "Legend",
-              subtitle: "🔥 Celebrate a full week streak",
+              subtitle: "🔥 Completed the Lessons",
               progressValue: perfectWeekStreak ? 1.0 : 0.0,
               progressPercentText: perfectWeekStreak ? "100 %" : "0 %",
               badgePath: "asset/silver.png",

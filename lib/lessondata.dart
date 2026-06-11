@@ -37,22 +37,22 @@ class _LessonDataState extends State<LessonData> {
 
   static const List<String> _categoryTitles = [
     "Tech & Tradition",
-    "Finance & Physics",
-    "Objects & Ideas",
-    "Law & Structures",
-    "Attributes & Evaluation",
-    "Actions & Movement",
-    "Directions & Space",
+    "Finance\n& Physics",
+    "Objects\n& Ideas",
+    "Law\n& Structures",
+    "Attributes\n& Evaluation",
+    "Actions\n& Movement",
+    "Directions\n& Space",
   ];
 
   static const Map<String, String> _categoryIcons = {
     "Tech & Tradition": "asset/tech_tradition_icon.png",
-    "Finance & Physics": "asset/finance_physics_icon.png",
-    "Objects & Ideas": "asset/objects_ideas_icon.png",
-    "Law & Structures": "asset/law_structures_icon.png",
-    "Attributes & Evaluation": "asset/attributes_evaluation_icon.png",
-    "Actions & Movement": "asset/actions_movement_icon.png",
-    "Directions & Space": "asset/directions_space_icon.png",
+    "Finance\n& Physics": "asset/finance_physics_icon.png",
+    "Objects\n& Ideas": "asset/objects_ideas_icon.png",
+    "Law\n& Structures": "asset/law_structures_icon.png",
+    "Attributes\n& Evaluation": "asset/attributes_evaluation_icon.png",
+    "Actions\n& Movement": "asset/actions_movement_icon.png",
+    "Directions\n& Space": "asset/directions_space_icon.png",
   };
 
   @override
@@ -86,16 +86,12 @@ class _LessonDataState extends State<LessonData> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppPalette.navyDark,
-                borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                "asset/greatjoblogo.png",
+                width: 150,
+                height: 150,
+                fit: BoxFit.contain,
               ),
-              child: IconButton(
-                icon: const Icon(Icons.menu, color: Colors.white),
-                onPressed: () {},
-              ),
-            ),
           )
         ],
       ),
@@ -185,7 +181,7 @@ class _LessonDataState extends State<LessonData> {
   bool _isCategoryLocked(String categoryTitle) {
     final index = _categoryTitles.indexOf(categoryTitle);
     if (index <= 0) return false; // First category is never locked
-    
+
     final previousCategory = _categoryTitles[index - 1];
     final progress = ProgressService();
     return !progress.isCategoryCompleted(previousCategory);
@@ -231,10 +227,6 @@ class _LessonDataState extends State<LessonData> {
                 Container(
                   width: 56,
                   height: 56,
-                  decoration: BoxDecoration(
-                    color: theme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
                   child: displayIcon != null
                       ? Image.asset(
                           displayIcon,
@@ -289,34 +281,21 @@ class _LessonDataState extends State<LessonData> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                if (!isLocked)
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: theme.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.play_arrow_rounded,
-                      color: theme.onPrimary,
-                      size: 32,
-                    ),
-                  )
-                else
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withValues(alpha: 0.3),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.lock,
-                      color: Colors.grey,
-                      size: 28,
-                    ),
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: isLocked
+                        ? Colors.grey.withValues(alpha: 0.3)
+                        : const Color(0xFF5CB85C),
+                    shape: BoxShape.circle,
                   ),
+                  child: Icon(
+                    Icons.play_arrow_rounded,
+                    color: isLocked ? Colors.grey : Colors.white,
+                    size: 32,
+                  ),
+                ),
               ],
             ),
           ),

@@ -22,8 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Settings State Trackers
   bool _notificationsEnabled = false;
-  bool _darkModeEnabled = false;
-  bool _sstSoundEnabled = false;
 
   final List<String> _avatarOptions = [
     'asset/bear_avatar.png',
@@ -310,7 +308,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   _buildSettingsDropdown(),
                   _buildDivider(),
-                  _buildDropdownTile("Account Management"),
+                  _buildAccountManagementDropdown(),
                   _buildDivider(),
                   _buildPrivacyPolicyDropdown(),
                   _buildDivider(),
@@ -333,7 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("LogOut", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2C4379))),
+                          Text("Logout", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2C4379))),
                           Icon(Icons.power_settings_new_rounded, color: Color(0xFF2C4379), size: 24),
                         ],
                       ),
@@ -419,7 +417,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   description: "You'll now see alerts when you hit milestones.",
                   badgePath: "asset/gold.png",
                   avatarPath: _currentAvatar,
-                  isDarkMode: _darkModeEnabled,
                 );
 
                 final int totalPerfectScores = ProgressService().getUnlockedLevel('General');
@@ -433,34 +430,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       description: "Re-verified: 10/10 perfect scores achieved!",
                       badgePath: "asset/bronze.png",
                       avatarPath: "asset/perfectscore.png",
-                      isDarkMode: _darkModeEnabled,
                     );
                   }
                 }
               }
             },
           ),
-          _buildSubDivider(),
-          _buildSettingsSubRow(
-            "Dark Mode",
-            value: _darkModeEnabled,
-            onChanged: (bool newValue) {
-              setState(() {
-                _darkModeEnabled = newValue;
-              });
-            },
-          ),
-          _buildSubDivider(),
-          _buildSettingsSubRow(
-            "SST Sound",
-            value: _sstSoundEnabled,
-            onChanged: (bool newValue) {
-              setState(() {
-                _sstSoundEnabled = newValue;
-              });
-            },
-          ),
-          const SizedBox(height: 8),
         ],
       ),
     );
@@ -482,19 +457,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildDropdownTile(String title) {
+  Widget _buildAccountManagementDropdown() {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF2C4379))),
-        trailing: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF2C4379), size: 28),
-        childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        title: const Text(
+          "Account Management",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF2C4379),
+          ),
+        ),
+        trailing: const Icon(
+          Icons.keyboard_arrow_down_rounded,
+          color: Color(0xFF2C4379),
+          size: 28,
+        ),
         children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(8)),
-            child: Text("Configurable details for $title here.", style: const TextStyle(color: Colors.grey)),
+          ListTile(
+            leading: const Icon(Icons.lock_outline),
+            title: const Text("Change Password"),
+            onTap: () async {
+              final email = FirebaseAuth.instance.currentUser?.email;
+
+              if (email == null) return;
+
+              try {
+                await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Password reset email sent."),
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Failed to send reset email."),
+                  ),
+                );
+              }
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ListTile(
+            leading: const Icon(Icons.delete_forever, color: Colors.red),
+            title: const Text(
+              "Delete Account",
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -601,7 +615,6 @@ class NotificationManager {
     required String description,
     required String badgePath,
     required String avatarPath,
-    required bool isDarkMode,
   }) {
     _currentEntry?.remove();
 
@@ -611,7 +624,6 @@ class NotificationManager {
         description: description,
         badgePath: badgePath,
         avatarPath: avatarPath,
-        isDarkMode: isDarkMode,
         onDismissed: () {
           _currentEntry?.remove();
           _currentEntry = null;

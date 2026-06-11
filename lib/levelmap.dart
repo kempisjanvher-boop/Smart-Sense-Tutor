@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_sense_tutor/homescreen.dart';
 import 'package:smart_sense_tutor/smartlookup.dart';
 import 'level_difficulty_screen.dart';
 import 'services/level_manager.dart';
@@ -16,12 +17,12 @@ class LevelMap extends StatefulWidget {
 }
 
 class LevelMapState extends State<LevelMap> {
-  bool _hasPlayedGame = false;
-  int _streakCount = 0;
-
-  // FIX: Changed from ProgressService. to ProgressService().
   int get _unlockedLevel =>
       ProgressService().getUnlockedLevel(widget.category);
+
+  // 🔥 REAL AUTO-UPDATING VALUE
+  int get _streakCount =>
+      ProgressService().getTotalCompletedAll();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class LevelMapState extends State<LevelMap> {
               fit: BoxFit.fill,
             ),
           ),
+
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -116,7 +118,7 @@ class LevelMapState extends State<LevelMap> {
             ),
           ),
 
-          // STREAK BUTTON
+          // 🔥 STREAK BUTTON (AUTO UPDATED)
           Positioned(
             bottom: 30,
             right: 40,
@@ -125,16 +127,30 @@ class LevelMapState extends State<LevelMap> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _hasPlayedGame = true;
-                      _streakCount = 1;
-                    });
+                    setState(() {}); // just refresh UI
                   },
                   child: Container(
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: _hasPlayedGame ? theme.accent : Colors.grey[400],
+                      gradient: _streakCount > 0
+                          ? const LinearGradient(
+                        colors: [
+                          Color(0xFFFFCE56),
+                          Color(0xFFFF705D),
+                          Color(0xFF92B3F3),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                          : LinearGradient(
+                        colors: [
+                          Colors.grey.shade400,
+                          Colors.grey.shade500,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       shape: BoxShape.circle,
                       boxShadow: const [
                         BoxShadow(
@@ -144,29 +160,33 @@ class LevelMapState extends State<LevelMap> {
                         ),
                       ],
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.local_fire_department,
-                      color: _hasPlayedGame ? Colors.yellow : Colors.white70,
+                      color: Colors.white,
                       size: 40,
                     ),
                   ),
                 ),
-                if (_hasPlayedGame)
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: theme.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      "$_streakCount",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
+
+                if (_streakCount > 0)
+                  Transform.translate(
+                    offset: const Offset(0, -9),
+                    child: Container(
+                      padding: const EdgeInsets.all(9),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFCCE772),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        "$_streakCount",
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                  ),
+                  )
               ],
             ),
           ),
@@ -209,7 +229,12 @@ class LevelMapState extends State<LevelMap> {
                     backgroundColor: theme.primary,
                     child: IconButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                        );
                       },
                       icon: const Icon(
                         Icons.home,
@@ -248,16 +273,15 @@ class LevelMapState extends State<LevelMap> {
     final characterBaseColor = theme.levelNodeColor(levelNumber);
     bool isLevelLocked = levelNumber > _unlockedLevel;
 
-    // 1. Calculate the average stars across all difficulties
+
     int totalEarnedStars = 0;
-    final difficulties = LevelManager.difficultiesPerLevel; // Assuming this has 3 elements: ['easy', 'moderate', 'hard']
+    final difficulties = LevelManager.difficultiesPerLevel;
 
     for (var diff in difficulties) {
-      totalEarnedStars += ProgressService().getStars(widget.category, levelNumber, diff);
+      totalEarnedStars +=
+          ProgressService().getStars(widget.category, levelNumber, diff);
     }
 
-    // Calculate average. Using .round() to get the closest integer (e.g., 1.6 stars becomes 2 stars).
-    // If you want to truncate instead, use .toInt() or ~/ operator.
     int averageStars = difficulties.isNotEmpty
         ? (totalEarnedStars / difficulties.length).round()
         : 0;
@@ -265,14 +289,12 @@ class LevelMapState extends State<LevelMap> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 2. Display stars if the level is unlocked and average stars > 0
         if (!isLevelLocked && averageStars > 0)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(3, (index) {
-                // Fill the star if the current index is less than our calculated average
                 bool isFilled = index < averageStars;
                 return Icon(
                   Icons.star_rounded,
@@ -306,10 +328,7 @@ class LevelMapState extends State<LevelMap> {
               );
 
               if (refreshed == true && mounted) {
-                setState(() {
-                  _hasPlayedGame = true;
-                  _streakCount = 1;
-                });
+                setState(() {});
               }
             }
           },
@@ -320,7 +339,8 @@ class LevelMapState extends State<LevelMap> {
                 width: 76,
                 height: 76,
                 decoration: BoxDecoration(
-                  color: isLevelLocked ? Colors.grey[300] : characterBaseColor,
+                  color:
+                  isLevelLocked ? Colors.grey[300] : characterBaseColor,
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 3.5),
                   boxShadow: const [
@@ -332,19 +352,11 @@ class LevelMapState extends State<LevelMap> {
                   ],
                 ),
                 child: isLevelLocked
-                    ? Icon(Icons.lock, color: Colors.grey[600], size: 32)
+                    ? Icon(Icons.lock,
+                    color: Colors.grey[600], size: 32)
                     : Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.broken_image,
-                        color: Colors.black26,
-                      );
-                    },
-                  ),
+                  child: Image.asset(imagePath),
                 ),
               ),
             ],
@@ -354,7 +366,8 @@ class LevelMapState extends State<LevelMap> {
         const SizedBox(height: 6),
 
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+          padding:
+          const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
           decoration: BoxDecoration(
             color: theme.secondary,
             borderRadius: BorderRadius.circular(10),

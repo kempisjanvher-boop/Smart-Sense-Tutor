@@ -6,7 +6,6 @@ class AchievementNotification extends StatefulWidget {
   final String badgePath;
   final String avatarPath;
   final VoidCallback onDismissed;
-  final bool isDarkMode;
 
   const AchievementNotification({
     super.key,
@@ -15,7 +14,6 @@ class AchievementNotification extends StatefulWidget {
     required this.badgePath,
     required this.avatarPath,
     required this.onDismissed,
-    required this.isDarkMode,
   });
 
   @override
@@ -61,8 +59,6 @@ class _AchievementNotificationState extends State<AchievementNotification>
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = widget.isDarkMode ? Colors.grey[900] : Colors.white;
-    final textColor = widget.isDarkMode ? Colors.white : const Color(0xFF2C4379);
 
     return SafeArea(
       child: Align(
@@ -75,7 +71,7 @@ class _AchievementNotificationState extends State<AchievementNotification>
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: backgroundColor,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: const [
                   BoxShadow(color: Colors.black26, blurRadius: 12, offset: Offset(0, 4)),
@@ -130,7 +126,7 @@ class _AchievementNotificationState extends State<AchievementNotification>
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: textColor,
+                            color: Colors.black,
                           ),
                         ),
                         Text(

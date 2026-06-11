@@ -5,7 +5,7 @@ import 'level_manager.dart';
 import 'question_generator.dart';
 import 'wsd_dataset_loader.dart';
 import 'package:flutter/material.dart';
-import '../account/notif.dart';
+import '../progress.dart';
 import '../account/profile.dart';
 
 /// Facade for the centralized quiz system. Initialize once at app start.
@@ -109,28 +109,35 @@ class QuizEngine {
   /// Evaluates game results immediately upon quiz completion to trigger achievement banners
   void evaluateAndTriggerAchievements({
     required BuildContext context,
+    required String category,
+    required int level,
     required int correctAnswers,
     required int totalQuestions,
     required int totalPerfectScoresFromStorage,
     required bool notificationsEnabled,
-    required bool isDarkMode,
   }) {
     if (!notificationsEnabled) return;
 
-    // --- INSTANCE A: CONQUEROR (Completed a Lesson) ---
-    NotificationManager.showAchievement(
-      context: context,
-      title: "Conqueror",
-      description: "You completed a lesson",
-      badgePath: "asset/gold.png",
-      avatarPath: "asset/conqueror.png",
-      isDarkMode: isDarkMode,
-    );
+    final progress = ProgressService();
 
-    // --- INSTANCE B: ROYAL (Perfect Score Milestone) ---
+    // =========================
+    // CONQUEROR (FULL LEVEL COMPLETE)
+    // =========================
+    if (progress.isLevelCompleted(category, level)) {
+      NotificationManager.showAchievement(
+        context: context,
+        title: "Conqueror",
+        description: "Completed Level $level",
+        badgePath: "asset/gold.png",
+        avatarPath: "asset/conqueror.png",
+      );
+    }
+
+    // =========================
+    // ROYAL (PERFECT SCORE MILESTONE)
+    // =========================
     if (correctAnswers == totalQuestions) {
       if (totalPerfectScoresFromStorage == 10) {
-        // Delayed slightly so it doesn't conflict with or overlap the Conqueror animation
         Future.delayed(const Duration(milliseconds: 4500), () {
           if (context.mounted) {
             NotificationManager.showAchievement(
@@ -139,7 +146,6 @@ class QuizEngine {
               description: "10/10 perfect scores achieved!",
               badgePath: "asset/bronze.png",
               avatarPath: "asset/perfectscore.png",
-              isDarkMode: isDarkMode,
             );
           }
         });

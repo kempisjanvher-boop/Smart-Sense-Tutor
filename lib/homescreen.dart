@@ -92,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
 
-                // Wrap this 4th Achievement card to navigate on click!
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -100,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(builder: (context) => const AchievementsScreen()),
                     );
                   },
-                  // FIX: Changed ProgressService. to ProgressService().
                   child: _buildStatCard(
                     ProgressService().getAchievementsUnlockedCount().toString(),
                     "Achievement",
@@ -138,25 +136,25 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 30),
             Row(
               children: [
-                Expanded(child: _buildCategoryCard("Finance & Physics")),
+                Expanded(child: _buildCategoryCard("Finance\n& Physics")),
                 const SizedBox(width: 12),
-                Expanded(child: _buildCategoryCard("Objects & Ideas")),
+                Expanded(child: _buildCategoryCard("Objects\n& Ideas")),
               ],
             ),
             const SizedBox(height: 30),
             Row(
               children: [
-                Expanded(child: _buildCategoryCard("Law & Structures")),
+                Expanded(child: _buildCategoryCard("Law\n& Structures")),
                 const SizedBox(width: 12),
-                Expanded(child: _buildCategoryCard("Attributes & Evaluation")),
+                Expanded(child: _buildCategoryCard("Attributes\n& Evaluation")),
               ],
             ),
             const SizedBox(height: 30),
             Row(
               children: [
-                Expanded(child: _buildCategoryCard("Actions & Movement")),
-                const SizedBox(width: 12),
-                Expanded(child: _buildCategoryCard("Directions & Space")),
+                Expanded(child: _buildCategoryCard("Actions\n& Movement")),
+                const SizedBox(width: 10),
+                Expanded(child: _buildCategoryCard("Directions\n& Space")),
               ],
             ),
           ],
@@ -266,22 +264,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const Map<String, String> _categoryIcons = {
     "Tech & Tradition": "asset/tech_tradition_icon.png",
-    "Finance & Physics": "asset/finance_physics_icon.png",
-    "Objects & Ideas": "asset/objects_ideas_icon.png",
-    "Law & Structures": "asset/law_structures_icon.png",
-    "Attributes & Evaluation": "asset/attributes_evaluation_icon.png",
-    "Actions & Movement": "asset/actions_movement_icon.png",
-    "Directions & Space": "asset/directions_space_icon.png",
+    "Finance\n& Physics": "asset/finance_physics_icon.png",
+    "Objects\n& Ideas": "asset/objects_ideas_icon.png",
+    "Law\n& Structures": "asset/law_structures_icon.png",
+    "Attributes\n& Evaluation": "asset/attributes_evaluation_icon.png",
+    "Actions\n& Movement": "asset/actions_movement_icon.png",
+    "Directions\n& Space": "asset/directions_space_icon.png",
   };
 
   static const List<String> _categoryOrder = [
     "Tech & Tradition",
-    "Finance & Physics",
-    "Objects & Ideas",
-    "Law & Structures",
-    "Attributes & Evaluation",
-    "Actions & Movement",
-    "Directions & Space",
+    "Finance\n& Physics",
+    "Objects\n& Ideas",
+    "Law\n& Structures",
+    "Attributes\n& Evaluation",
+    "Actions\n& Movement",
+    "Directions\n& Space",
   ];
 
   bool _isCategoryLocked(String categoryTitle) {
@@ -327,41 +325,27 @@ class _HomeScreenState extends State<HomeScreen> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                Container(
-                  width: 6,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: isLocked ? Colors.grey : theme.accent,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 0),
                 if (displayIcon != null)
                   Image.asset(
                     displayIcon,
-                    width: 32,
-                    height: 32,
+                    width: 45,
+                    height: 45,
                     fit: BoxFit.contain,
                   )
                 else
                   const SizedBox(width: 32),
-                const SizedBox(width: 14),
+                const SizedBox(width: 5),
                 Expanded(
                   child: Text(
                     title,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 15.2,
                       fontWeight: FontWeight.bold,
                       color: isLocked ? Colors.grey : theme.titleText,
                     ),
                   ),
                 ),
-                if (isLocked)
-                  const Icon(
-                    Icons.lock,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
               ],
             ),
           ),
