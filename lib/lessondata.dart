@@ -19,10 +19,8 @@ class LessonCategory {
 
   LessonCategory({required this.title});
 
-  // FIX: Changed ProgressService.totalLessons to ProgressService().totalLessons
   int get totalLessons => ProgressService().totalLessons[title] ?? 3;
 
-  // FIX: Changed ProgressService.getCompleted to ProgressService().getCompleted
   int get completedLessons {
     final done = ProgressService().getCompleted(title);
     return done.clamp(0, totalLessons);
@@ -34,6 +32,7 @@ class LessonCategory {
 
 class _LessonDataState extends State<LessonData> {
   final int _currentIndex = 1;
+  bool _isLoadingProgress = true; // Tracks sync state to avoid race layouts
 
   static const List<String> _categoryTitles = [
     "Tech & Tradition",
@@ -56,21 +55,35 @@ class _LessonDataState extends State<LessonData> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    _refreshProgressState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setState(() {}); // refresh progress when coming back
+    _refreshProgressState(); // Force fresh data fetches when screen re-focuses
+  }
+
+  /// Explicitly syncs local structures with current account profiles
+  Future<void> _refreshProgressState() async {
+    await ProgressService().downloadProgressFromCloud();
+    if (mounted) {
+      setState(() {
+        _isLoadingProgress = false; // Release the screen for paint operations
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPalette.scaffoldBg,
-
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppPalette.header,
         elevation: 0,
-
         title: const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: Text(
@@ -82,30 +95,40 @@ class _LessonDataState extends State<LessonData> {
             ),
           ),
         ),
-
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-              child: Image.asset(
-                "asset/greatjoblogo.png",
-                width: 150,
-                height: 150,
-                fit: BoxFit.contain,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppPalette.navyDark,
+                borderRadius: BorderRadius.circular(8),
               ),
+              child: IconButton(
+                icon: const Icon(Icons.menu, color: Colors.white),
+                onPressed: () {},
+              ),
+            ),
           )
         ],
       ),
 
-      body: ListView.separated(
+      // Blocks stale user renders while down-streaming clean cloud rules
+      body: _isLoadingProgress
+          ? const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5CB85C)),
+        ),
+      )
+          : ListView.separated(
         padding: const EdgeInsets.symmetric(
           horizontal: 16.0,
           vertical: 24.0,
         ),
         itemCount: _categoryTitles.length,
-        separatorBuilder: (context, index) =>
-        const SizedBox(height: 20),
+        separatorBuilder: (context, index) => const SizedBox(height: 20),
         itemBuilder: (context, index) {
-          return _buildLessonCard(LessonCategory(title: _categoryTitles[index]));
+          return _buildLessonCard(
+              LessonCategory(title: _categoryTitles[index]));
         },
       ),
 
@@ -118,36 +141,25 @@ class _LessonDataState extends State<LessonData> {
             case 0:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
               break;
-
             case 1:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const LessonData(),
-                ),
+                MaterialPageRoute(builder: (context) => const LessonData()),
               );
               break;
-
             case 2:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const SmartLookup(),
-                ),
+                MaterialPageRoute(builder: (context) => const SmartLookup()),
               );
               break;
-
             case 3:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfileScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
               break;
           }
@@ -180,7 +192,7 @@ class _LessonDataState extends State<LessonData> {
 
   bool _isCategoryLocked(String categoryTitle) {
     final index = _categoryTitles.indexOf(categoryTitle);
-    if (index <= 0) return false; // First category is never locked
+    if (index <= 0) return false;
 
     final previousCategory = _categoryTitles[index - 1];
     final progress = ProgressService();
@@ -194,13 +206,13 @@ class _LessonDataState extends State<LessonData> {
     final displayIcon = isLocked ? "asset/lock_category_image.png" : iconPath;
 
     return GestureDetector(
-      onTap: isLocked ? null : () {
+      onTap: isLocked
+          ? null
+          : () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => LevelMap(
-              category: category.title,
-            ),
+            builder: (context) => LevelMap(category: category.title),
           ),
         );
       },
@@ -223,22 +235,21 @@ class _LessonDataState extends State<LessonData> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Category Icon
-                Container(
+                SizedBox(
                   width: 56,
                   height: 56,
                   child: displayIcon != null
                       ? Image.asset(
-                          displayIcon,
-                          width: 36,
-                          height: 36,
-                          fit: BoxFit.contain,
-                        )
+                    displayIcon,
+                    width: 36,
+                    height: 36,
+                    fit: BoxFit.contain,
+                  )
                       : Icon(
-                          Icons.category,
-                          color: theme.primary,
-                          size: 32,
-                        ),
+                    Icons.category,
+                    color: theme.primary,
+                    size: 32,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -272,7 +283,9 @@ class _LessonDataState extends State<LessonData> {
                             : "${category.completedLessons}/${category.totalLessons} Lessons Completed",
                         style: TextStyle(
                           fontSize: 14,
-                          color: isLocked ? Colors.grey : theme.titleText.withValues(alpha: 0.65),
+                          color: isLocked
+                              ? Colors.grey
+                              : theme.titleText.withValues(alpha: 0.65),
                           fontStyle: FontStyle.italic,
                           height: 1.2,
                         ),
@@ -285,14 +298,15 @@ class _LessonDataState extends State<LessonData> {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    // Fixed configuration using color matching image palette rules
                     color: isLocked
                         ? Colors.grey.withValues(alpha: 0.3)
-                        : const Color(0xFF5CB85C),
-                    shape: BoxShape.circle,
+                        : const Color(0xFF8EDB90), // Lighter glassy grass green
                   ),
                   child: Icon(
                     Icons.play_arrow_rounded,
-                    color: isLocked ? Colors.grey : Colors.white,
+                    color: isLocked ? Colors.grey : const Color(0xFFC2F7D6), // Soft mint icon color
                     size: 32,
                   ),
                 ),

@@ -155,14 +155,14 @@ class ProgressService {
     if (completedLessons.containsKey(oldKey)) {
       final existing = completedLessons[newKey] ?? 0;
       completedLessons[newKey] =
-          existing > completedLessons[oldKey]! ? existing : completedLessons[oldKey]!;
+      existing > completedLessons[oldKey]! ? existing : completedLessons[oldKey]!;
       completedLessons.remove(oldKey);
     }
 
     if (unlockedLevel.containsKey(oldKey)) {
       final existing = unlockedLevel[newKey] ?? 1;
       unlockedLevel[newKey] =
-          existing > unlockedLevel[oldKey]! ? existing : unlockedLevel[oldKey]!;
+      existing > unlockedLevel[oldKey]! ? existing : unlockedLevel[oldKey]!;
       unlockedLevel.remove(oldKey);
     }
 
@@ -248,6 +248,24 @@ class ProgressService {
     } catch (e) {
       print("Error fetching online save record: $e");
     }
+  }
+
+  // =========================
+  // MEMORY PURGE LAYER
+  // =========================
+
+  /// Wipes all cached progression maps and statistics from local runtime RAM.
+  /// Essential to execute on sign-out/sign-in flows to avoid sync contamination.
+  void clearLocalCache() {
+    completedLessons.clear();
+    levelStars.clear();
+
+    // Reset all level parameters back to base default level 1
+    for (final category in totalLessons.keys) {
+      unlockedLevel[category] = 1;
+    }
+
+    print("ProgressService: Local progression cache successfully flushed.");
   }
 
   // =========================
